@@ -131,7 +131,7 @@
     }
 
     const btn = document.querySelector('.book-btn');
-    if (btn) { btn.textContent = 'Processing...'; btn.disabled = true; }
+    if (btn) { btn.textContent = 'Processing...'; btn.disabled = true; btn.style.background = 'var(--clay)'; }
 
     try {
       const res = await fetch('/api/create-reservation', {

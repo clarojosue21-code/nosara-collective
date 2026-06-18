@@ -91,11 +91,23 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing required fields' }) };
   }
 
-  // Check availability
+  // Get property first — accept either UUID or slug
+  const isUUID = /^[0-9a-f-]{36}$/.test(property_id);
+  const { data: property, error: propErr } = await supabase
+    .from('properties')
+    .select('id, name, price_per_night')
+    .eq(isUUID ? 'id' : 'slug', property_id)
+    .single();
+
+  if (propErr || !property) {
+    return { statusCode: 404, body: JSON.stringify({ error: 'Property not found' }) };
+  }
+
+  // Check availability using the real UUID
   const { data: blocked } = await supabase
     .from('blocked_dates')
     .select('date')
-    .eq('property_id', property_id)
+    .eq('property_id', property.id)
     .gte('date', check_in)
     .lt('date', check_out);
 
@@ -104,17 +116,6 @@ exports.handler = async (event) => {
       statusCode: 409,
       body: JSON.stringify({ error: 'Selected dates are not available', blocked_dates: blocked.map((b) => b.date) }),
     };
-  }
-
-  // Get property price
-  const { data: property, error: propErr } = await supabase
-    .from('properties')
-    .select('id, name, price_per_night')
-    .eq('id', property_id)
-    .single();
-
-  if (propErr || !property) {
-    return { statusCode: 404, body: JSON.stringify({ error: 'Property not found' }) };
   }
 
   const nights = Math.round((new Date(check_out) - new Date(check_in)) / 86400000);
@@ -131,7 +132,7 @@ exports.handler = async (event) => {
     .from('reservations')
     .insert({
       reference,
-      property_id,
+      property_id: property.id,
       guest_name,
       guest_email,
       guest_phone,
