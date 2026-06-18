@@ -2051,7 +2051,7 @@ async function submitBooking(){
 
   try{
     alert('DEBUG: Calling API for '+curProp.id+' | '+paymentMethod);
-    const res=await fetch('/api/create-reservation',{
+    const res=await fetch(window.location.origin+'/api/create-reservation',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
