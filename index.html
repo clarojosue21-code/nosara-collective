@@ -2050,6 +2050,7 @@ async function submitBooking(){
   if(btn){btn.textContent='Processing...';btn.disabled=true;btn.style.background='var(--clay)';}
 
   try{
+    alert('DEBUG: Calling API for '+curProp.id+' | '+paymentMethod);
     const res=await fetch('/api/create-reservation',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -2064,8 +2065,10 @@ async function submitBooking(){
         payment_method:paymentMethod
       })
     });
+    alert('DEBUG: Response status '+res.status);
     const data=await res.json();
-    if(!res.ok){showCalMsg(data.error||'Reservation failed. Please try again.');return;}
+    alert('DEBUG: Data = '+JSON.stringify(data).slice(0,200));
+    if(!res.ok){alert('ERROR: '+(data.error||'Unknown error'));return;}
 
     if(paymentMethod==='paypal'&&data.paypal_approval_url){
       window.location.href=data.paypal_approval_url;
@@ -2074,8 +2077,8 @@ async function submitBooking(){
       showWiseInstructions(data);
     }
   }catch(e){
+    alert('CATCH ERROR: '+e.message);
     console.error('Booking error:',e);
-    showCalMsg('Connection error. Please try again.');
   }finally{
     if(btn){btn.textContent='Reserve Now';btn.disabled=false;btn.style.background='';}
   }
