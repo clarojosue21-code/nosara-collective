@@ -2050,8 +2050,9 @@ async function submitBooking(){
   if(btn){btn.textContent='Processing...';btn.disabled=true;btn.style.background='var(--clay)';}
 
   try{
-    alert('DEBUG: Calling API for '+curProp.id+' | '+paymentMethod);
-    const res=await fetch(window.location.origin+'/api/create-reservation',{
+    const apiBase=(window.location.origin&&window.location.origin!=='null')?window.location.origin:'https://nosara-collective.netlify.app';
+    alert('DEBUG: Calling API for '+curProp.id+' | '+paymentMethod+' | base='+apiBase);
+    const res=await fetch(apiBase+'/.netlify/functions/create-reservation',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
