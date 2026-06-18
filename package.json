@@ -1,0 +1,12 @@
+{
+  "name": "nosara-collective-conscience",
+  "version": "1.0.0",
+  "description": "Nosara Collective Conscience — Luxury vacation rentals with community impact",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

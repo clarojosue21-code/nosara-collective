@@ -1,0 +1,2369 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosara <span style="color:var(--clay);font-weight:700"><span style="color:var(--clay);font-weight:700">Conscience Collective</span></span></title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F2EDE4;
+  --bg2:#EAE4D8;
+  --bg3:#E0D8C8;
+  --white:#FDFAF5;
+  --black:#141210;
+  --text:#141210;
+  --text-mid:#5A5548;
+  --text-muted:#8A8278;
+  --clay:#C4784A;
+  --clay-light:#D4906A;
+  --clay-dark:#A85E35;
+  --ocean:#1E5A6A;
+  --ocean-light:#2A7A8E;
+  --wax:#F0C878;       /* surf wax yellow */
+  --fin:#7AAAC0;       /* fin blue */
+  --rail:#D4906A;      /* rail orange */
+  --border:#141210;
+  --border-light:rgba(20,18,16,0.1);
+  --border-med:rgba(20,18,16,0.18);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(242,237,228,0.96);
+  backdrop-filter:blur(20px);
+  border-bottom:2px solid var(--border);
+}
+.nav-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 2rem}
+.nav-logo{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.72rem;font-weight:700;
+  color:var(--text);letter-spacing:0.2em;
+  text-transform:uppercase;cursor:pointer;
+  line-height:1.2;
+}
+.nav-logo span{color:var(--clay);font-weight:700}.nav-logo small{display:none}
+.nav-logo small{display:block;font-size:0.48rem;letter-spacing:0.28em;color:var(--text-muted);font-weight:400;margin-top:1px}
+.nav-links{display:flex;list-style:none}
+.nav-links a{
+  font-family:'DM Mono',monospace;
+  font-size:0.58rem;color:var(--text-muted);
+  text-decoration:none;letter-spacing:0.08em;
+  text-transform:uppercase;padding:0 0.9rem;
+  transition:color 0.15s;font-weight:300;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-cart{
+  display:flex;align-items:center;gap:0.5rem;
+  background:var(--text);color:var(--bg);
+  padding:8px 18px;font-size:0.6rem;
+  font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;cursor:pointer;border:none;
+  transition:all 0.2s;position:relative;
+}
+.nav-cart:hover{background:var(--clay)}
+.cart-count{
+  background:var(--clay);color:var(--white);
+  width:18px;height:18px;border-radius:50%;
+  font-size:0.55rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ─── IMPACT STRIP ─── */
+.impact-strip{
+  background:var(--text);color:var(--bg);
+  padding:10px 2rem;text-align:center;
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.18em;
+  text-transform:uppercase;font-weight:400;
+}
+.impact-strip span{color:var(--clay-light)}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:flex-end;
+  padding:0 3rem 4rem;
+  position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to bottom,
+      rgba(242,237,228,0.08) 0%,
+      rgba(242,237,228,0) 25%,
+      rgba(242,237,228,0.5) 65%,
+      rgba(242,237,228,1) 100%
+    ),
+    url('https://res.cloudinary.com/dzqgajn3l/image/upload/v1780975891/1_-_grounds5_qacxew.jpg') center/cover no-repeat;
+  filter:saturate(0.75) contrast(1.08);
+}
+/* Retro grain overlay */
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1;
+}
+.hero>*{position:relative;z-index:2}
+.hero-eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--clay);
+  margin-bottom:1rem;font-weight:400;
+  display:flex;align-items:center;gap:0.75rem;
+}
+.hero-eyebrow::before{content:'◈';font-size:0.5rem}
+.hero-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(3.5rem,9.5vw,9rem);
+  font-weight:700;line-height:0.86;
+  margin-bottom:0.4rem;
+  text-transform:uppercase;letter-spacing:-0.025em;
+  color:var(--text);
+}
+.hero-title em{
+  font-style:normal;color:var(--clay);
+  display:block;font-weight:300;
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.55em;letter-spacing:0.05em;
+  line-height:1.2;margin-top:0.2rem;
+}
+.hero-sub{
+  font-size:0.78rem;color:var(--text-mid);
+  max-width:340px;line-height:1.9;
+  margin-bottom:2rem;font-weight:300;
+}
+.hero-actions{display:flex;gap:0;align-items:stretch}
+.btn-primary{
+  background:var(--text);color:var(--bg);
+  padding:14px 28px;font-size:0.62rem;
+  font-weight:700;letter-spacing:0.16em;
+  text-transform:uppercase;cursor:pointer;
+  border:2px solid var(--text);transition:all 0.15s;
+  font-family:'Space Grotesk',sans-serif;
+}
+.btn-primary:hover{background:var(--clay);border-color:var(--clay)}
+.btn-ghost{
+  background:transparent;color:var(--text);
+  padding:14px 28px;font-size:0.62rem;
+  font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;cursor:pointer;
+  border:2px solid var(--text);border-left:none;
+  transition:all 0.15s;font-family:'Space Grotesk',sans-serif;
+}
+.btn-ghost:hover{background:var(--bg2)}
+/* Retro sticker badge */
+.hero-badge{
+  position:absolute;bottom:4rem;right:3rem;
+  width:90px;height:90px;
+  background:var(--clay);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  display:flex;align-items:center;justify-content:center;
+  animation:spin 20s linear infinite;
+  cursor:pointer;
+}
+.hero-badge-text{
+  font-family:'DM Mono',monospace;
+  font-size:0.42rem;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--white);text-align:center;
+  line-height:1.4;
+  animation:spin-reverse 20s linear infinite;
+}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes spin-reverse{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+
+/* ─── SECTIONS ─── */
+section{padding:5rem 3rem}
+.section-inner{max-width:1440px;margin:0 auto}
+.section-label{
+  font-family:'DM Mono',monospace;
+  font-size:0.56rem;letter-spacing:0.28em;
+  text-transform:uppercase;color:var(--clay-dark);
+  margin-bottom:1rem;font-weight:600;
+  display:flex;align-items:center;gap:0.6rem;
+}
+.section-label::before{content:'—';opacity:0.6}
+.section-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(2rem,4.5vw,3.8rem);
+  font-weight:700;line-height:0.9;
+  margin-bottom:1rem;color:var(--text);
+  text-transform:uppercase;letter-spacing:-0.02em;
+}
+.section-sub{
+  font-size:0.8rem;color:var(--text-muted);
+  max-width:480px;line-height:1.9;
+  font-weight:300;margin-bottom:3rem;
+}
+
+/* ─── PROPERTY CARDS ─── */
+#properties{background:var(--bg)}
+.props-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
+  gap:2px;background:var(--border);
+}
+.prop-card{
+  background:var(--white);cursor:pointer;
+  transition:background 0.2s;position:relative;overflow:hidden;
+}
+.prop-card:hover{background:var(--bg2)}
+.prop-card:hover .prop-img-wrap img{transform:scale(1.05)}
+.prop-img-wrap{position:relative;height:260px;overflow:hidden;background:var(--bg2)}
+.prop-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;display:block;filter:saturate(0.85)}
+.prop-ph{width:100%;height:260px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg2)}
+/* Retro corner badge */
+.prop-badge{
+  position:absolute;top:12px;left:12px;
+  background:var(--clay);color:var(--white);
+  padding:4px 12px;font-size:0.52rem;
+  font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;
+  font-family:'DM Mono',monospace;
+}
+.prop-badge.bundle{background:var(--ocean)}
+.prop-badge.eco{background:#3A6E3A}
+.prop-badge.retreat{background:var(--clay-dark)}
+/* Add to cart overlay */
+.prop-overlay{
+  position:absolute;inset:0;
+  background:rgba(20,18,16,0.65);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0.75rem;
+  opacity:0;transition:opacity 0.25s;
+}
+.prop-card:hover .prop-overlay{opacity:1}
+.prop-overlay-add{
+  background:var(--clay);color:var(--white);
+  padding:11px 28px;font-size:0.6rem;
+  font-weight:700;letter-spacing:0.16em;
+  text-transform:uppercase;border:none;
+  cursor:pointer;font-family:'Space Grotesk',sans-serif;
+  transition:background 0.15s;
+}
+.prop-overlay-view{
+  background:transparent;color:var(--white);
+  padding:8px 24px;font-size:0.58rem;
+  font-weight:600;letter-spacing:0.14em;
+  text-transform:uppercase;
+  border:1px solid rgba(253,250,245,0.5);
+  cursor:pointer;font-family:'Space Grotesk',sans-serif;
+  transition:all 0.15s;
+}
+.prop-body{padding:1.5rem}
+.prop-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.95rem;font-weight:700;
+  margin-bottom:0.25rem;color:var(--text);
+  text-transform:uppercase;letter-spacing:0.04em;
+}
+.prop-meta{
+  font-family:'DM Mono',monospace;
+  font-size:0.58rem;color:var(--text-muted);
+  margin-bottom:0.75rem;letter-spacing:0.04em;font-weight:300;
+}
+.prop-desc{font-size:0.76rem;color:var(--text-muted);line-height:1.75;margin-bottom:1.1rem;font-weight:300}
+.prop-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border-light);padding-top:0.9rem}
+.prop-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.75rem;font-weight:300;color:var(--text);
+}
+.prop-price span{
+  font-family:'DM Mono',monospace;
+  font-size:0.58rem;color:var(--text-muted);font-weight:300;
+}
+.prop-btn{
+  background:var(--text);color:var(--bg);
+  border:none;padding:8px 18px;
+  font-size:0.58rem;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  letter-spacing:0.12em;text-transform:uppercase;
+  font-family:'Space Grotesk',sans-serif;
+}
+.prop-btn:hover{background:var(--clay)}
+.impact-chip{
+  font-family:'DM Mono',monospace;
+  font-size:0.56rem;color:var(--clay);font-weight:400;
+}
+
+/* ─── SHOPPING CART PANEL ─── */
+.cart-panel{
+  position:fixed;top:0;right:0;bottom:0;
+  width:420px;background:var(--white);
+  border-left:2px solid var(--border);
+  z-index:500;transform:translateX(100%);
+  transition:transform 0.35s cubic-bezier(.16,1,.3,1);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.cart-panel.open{transform:translateX(0)}
+.cart-backdrop{
+  position:fixed;inset:0;background:rgba(20,18,16,0.45);
+  z-index:499;opacity:0;pointer-events:none;
+  transition:opacity 0.35s;
+}
+.cart-backdrop.open{opacity:1;pointer-events:auto}
+.cart-header{
+  padding:1.5rem;border-bottom:2px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg);flex-shrink:0;
+}
+.cart-header-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.72rem;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;
+}
+.cart-close{
+  background:none;border:none;cursor:pointer;
+  font-size:1.1rem;color:var(--text);
+  width:32px;height:32px;display:flex;
+  align-items:center;justify-content:center;
+  transition:background 0.15s;
+}
+.cart-close:hover{background:var(--bg2)}
+.cart-body{flex:1;overflow-y:auto;padding:1.5rem}
+.cart-empty{
+  text-align:center;padding:3rem 1rem;
+  color:var(--text-muted);
+}
+.cart-empty-icon{font-size:2.5rem;margin-bottom:1rem;opacity:0.4}
+.cart-empty-text{
+  font-family:'DM Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.12em;
+  text-transform:uppercase;font-weight:300;
+}
+.cart-item{
+  display:flex;gap:1rem;padding:1rem 0;
+  border-bottom:1px solid var(--border-light);
+}
+.cart-item-img{
+  width:60px;height:60px;object-fit:cover;
+  flex-shrink:0;background:var(--bg2);
+  border:1px solid var(--border-light);
+}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{
+  font-size:0.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.06em;
+  margin-bottom:0.2rem;color:var(--text);
+}
+.cart-item-meta{
+  font-family:'DM Mono',monospace;
+  font-size:0.58rem;color:var(--text-muted);
+  font-weight:300;margin-bottom:0.4rem;
+}
+.cart-item-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem;font-weight:300;color:var(--text);
+}
+.cart-item-remove{
+  background:none;border:none;cursor:pointer;
+  font-size:0.7rem;color:var(--text-muted);
+  transition:color 0.15s;flex-shrink:0;
+  align-self:flex-start;padding:2px;
+}
+.cart-item-remove:hover{color:var(--clay)}
+.cart-footer{
+  padding:1.5rem;border-top:2px solid var(--border);
+  background:var(--bg);flex-shrink:0;
+}
+.cart-subtotal{
+  display:flex;justify-content:space-between;
+  align-items:baseline;margin-bottom:0.5rem;
+}
+.cart-subtotal-label{
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--text-muted);
+}
+.cart-subtotal-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;font-weight:300;color:var(--text);
+}
+.cart-note{
+  font-family:'DM Mono',monospace;
+  font-size:0.55rem;color:var(--clay);
+  letter-spacing:0.08em;margin-bottom:1.25rem;
+  font-weight:400;
+}
+.cart-checkout{
+  width:100%;background:var(--text);color:var(--bg);
+  border:none;padding:16px;font-size:0.65rem;
+  font-weight:700;letter-spacing:0.2em;
+  text-transform:uppercase;cursor:pointer;
+  transition:all 0.15s;font-family:'Space Grotesk',sans-serif;
+  margin-bottom:0.75rem;
+}
+.cart-checkout:hover{background:var(--clay)}
+.cart-payment-icons{
+  display:flex;gap:0.5rem;justify-content:center;
+  font-family:'DM Mono',monospace;
+  font-size:0.52rem;color:var(--text-muted);
+  letter-spacing:0.06em;
+}
+
+/* ─── CONCIERGE ─── */
+#concierge{background:var(--bg2);border-top:2px solid var(--border)}
+.builder-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:2px;background:var(--border);margin-bottom:2rem;
+}
+@media(max-width:768px){.builder-grid{grid-template-columns:1fr}}
+.service-card{
+  background:var(--white);padding:1.5rem;
+  cursor:pointer;transition:background 0.15s;position:relative;
+}
+.service-card:hover{background:var(--bg)}
+.service-card.selected{background:var(--bg);outline:2px solid var(--clay)}
+.sc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.5rem}
+.sc-icon{font-size:1.2rem;margin-bottom:0.4rem}
+.sc-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.78rem;font-weight:700;
+  margin-bottom:0.2rem;color:var(--text);
+  text-transform:uppercase;letter-spacing:0.06em;
+}
+.sc-desc{font-size:0.72rem;color:var(--text-muted);line-height:1.65;font-weight:300}
+.sc-price{
+  font-family:'DM Mono',monospace;
+  font-size:0.62rem;font-weight:400;color:var(--clay);
+  margin-top:0.6rem;letter-spacing:0.04em;
+}
+.sc-check{
+  width:20px;height:20px;border:2px solid var(--border-med);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;flex-shrink:0;transition:all 0.15s;color:transparent;
+}
+.service-card.selected .sc-check{background:var(--clay);border-color:var(--clay);color:var(--white)}
+.sc-options{margin-top:1rem;display:none;flex-direction:column;gap:0.5rem}
+.service-card.selected .sc-options{display:flex}
+.sc-opt{display:flex;flex-direction:column;gap:3px}
+.sc-opt label{
+  font-family:'DM Mono',monospace;
+  font-size:0.55rem;color:var(--text-muted);
+  font-weight:400;letter-spacing:0.1em;text-transform:uppercase;
+}
+.sc-opt input,.sc-opt select,.sc-opt textarea{
+  border:1px solid var(--border-med);padding:8px 10px;
+  font-size:0.78rem;background:var(--white);
+  color:var(--text);font-family:'Space Grotesk',sans-serif;
+  outline:none;transition:border-color 0.15s;width:100%;
+}
+.sc-opt input:focus,.sc-opt select:focus,.sc-opt textarea:focus{border-color:var(--clay)}
+.sc-opt textarea{resize:vertical;min-height:65px}
+
+/* ─── RETREATS ─── */
+#retreats{background:var(--bg3);border-top:2px solid var(--border)}
+.retreats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(400px,1fr));
+  gap:2px;background:var(--border);
+}
+.retreat-card{background:var(--white);overflow:hidden}
+.retreat-img-wrap{height:270px;overflow:hidden;position:relative}
+.retreat-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s;display:block;filter:saturate(0.82)}
+.retreat-card:hover .retreat-img-wrap img{transform:scale(1.04)}
+.retreat-ph{width:100%;height:270px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg2)}
+.retreat-body{padding:1.75rem;border-top:1px solid var(--border-light)}
+.retreat-tag{
+  font-family:'DM Mono',monospace;
+  font-size:0.55rem;font-weight:400;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--clay);margin-bottom:0.75rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.retreat-tag::before{content:'◈';font-size:0.5rem}
+.retreat-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:1.3rem;font-weight:700;
+  margin-bottom:0.6rem;color:var(--text);
+  text-transform:uppercase;letter-spacing:0.02em;
+}
+.retreat-desc{font-size:0.76rem;color:var(--text-muted);line-height:1.8;margin-bottom:1.25rem;font-weight:300}
+.retreat-feats{display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:1.25rem}
+.retreat-feat{
+  padding:3px 9px;font-size:0.58rem;
+  color:var(--text-muted);background:var(--bg);
+  border:1px solid var(--border-light);
+  font-family:'DM Mono',monospace;font-weight:300;
+}
+.retreat-cta{
+  background:var(--text);color:var(--bg);border:none;
+  padding:11px 22px;font-size:0.6rem;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  letter-spacing:0.14em;text-transform:uppercase;
+  font-family:'Space Grotesk',sans-serif;
+}
+.retreat-cta:hover{background:var(--clay)}
+
+/* ─── SURF ─── */
+#surf{background:var(--ocean);border-top:2px solid var(--border);padding:5rem 3rem}
+.surf-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:2px;background:rgba(255,255,255,0.08);
+  margin-bottom:2rem;
+}
+.surf-card{background:rgba(255,255,255,0.05);padding:2rem}
+.surf-card-label{
+  font-family:'DM Mono',monospace;
+  font-size:0.5rem;letter-spacing:0.24em;
+  text-transform:uppercase;color:rgba(253,250,245,0.5);
+  margin-bottom:0.6rem;font-weight:400;
+}
+.surf-card-val{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3.5rem;font-weight:300;color:#FDFAF5;line-height:1;
+}
+.surf-card-desc{font-size:0.68rem;color:rgba(253,250,245,0.55);margin-top:0.4rem;line-height:1.6;font-family:'DM Mono',monospace;font-weight:300}
+
+/* ─── LOTS ─── */
+#lots{background:var(--bg2);border-top:2px solid var(--border)}
+.lots-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:2px;background:var(--border);
+}
+.lot-card{background:var(--white);padding:2rem;transition:background 0.15s}
+.lot-card:hover{background:var(--bg)}
+.lot-icon{font-size:1.3rem;margin-bottom:1rem}
+.lot-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.85rem;font-weight:700;
+  margin-bottom:0.35rem;color:var(--text);
+  text-transform:uppercase;letter-spacing:0.06em;
+}
+.lot-size{
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;color:var(--clay);
+  font-weight:400;margin-bottom:0.7rem;letter-spacing:0.06em;
+}
+.lot-desc{font-size:0.76rem;color:var(--text-muted);line-height:1.75;font-weight:300;margin-bottom:1.1rem}
+.lot-price{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--text-muted);margin-bottom:0.9rem}
+.lot-btn{
+  background:transparent;color:var(--text);
+  border:2px solid var(--border);padding:8px 18px;
+  font-size:0.58rem;font-weight:700;cursor:pointer;
+  transition:all 0.15s;letter-spacing:0.12em;
+  text-transform:uppercase;font-family:'Space Grotesk',sans-serif;
+}
+.lot-btn:hover{background:var(--text);color:var(--bg)}
+
+/* ─── GUIDE ─── */
+#guide{background:var(--bg);border-top:2px solid var(--border)}
+.guide-tabs{
+  display:flex;gap:0;margin-bottom:2.5rem;
+  flex-wrap:wrap;border-bottom:2px solid var(--border);
+}
+.guide-tab{
+  padding:11px 22px;
+  font-family:'DM Mono',monospace;
+  font-size:0.58rem;font-weight:400;
+  cursor:pointer;border:none;background:transparent;
+  color:var(--text-muted);transition:all 0.15s;
+  letter-spacing:0.12em;text-transform:uppercase;
+  border-bottom:2px solid transparent;margin-bottom:-2px;
+}
+.guide-tab.active,.guide-tab:hover{color:var(--text);border-bottom-color:var(--clay)}
+.guide-panel{display:none}
+.guide-panel.active{display:block}
+.guide-articles{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:2px;background:var(--border);
+}
+.guide-article{background:var(--white);padding:2rem}
+.guide-article-icon{font-size:1.3rem;margin-bottom:0.75rem}
+.guide-article-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.82rem;font-weight:700;
+  margin-bottom:0.6rem;color:var(--text);
+  text-transform:uppercase;letter-spacing:0.04em;
+}
+.guide-article-text{font-size:0.76rem;color:var(--text-muted);line-height:1.85;font-weight:300}
+.guide-article-text ul{margin-left:1rem;margin-top:0.5rem}
+.guide-article-text li{margin-bottom:0.35rem}
+
+/* ─── IMPACT ─── */
+#impact{background:#1E1D18 !important;padding:5rem 3rem}
+.impact-big-banner{
+  background:var(--clay);padding:2.5rem 3rem;
+  margin-bottom:3.5rem;
+  display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:2rem;
+  border:2px solid var(--clay-dark);
+}
+.impact-big-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(4rem,10vw,8rem);
+  font-weight:300;color:#FDFAF5;line-height:0.85;
+}
+.impact-big-num sup{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.35em;font-weight:700;vertical-align:super;
+}
+.impact-big-label{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.62rem;font-weight:700;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(253,250,245,0.8);margin-top:0.5rem;
+}
+.impact-big-desc{
+  font-family:'DM Mono',monospace;
+  font-size:0.68rem;color:rgba(253,250,245,0.75);
+  line-height:1.8;font-weight:300;
+  max-width:380px;border-left:2px solid rgba(253,250,245,0.3);
+  padding-left:1.25rem;
+}
+.impact-grid-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:4rem;align-items:start;
+}
+.impact-text-col h2{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:700;line-height:0.95;
+  color:#FDFAF5 !important;
+  text-transform:uppercase;letter-spacing:-0.01em;
+  margin-bottom:1.5rem;
+}
+.impact-text-col p{
+  font-size:0.82rem;
+  color:#E8E2D8 !important;
+  line-height:1.9;font-weight:300;margin-bottom:1rem;
+}
+.impact-label{
+  font-family:'DM Mono',monospace;
+  font-size:0.52rem;letter-spacing:0.28em;
+  text-transform:uppercase;color:#D8906A !important;
+  margin-bottom:1.25rem;font-weight:400;
+}
+.impact-stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:2px;background:rgba(253,250,245,0.06);
+}
+.impact-stat{
+  text-align:center;padding:2.25rem;
+  background:#252520;
+}
+.impact-stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3rem;font-weight:300;
+  color:#D8906A;line-height:1;
+}
+.impact-stat-label{
+  font-family:'DM Mono',monospace;
+  font-size:0.5rem;color:#6A6560;
+  margin-top:0.4rem;letter-spacing:0.14em;
+  text-transform:uppercase;font-weight:400;
+}
+
+/* ─── MODAL ─── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(20,18,16,0.7);
+  z-index:300;display:none;align-items:flex-start;
+  justify-content:center;overflow-y:auto;padding:2rem 1rem;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--white);max-width:860px;width:100%;
+  margin:auto;overflow:hidden;
+  animation:slideUp 0.25s ease;
+  border:2px solid var(--border);
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-gal{position:relative;height:380px;overflow:hidden}
+.modal-gal img{width:100%;height:380px;object-fit:cover;filter:saturate(0.88)}
+.modal-close{
+  position:absolute;top:0;right:0;
+  background:var(--bg);border:none;
+  border-left:2px solid var(--border);
+  border-bottom:2px solid var(--border);
+  width:44px;height:44px;cursor:pointer;
+  font-size:1rem;z-index:10;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text);transition:background 0.15s;
+}
+.modal-close:hover{background:var(--clay);color:var(--white)}
+.modal-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(242,237,228,0.88);
+  border:1px solid var(--border-med);
+  width:38px;height:38px;cursor:pointer;
+  font-size:1.1rem;display:flex;align-items:center;justify-content:center;
+  color:var(--text);transition:background 0.15s;
+}
+.modal-arrow:hover{background:var(--clay);color:var(--white)}
+.modal-arrow.prev{left:1rem}
+.modal-arrow.next{right:1rem}
+.gal-dots{position:absolute;bottom:0.75rem;left:50%;transform:translateX(-50%);display:flex;gap:4px}
+.gal-dot{width:5px;height:5px;background:rgba(20,18,16,0.3);border:none;cursor:pointer;transition:background 0.15s}
+.gal-dot.active{background:var(--text)}
+.modal-body{padding:2rem}
+.modal-hdr{
+  display:flex;justify-content:space-between;
+  align-items:flex-start;margin-bottom:1.25rem;
+  flex-wrap:wrap;gap:1rem;
+  padding-bottom:1.25rem;border-bottom:1px solid var(--border-light);
+}
+.modal-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:1.3rem;font-weight:700;
+  color:var(--text);text-transform:uppercase;letter-spacing:0.04em;
+}
+.modal-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.3rem;font-weight:300;color:var(--text);text-align:right;
+}
+.modal-price-note{
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;color:var(--text-muted);text-align:right;
+}
+.modal-desc{font-size:0.8rem;color:var(--text-muted);line-height:1.85;margin-bottom:1.25rem;font-weight:300}
+.modal-feats{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:0.4rem;margin-bottom:1.25rem;
+}
+.modal-feat{
+  background:var(--bg);padding:8px 10px;
+  font-size:0.7rem;display:flex;align-items:center;
+  gap:6px;color:var(--text-muted);
+  border:1px solid var(--border-light);
+  font-family:'DM Mono',monospace;font-weight:300;
+}
+.modal-impact-bar{
+  background:rgba(43,122,142,0.08);
+  border:1px solid rgba(43,122,142,0.18);
+  padding:0.9rem 1.1rem;margin-bottom:1.25rem;
+  display:flex;align-items:center;gap:10px;
+  font-size:0.75rem;color:var(--ocean);
+  font-family:'DM Mono',monospace;font-weight:300;
+}
+.modal-book{
+  background:var(--bg);padding:1.5rem;
+  border:1px solid var(--border-light);
+}
+.modal-book-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.72rem;font-weight:700;
+  margin-bottom:1.1rem;color:var(--text);
+  text-transform:uppercase;letter-spacing:0.12em;
+}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.6rem}
+.fg{display:flex;flex-direction:column;gap:3px;margin-bottom:0}
+.fg label{
+  font-family:'DM Mono',monospace;
+  font-size:0.54rem;color:var(--text-muted);
+  font-weight:400;letter-spacing:0.12em;text-transform:uppercase;
+}
+.fg input,.fg select{
+  border:1px solid var(--border-med);padding:9px 10px;
+  font-size:0.8rem;background:var(--white);
+  color:var(--text);font-family:'Space Grotesk',sans-serif;
+  outline:none;transition:border-color 0.15s;width:100%;
+}
+.fg input:focus,.fg select:focus{border-color:var(--clay)}
+.book-btn{
+  width:100%;background:var(--text);color:var(--bg);
+  border:none;padding:14px;font-size:0.65rem;
+  font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.15s;margin-top:0.9rem;
+  font-family:'Space Grotesk',sans-serif;
+}
+.book-btn:hover{background:var(--clay)}
+.book-note{
+  font-family:'DM Mono',monospace;
+  font-size:0.58rem;color:var(--text-muted);
+  text-align:center;margin-top:0.6rem;
+}
+#calendarWidget{
+  background:var(--white);border:1px solid var(--border-med);
+  padding:0.9rem;margin-bottom:0.9rem;
+}
+#nightCount{
+  font-family:'DM Mono',monospace;
+  font-size:0.65rem;font-weight:400;color:var(--clay);
+  margin-bottom:0.6rem;min-height:1.2em;letter-spacing:0.06em;
+}
+#calMsg{font-size:0.68rem;min-height:1.2em;margin-bottom:0.4rem;color:var(--clay-dark)}
+
+/* ─── FOOTER ─── */
+footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4rem 3rem 2.5rem}
+.footer-inner{max-width:1440px;margin:0 auto}
+.footer-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:3rem;margin-bottom:3rem;
+  padding-bottom:3rem;
+  border-bottom:1px solid rgba(253,250,245,0.06);
+}
+.footer-brand-logo{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.75rem;font-weight:700;
+  color:#F0EDE6;letter-spacing:0.2em;
+  text-transform:uppercase;margin-bottom:0.35rem;
+}
+.footer-brand-logo span{color:var(--clay-light)}
+.footer-brand-sub{
+  font-family:'DM Mono',monospace;
+  font-size:0.52rem;letter-spacing:0.18em;
+  text-transform:uppercase;color:#4A4840;
+  margin-bottom:1rem;font-weight:300;
+}
+.footer-brand-desc{
+  font-size:0.72rem;color:#5A5548;
+  line-height:1.85;font-weight:300;
+  max-width:260px;margin-bottom:1.5rem;
+}
+.footer-badge{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:var(--clay);padding:7px 14px;
+}
+.footer-badge-text{
+  font-family:'DM Mono',monospace;
+  font-size:0.56rem;font-weight:400;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:#FDFAF5;
+}
+.footer-col-title{
+  font-family:'DM Mono',monospace;
+  font-size:0.52rem;font-weight:400;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:#3A3830;margin-bottom:1.25rem;
+}
+.footer-col-links{display:flex;flex-direction:column;gap:0.6rem}
+.footer-col-links a,.footer-col-links span{
+  font-size:0.7rem;color:#5A5548;
+  text-decoration:none;letter-spacing:0.04em;
+  font-weight:300;transition:color 0.15s;
+  cursor:pointer;
+}
+.footer-col-links a:hover{color:#F0EDE6}
+.footer-bottom{
+  display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+.footer-copy{
+  font-family:'DM Mono',monospace;
+  font-size:0.56rem;color:#3A3830;letter-spacing:0.08em;
+}
+.footer-bottom-links{display:flex;gap:1.5rem}
+.footer-bottom-links a{
+  font-family:'DM Mono',monospace;
+  font-size:0.54rem;color:#3A3830;
+  text-decoration:none;letter-spacing:0.1em;
+  text-transform:uppercase;transition:color 0.15s;
+}
+.footer-bottom-links a:hover{color:#F0EDE6}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .nav-links{display:none}
+  section,#surf,#impact{padding:4rem 1.5rem}
+  .hero{padding:0 1.5rem 4rem}
+  .impact-grid-row{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .props-grid,.retreats-grid,.lots-grid,.guide-articles{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .builder-grid{grid-template-columns:1fr}
+  .hero-title{font-size:clamp(3rem,14vw,4.5rem)}
+  .impact-stats-grid{grid-template-columns:1fr 1fr}
+  .hero-actions{flex-direction:column}
+  .cart-panel{width:100%}
+  .footer-grid{grid-template-columns:1fr}
+  .guide-tabs{border-bottom:none}
+  .guide-tab{border-bottom:2px solid var(--border-light)}
+}
+
+/* ═══ IMPACT SECTION ═══ */
+#impact{
+  background:#1A1916;
+  padding:5rem 3rem;
+}
+#impact .section-inner{max-width:1440px;margin:0 auto}
+
+.impact-banner-big{
+  background:var(--clay);
+  display:flex;align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;gap:2rem;
+  padding:2.5rem 3rem;
+  margin-bottom:4rem;
+  border:2px solid var(--clay-dark);
+}
+.impact-pct{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(4rem,10vw,7rem);
+  font-weight:300;color:#FDFAF5;line-height:0.85;
+}
+.impact-pct sup{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.38em;font-weight:700;vertical-align:super;
+}
+.impact-pct-label{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.65rem;font-weight:700;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(253,250,245,0.85);margin-top:0.5rem;
+}
+.impact-banner-right{
+  font-family:'DM Mono',monospace;
+  font-size:0.75rem;color:rgba(253,250,245,0.8);
+  line-height:1.9;font-weight:300;
+  max-width:380px;
+  border-left:2px solid rgba(253,250,245,0.25);
+  padding-left:1.5rem;
+}
+.impact-banner-right strong{color:#FDFAF5;font-weight:500}
+
+.impact-body{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:start;
+}
+@media(max-width:900px){.impact-body{grid-template-columns:1fr;gap:3rem}}
+
+.impact-eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:0.55rem;letter-spacing:0.35em;
+  text-transform:uppercase;
+  color:#FDFAF5;
+  margin-bottom:1.5rem;font-weight:400;
+  opacity:0.5;
+}
+.impact-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.5rem,4.5vw,4rem);
+  font-weight:300;line-height:0.95;
+  color:#FDFAF5;
+  font-style:italic;
+  letter-spacing:0.01em;
+  margin-bottom:1.75rem;
+}
+.impact-p{
+  font-size:0.9rem;
+  color:#E8E2D8;
+  line-height:2;
+  font-weight:300;
+  margin-bottom:1.25rem;
+  letter-spacing:0.015em;
+}
+.impact-stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:2px;background:rgba(253,250,245,0.05);
+}
+.impact-stat{
+  text-align:center;padding:2.25rem;background:#222220;
+}
+.impact-stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3rem;font-weight:300;
+  color:#D8906A;line-height:1;
+}
+.impact-stat-label{
+  font-family:'DM Mono',monospace;
+  font-size:0.5rem;color:#605A52;
+  margin-top:0.4rem;letter-spacing:0.14em;
+  text-transform:uppercase;font-weight:400;
+}
+
+/* ═══ FOOTER ═══ */
+footer{
+  background:#141210;
+  border-top:1px solid rgba(253,250,245,0.05);
+  padding:4rem 3rem 2rem;
+}
+.footer-inner{max-width:1440px;margin:0 auto}
+.footer-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:3rem;margin-bottom:3rem;
+  padding-bottom:3rem;
+  border-bottom:1px solid rgba(253,250,245,0.05);
+}
+.footer-logo{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.8rem;font-weight:700;
+  color:#E8E2D8;letter-spacing:0.2em;text-transform:uppercase;
+}
+.footer-logo span{color:var(--clay-light)}
+.footer-logo-sub{
+  font-family:'DM Mono',monospace;
+  font-size:0.48rem;letter-spacing:0.28em;
+  text-transform:uppercase;color:#3A3830;
+  margin-bottom:1rem;font-weight:300;margin-top:2px;
+}
+.footer-desc{
+  font-size:0.7rem;color:#4A4640;
+  line-height:1.85;font-weight:300;
+  max-width:260px;margin-bottom:1.25rem;
+}
+.footer-5pct{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  background:var(--clay);padding:6px 12px;
+  font-family:'DM Mono',monospace;
+  font-size:0.54rem;font-weight:400;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:#FDFAF5;
+}
+.footer-col-title{
+  font-family:'DM Mono',monospace;
+  font-size:0.5rem;font-weight:400;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:#2E2C28;margin-bottom:1.25rem;
+}
+.footer-links{display:flex;flex-direction:column;gap:0.55rem}
+.footer-links a{
+  font-size:0.68rem;color:#4A4640;
+  text-decoration:none;letter-spacing:0.04em;
+  font-weight:300;transition:color 0.15s;
+}
+.footer-links a:hover{color:#E8E2D8}
+.footer-bottom{
+  display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+.footer-bottom span{
+  font-family:'DM Mono',monospace;
+  font-size:0.54rem;color:#2E2C28;letter-spacing:0.06em;
+}
+.footer-bottom-links{display:flex;gap:1.5rem}
+.footer-bottom-links a{
+  font-family:'DM Mono',monospace;
+  font-size:0.52rem;color:#2E2C28;
+  text-decoration:none;letter-spacing:0.1em;
+  text-transform:uppercase;transition:color 0.15s;
+}
+.footer-bottom-links a:hover{color:#E8E2D8}
+@media(max-width:900px){
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .footer-grid{grid-template-columns:1fr}
+}
+
+
+/* ═══ MOTION & ANIMATIONS ═══ */
+
+/* Fade up on scroll */
+.fade-up{
+  opacity:0;transform:translateY(32px);
+  transition:opacity 0.7s cubic-bezier(.16,1,.3,1),transform 0.7s cubic-bezier(.16,1,.3,1);
+}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* Stagger children */
+.stagger > *{
+  opacity:0;transform:translateY(24px);
+  transition:opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1);
+}
+.stagger.visible > *:nth-child(1){transition-delay:0s}
+.stagger.visible > *:nth-child(2){transition-delay:0.08s}
+.stagger.visible > *:nth-child(3){transition-delay:0.16s}
+.stagger.visible > *:nth-child(4){transition-delay:0.24s}
+.stagger.visible > *:nth-child(5){transition-delay:0.32s}
+.stagger.visible > *:nth-child(6){transition-delay:0.40s}
+.stagger.visible > *:nth-child(7){transition-delay:0.48s}
+.stagger.visible > *:nth-child(8){transition-delay:0.56s}
+.stagger.visible > *:nth-child(n+9){transition-delay:0.64s}
+.stagger.visible > *{opacity:1;transform:translateY(0)}
+
+/* Horizontal marquee ticker */
+.marquee-wrap{
+  overflow:hidden;background:var(--text);
+  border-top:1px solid rgba(253,250,245,0.08);
+  border-bottom:1px solid rgba(253,250,245,0.08);
+  padding:12px 0;
+}
+.marquee-track{
+  display:flex;gap:0;
+  animation:marquee 28s linear infinite;
+  width:max-content;
+}
+.marquee-track:hover{animation-play-state:paused}
+.marquee-item{
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;font-weight:400;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(253,250,245,0.45);
+  padding:0 2.5rem;white-space:nowrap;
+  display:flex;align-items:center;gap:1rem;
+}
+.marquee-item span{color:var(--clay);font-size:0.7rem}
+@keyframes marquee{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* Prop card hover — image pan */
+.prop-img-wrap img{
+  transition:transform 0.8s cubic-bezier(.16,1,.3,1) !important;
+}
+.prop-card:hover .prop-img-wrap img{
+  transform:scale(1.06) !important;
+}
+
+/* Cart bounce on add */
+@keyframes cartBounce{
+  0%,100%{transform:scale(1)}
+  30%{transform:scale(1.3)}
+  60%{transform:scale(0.9)}
+}
+.cart-bounce{animation:cartBounce 0.4s ease}
+
+/* Number counter animation */
+@keyframes countUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.impact-stat-num{animation:countUp 0.8s cubic-bezier(.16,1,.3,1) both}
+.impact-stat:nth-child(1) .impact-stat-num{animation-delay:0.1s}
+.impact-stat:nth-child(2) .impact-stat-num{animation-delay:0.2s}
+.impact-stat:nth-child(3) .impact-stat-num{animation-delay:0.3s}
+.impact-stat:nth-child(4) .impact-stat-num{animation-delay:0.4s}
+
+/* Smooth section reveals */
+section{opacity:0;transition:opacity 0.5s ease}
+section.revealed{opacity:1}
+
+/* Nav scroll state */
+nav.scrolled{
+  box-shadow:0 2px 24px rgba(20,18,16,0.1);
+}
+
+/* Prop card — lift effect */
+.prop-card{
+  transition:background 0.2s,transform 0.3s cubic-bezier(.16,1,.3,1),box-shadow 0.3s !important;
+}
+.prop-card:hover{
+  transform:translateY(-4px) !important;
+  box-shadow:0 16px 48px rgba(20,18,16,0.12) !important;
+}
+
+/* Service card — quick pop */
+.service-card{
+  transition:background 0.15s,transform 0.2s cubic-bezier(.16,1,.3,1) !important;
+}
+.service-card:hover{
+  transform:translateY(-2px) !important;
+}
+.service-card.selected{
+  transform:translateY(-2px) !important;
+}
+
+/* Smooth cart panel */
+.cart-panel{
+  transition:transform 0.4s cubic-bezier(.16,1,.3,1) !important;
+}
+
+/* Impact big banner pulse */
+@keyframes subtlePulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(196,120,74,0)}
+  50%{box-shadow:0 0 0 8px rgba(196,120,74,0.08)}
+}
+.impact-banner-big{animation:subtlePulse 3s ease infinite}
+
+/* Surf wave animation on data cards */
+@keyframes waveIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.surf-card{animation:waveIn 0.6s cubic-bezier(.16,1,.3,1) both}
+.surf-card:nth-child(1){animation-delay:0.05s}
+.surf-card:nth-child(2){animation-delay:0.15s}
+.surf-card:nth-child(3){animation-delay:0.25s}
+.surf-card:nth-child(4){animation-delay:0.35s}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="scrollTo(0,0)">NOSARA <span>COLLECTIVE</span><span style="font-size:0.5rem;color:rgba(28,26,22,0.4);font-weight:400;letter-spacing:0.1em;margin-left:4px">CONSCIENCE</span></div>
+    <ul class="nav-links">
+      <li><a href="#properties">Stay</a></li>
+      <li><a href="#concierge">Concierge</a></li>
+      <li><a href="#retreats">Retreats</a></li>
+      
+      <li><a href="#lots">Invest</a></li>
+      <li><a href="#guide">Guide</a></li>
+      <li><a href="#impact">Impact</a></li>
+    </ul>
+    <button class="nav-cart" onclick="toggleCart()" onclick="scrollTo({top:document.getElementById('properties').offsetTop-70,behavior:'smooth'})">Book Now</button>
+  </div>
+</nav><div style="background:#1A1916;border-bottom:2px solid var(--clay);padding:11px 2rem;text-align:center;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
+  <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400"><span style="color:var(--clay);font-weight:700">Conscience Collective</span></span>
+  <span style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--clay);color:#FDFAF5;padding:5px 16px;border:2px solid #1A1916;font-family:'Space Grotesk',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase">♥ 5% TO NOSARA FAMILIES</span>
+  <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400">Every Booking · Every Time</span>
+</div>
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-eyebrow" style="
+      color:#FDFAF5;
+      font-family:'DM Mono',monospace;
+      font-size:0.65rem;
+      font-weight:500;
+      letter-spacing:0.32em;
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      gap:0.75rem;
+      background:rgba(20,18,16,0.55);
+      padding:7px 14px;
+      backdrop-filter:blur(8px);
+      border:1px solid rgba(253,250,245,0.2);
+    ">Nosara · Guanacaste · Costa Rica</div>
+  <h1 class="hero-title">Stay with<br><em>Conscience</em><br>in Nosara</h1>
+  <p class="hero-sub" style="
+      color:#FDFAF5;
+      font-size:0.85rem;
+      line-height:1.85;
+      font-weight:400;
+      max-width:400px;
+      background:rgba(20,18,16,0.45);
+      padding:1rem 1.25rem;
+      backdrop-filter:blur(6px);
+      border-left:3px solid var(--clay);
+      letter-spacing:0.01em;
+    ">Handpicked homes, full concierge service, and a commitment to community. Every booking supports local Nosara families.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="scrollTo({top:document.getElementById('properties').offsetTop-70,behavior:'smooth'})">Explore Properties</button>
+    <button class="btn-ghost" onclick="scrollTo({top:document.getElementById('concierge').offsetTop-70,behavior:'smooth'})">Build Your Package</button>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- IMPACT STRIP -->
+<div 
+
+<!-- PROPERTIES -->
+<section id="impact">
+  <div class="section-inner">
+
+    <!-- BIG 5% BANNER -->
+    <div class="impact-banner-big">
+      <div class="impact-banner-left">
+        <div class="impact-pct">5<sup>%</sup></div>
+        <div class="impact-pct-label">Goes Directly to Nosara Families</div>
+      </div>
+      <div class="impact-banner-right">
+        Not to overhead. Not to a middleman.<br>
+        Directly to the people who built this place.<br>
+        <strong>Every. Single. Booking.</strong>
+      </div>
+    </div>
+
+    <!-- TEXT + STATS GRID -->
+    <div class="impact-body">
+      <div class="impact-text">
+        <div class="impact-eyebrow">◈ <span style="color:var(--clay);font-weight:700">Conscience Collective</span></div>
+        <h2 class="impact-title" style="color:#FDFAF5;font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:300;font-style:italic;line-height:1;margin-bottom:1.5rem">Travel That<br>Gives Back</h2>
+        <p class="impact-p" style="font-size:0.88rem;color:#E8E4DC;line-height:2;font-weight:300;margin-bottom:1.25rem;letter-spacing:0.01em">5% of every reservation goes directly to families in Nosara — not to overhead, not to a middleman. Directly to the people who have built this community into what it is.</p>
+        <p class="impact-p" style="font-size:0.88rem;color:#E8E4DC;line-height:2;font-weight:300;margin-bottom:1.25rem;letter-spacing:0.01em">When you book with us, you're part of something larger than a vacation. You're part of a movement that believes paradise should lift everyone.</p>
+      </div>
+      <div class="impact-stats stagger">
+        <div class="impact-stat"><div class="impact-stat-num">5%</div><div class="impact-stat-label">Every Booking</div></div>
+        <div class="impact-stat"><div class="impact-stat-num">9</div><div class="impact-stat-label">Properties Working in Collective</div></div>
+        <div class="impact-stat"><div class="impact-stat-num">100%</div><div class="impact-stat-label">Direct to Families</div></div>
+        <div class="impact-stat"><div class="impact-stat-num">∞</div><div class="impact-stat-label">Good Vibes</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<section id="properties">
+  <div class="section-inner">
+    <div class="section-label">Where to Stay</div>
+    <h2 class="section-title">Our Properties</h2>
+    <p class="section-sub">From earthen casas to highland retreats — each home carries the soul of Nosara and the warmth of its people.</p>
+    <div class="props-grid stagger" id="propsGrid"></div>
+  </div>
+</section>
+
+<!-- CONCIERGE BUILDER -->
+<section id="concierge">
+  <div class="section-inner">
+    <div class="section-label">Full Service</div>
+    <h2 class="section-title">Build Your Perfect Stay</h2>
+    <p class="section-sub">Select everything you need — from airport pickup to private chef — and we'll have it all ready when you arrive.</p>
+    <div class="builder-grid" id="servicesGrid"></div>
+    <div class="quote-box" id="quoteBox" style="display:none">
+      <div class="quote-title">Your Package Quote</div>
+      <ul class="quote-items" id="quoteItems"></ul>
+      <div class="quote-total">
+        <div>
+          <div class="quote-total-label">Estimated Total</div>
+          <div class="quote-note">+ taxes · final quote sent within 24h</div>
+        </div>
+        <div class="quote-total-price" id="quoteTotal">$0</div>
+      </div>
+      <button class="submit-quote" onclick="addServicesToCart()">🛒 Add All to Cart ♥</button>
+    </div>
+  </div>
+</section>
+
+<!-- RETREATS -->
+<section id="retreats">
+  <div class="section-inner">
+    <div class="section-label">Group Experiences</div>
+    <h2 class="section-title">Host Your Retreat in Nosara</h2>
+    <p class="section-sub">Yoga, wellness, surf, business, creative — Nosara's energy is unlike anywhere else. We offer the perfect spaces and full support for retreat hosts from around the world.</p>
+    <div class="retreats-grid stagger" id="retreatsGrid"></div>
+  </div>
+</section>
+
+<!-- SURF INFO (sin Surfline) -->
+<section id="surf">
+  <div class="section-inner">
+    <div class="section-label">Wave Report</div>
+    <h2 class="section-title">Nosara Surf</h2>
+    <p class="section-sub">Playa Guiones — one of the most consistent beach breaks in Central America. Best surf: May–November. Offshore winds: Dec–April.</p>
+    <div class="surf-cards">
+      <div class="surf-card">
+        <div class="surf-card-label">Today's Waves</div>
+        <div class="surf-card-val" id="waveToday">—</div>
+        <div class="surf-card-desc" id="waveTodayDesc">Loading conditions...</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Wind</div>
+        <div class="surf-card-val" id="windToday">—</div>
+        <div class="surf-card-desc" id="windTodayDesc">Loading...</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Water Temp</div>
+        <div class="surf-card-val">28°C</div>
+        <div class="surf-card-desc">Warm year-round 🌊</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Best Sessions</div>
+        <div class="surf-card-val" style="font-size:1.6rem">Dawn</div>
+        <div class="surf-card-desc">6–8am offshore · 4–6pm afternoon glass</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Turtle Season</div>
+        <div class="surf-card-val" style="font-size:1.6rem">Jul–Dec</div>
+        <div class="surf-card-desc">Olive Ridley mass nesting at Ostional</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Nearby Breaks</div>
+        <div class="surf-card-val" style="font-size:1.2rem">4 Spots</div>
+        <div class="surf-card-desc">Guiones · Pelada · Ostional · Marbella</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- LOTS -->
+<section id="lots">
+  <div class="section-inner">
+    <div class="section-label">Real Estate</div>
+    <h2 class="section-title">Available Lots</h2>
+    <p class="section-sub">Own a piece of Nosara. Carefully selected land parcels in prime locations — from jungle hillsides to surf-adjacent flats.</p>
+    <div class="lots-grid stagger" id="lotsGrid"></div>
+  </div>
+</section>
+
+<!-- GUIDE -->
+<section id="guide">
+  <div class="section-inner">
+    <div class="section-label">Your Nosara Resource</div>
+    <h2 class="section-title">The Collective Guide</h2>
+    <p class="section-sub">Everything a foreigner needs to know — buying property, moving to Costa Rica, understanding Guanacaste culture, and making the most of Nosara.</p>
+    <div class="guide-tabs" id="guideTabs"></div>
+    <div id="guidePanels"></div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="impact-section" id="impact">
+  <div class="impact-grid">
+    <div>
+      <div class="section-label"><span style="color:var(--clay);font-weight:700">Conscience Collective</span></div>
+      <h2 class="section-title" style="font-size:clamp(2.5rem,5vw,3.5rem)">Travel that gives back</h2>
+      <p style="margin-top:1.25rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">5% of every reservation goes directly to families in Nosara — not to overhead, not to a middleman. Directly to the people who have built this community into what it is.</p>
+      <p style="margin-top:1rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">When you book with us, you're part of something larger than a vacation. You're part of a movement that believes paradise should lift everyone.</p>
+    </div>
+    <div class="impact-stats stagger">
+      <div class="impact-stat"><div class="impact-stat-num">5%</div><div class="impact-stat-label">Every Booking</div></div>
+      <div class="impact-stat"><div class="impact-stat-num">9</div><div class="impact-stat-label">Properties Working<br>in Collective</div></div>
+      <div class="impact-stat"><div class="impact-stat-num">100%</div><div class="impact-stat-label">Direct to Families</div></div>
+      <div class="impact-stat"><div class="impact-stat-num">∞</div><div class="impact-stat-label">Good Vibes</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+
+<footer>
+  <div class="footer-inner">
+
+    <!-- Mission Statement -->
+    <div style="border-bottom:1px solid rgba(253,250,245,0.06);padding-bottom:3rem;margin-bottom:3rem;max-width:820px">
+      <div style="font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--clay-light);margin-bottom:1.5rem;font-weight:400">◈ Our Mission</div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;font-style:italic;color:#C8C2B6;line-height:1.75;margin-bottom:1.5rem">
+        As tourism continues to grow, much of the revenue generated here leaves the region through large international booking platforms. Nosara <span style="color:var(--clay);font-weight:700">Collective Conscience</span> was created to change that.
+      </p>
+      <p style="font-size:0.78rem;color:#6A6460;line-height:1.9;font-weight:300;margin-bottom:1rem">
+        We are building a locally driven network of homes, experiences, and services that keeps more tourism dollars circulating within the community. Together with homeowners, local businesses, and conscious travelers, we are creating a model where tourism directly contributes to the people, culture, and future of Nosara.
+      </p>
+      <p style="font-size:0.78rem;color:#6A6460;line-height:1.9;font-weight:300;margin-bottom:1.5rem">
+        Every reservation becomes an opportunity to support local families, strengthen community initiatives, and preserve the spirit that makes Nosara one of the world's most special coastal destinations.
+      </p>
+      <p style="font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:600;color:#C8C2B6;letter-spacing:0.04em">
+        Travel with purpose. Stay with impact. Surf good waves everyday 🌴✨
+      </p>
+    </div>
+
+    <!-- 5% Transparency Block -->
+    <div style="background:#1E1D18;border:1px solid rgba(253,250,245,0.06);padding:2rem;margin-bottom:3rem">
+      <div style="font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--clay-light);margin-bottom:1rem;font-weight:400">◈ Community Impact</div>
+      <p style="font-size:0.78rem;color:#8A8478;line-height:1.85;font-weight:300;margin-bottom:0.75rem">Every reservation contributes directly to local Nosara families. We donate 5% of our profits to community initiatives, educational programs, and families in need.</p>
+      <p style="font-size:0.78rem;color:#8A8478;line-height:1.85;font-weight:300">At the end of each year, we publish a transparency report showing exactly where the funds were allocated.</p>
+    </div>
+
+    <!-- Grid Links -->
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">NOSARA <span>COLLECTIVE</span></div>
+        <div class="footer-logo-sub">CONSCIENCE</div>
+        <p class="footer-desc" style="color:#6A6460">Handpicked homes in Nosara's most beautiful pockets. Every booking supports local families — 5% goes directly to the community.</p>
+        <div class="footer-5pct">♥ 5% to Nosara Families</div>
+        <div style="margin-top:1rem;font-family:'DM Mono',monospace;font-size:0.56rem;color:#3A3830;letter-spacing:0.1em;text-transform:uppercase;font-weight:400">🇨🇷 100% Costa Rican Company</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Stay</div>
+        <div class="footer-links">
+          <a href="#properties">Our Properties</a>
+          <a href="#properties">Casa Arcilla</a>
+          <a href="#properties">Ojos Azules</a>
+          <a href="#properties">Casa Sol &amp; Mar</a>
+          <a href="#properties">H7 Highlands</a>
+          <a href="#properties">Castillo Colonial</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Explore</div>
+        <div class="footer-links">
+          <a href="#concierge">Concierge</a>
+          <a href="#retreats">Retreats</a>
+          <a href="#surf">Surf Forecast</a>
+          <a href="#lots">Invest</a>
+          <a href="#guide">Guide</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <div class="footer-links">
+          <a href="https://wa.me/50612345678" target="_blank">📱 WhatsApp</a>
+          <a href="mailto:info@nosaracollective.com">✉️ info@nosaracollective.com</a>
+          <span style="font-size:0.68rem;color:#3A3830;line-height:1.6">📍 Nosara, Guanacaste<br>Costa Rica</span>
+        </div>
+        <div style="margin-top:1.5rem">
+          <div class="footer-col-title">Follow</div>
+          <div class="footer-links">
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+            <a href="https://tiktok.com" target="_blank">TikTok</a>
+            <a href="https://facebook.com" target="_blank">Facebook</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom" style="margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(253,250,245,0.05)">
+      <span>© 2025 Nosara <span style="color:var(--clay);font-weight:700"><span style="color:var(--clay);font-weight:700">Conscience Collective</span></span> · Nosara, Guanacaste, Costa Rica · 🇨🇷 100% Costa Rican Company</span>
+      <div class="footer-bottom-links">
+        <a href="#" onclick="showPolicy('privacy')">Privacy Policy</a>
+        <a href="#" onclick="showPolicy('terms')">Terms & Conditions</a>
+        <a href="#" onclick="showPolicy('cancellation')">Cancellation Policy</a>
+        <a href="#" onclick="showPolicy('contact')">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Policy Modal -->
+<div id="policyModal" style="display:none;position:fixed;inset:0;background:rgba(20,18,16,0.75);z-index:600;align-items:center;justify-content:center;padding:2rem">
+  <div style="background:var(--white);max-width:600px;width:100%;padding:2.5rem;border:2px solid var(--border);max-height:80vh;overflow-y:auto;position:relative">
+    <button onclick="document.getElementById('policyModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text)">✕</button>
+    <div id="policyContent"></div>
+  </div>
+</div>
+<script>
+const POLICIES = {
+  privacy: {title:'Privacy Policy',text:'We collect only the information necessary to process your reservation and provide our services. We never sell your data to third parties. Your payment information is processed securely through Wise or PayPal. By using our site you agree to this policy.'},
+  terms: {title:'Terms & Conditions',text:'All reservations are subject to availability confirmation within 24 hours. Prices are in USD and subject to applicable taxes. The 5% community contribution is included in all bookings. Nosara Collective Conscience reserves the right to cancel bookings in case of force majeure.'},
+  cancellation: {title:'Cancellation Policy',text:'Free cancellation up to 14 days before check-in. 50% refund for cancellations 7-14 days before. No refund within 7 days of check-in. All cancellations must be submitted in writing to info@nosaracollective.com.'},
+  contact: {title:'Contact Us',text:'📱 WhatsApp: +506 1234-5678<br>✉️ Email: info@nosaracollective.com<br>📍 Nosara, Guanacaste, Costa Rica<br><br>We respond within 24 hours, usually much faster!'}
+};
+function showPolicy(key){
+  const p = POLICIES[key];
+  if(!p) return;
+  document.getElementById('policyContent').innerHTML = `<h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1.25rem">${p.title}</h2><p style="font-size:0.82rem;color:var(--text-muted);line-height:1.85;font-weight:300">${p.text}</p>`;
+  const m = document.getElementById('policyModal');
+  m.style.display='flex';
+}
+</script>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-gal">
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      <button class="modal-arrow prev" onclick="galPrev(event)">‹</button>
+      <button class="modal-arrow next" onclick="galNext(event)">›</button>
+      <img id="modalImg" src="" alt="">
+      <div class="gal-dots" id="galDots"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-hdr">
+        <div><h2 class="modal-title" id="modalTitle"></h2><div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px" id="modalMeta"></div></div>
+        <div><div class="modal-price" id="modalPrice"></div><div class="modal-price-note">per night · USD</div></div>
+      </div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-feats" id="modalFeats"></div>
+      <div class="modal-impact-bar">♥ <div><strong>5% of your booking</strong> goes directly to local Nosara families through the <span style="color:var(--clay);font-weight:700">Conscience Collective</span>.</div></div>
+      <div class="modal-book">
+        <div class="modal-book-title">Check Availability & Reserve</div>
+        <div id="calendarWidget" style="background:rgba(245,242,236,0.04);border:1px solid var(--border);border-radius:2px;padding:1rem;margin-bottom:1rem"></div>
+        <div id="calMsg" style="font-size:0.75rem;min-height:1.2em;margin-bottom:0.5rem"></div>
+        <div class="form-row">
+          <div class="fg"><label>Check-in</label><input type="date" id="checkin" onchange="updateNightCount();renderCalendar(curProp?.id)"></div>
+          <div class="fg"><label>Check-out</label><input type="date" id="checkout" onchange="updateNightCount();renderCalendar(curProp?.id)"></div>
+        </div>
+        <div id="nightCount" style="font-size:0.8rem;font-weight:400;margin-bottom:0.75rem;min-height:1.2em;color:var(--clay)"></div>
+        <div class="form-row">
+          <div class="fg"><label>Guests</label><select id="numGuests"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8+</option></select></div>
+          <div class="fg"><label>Full Name</label><input type="text" id="guestName" placeholder="Your name"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Email</label><input type="email" id="guestEmail" placeholder="your@email.com"></div>
+          <div class="fg"><label>Phone (WhatsApp)</label><input type="tel" id="guestPhone" placeholder="+1 555 000 0000"></div>
+        </div>
+        <div style="margin-bottom:1rem">
+          <div style="font-family:'DM Mono',monospace;font-size:0.54rem;color:var(--text-muted);font-weight:400;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem">Payment Method</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+            <label style="display:flex;align-items:center;gap:0.5rem;padding:10px 12px;border:1px solid var(--border-med);cursor:pointer;font-size:0.72rem;background:var(--white)">
+              <input type="radio" name="paymentMethod" value="paypal" checked style="accent-color:var(--clay)"> 🅿️ PayPal
+            </label>
+            <label style="display:flex;align-items:center;gap:0.5rem;padding:10px 12px;border:1px solid var(--border-med);cursor:pointer;font-size:0.72rem;background:var(--white)">
+              <input type="radio" name="paymentMethod" value="wise" style="accent-color:var(--clay)"> 🌍 Wise
+            </label>
+          </div>
+        </div>
+        <button class="book-btn" onclick="submitBooking()">Reserve Now</button>
+        <p class="book-note">🔒 Secure checkout · 5% supports Nosara families · Dates sync with Airbnb</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CDN='https://res.cloudinary.com/dzqgajn3l/image/upload/';
+
+// ─── DATA (same as original) ───
+const PROPS=[
+  {id:'arcilla1',name:'Casa Arcilla No. 1',badge:'Signature',price:500,meta:'3 bed · 3 bath · Private pool · Jungle',desc:'A masterpiece of earth and light — hand-crafted clay walls, soaring ceilings, and a private pool wrapped in tropical gardens. The original jewel of the Collective.',
+  cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',
+  images:[CDN+'v1780975891/1_-_grounds5_qacxew.jpg',CDN+'v1780975903/20_-_grounds_sawx8t.jpg',CDN+'v1780975902/19_-_grounds4_q7rwk7.jpg',CDN+'v1780975890/18_-_grounds3_y3x8op.jpg',CDN+'v1780975890/17_-_queen2_szlikg.jpg',CDN+'v1780975900/16_-_queen_xbq55n.jpg',CDN+'v1780975899/15_-_master3_rhnqgg.jpg',CDN+'v1780975905/14_-_master_5_fz39fi.jpg',CDN+'v1780975898/13_-_master6_y2hquz.jpg',CDN+'v1780975898/12_-_master4_yy0vim.jpg',CDN+'v1780975897/11_-_master_cdplzv.jpg',CDN+'v1780975896/9_-_lower-2_1_u2hxop.jpg',CDN+'v1780975905/9_-_lower-2_k9qnpr.jpg',CDN+'v1780975895/8_-_lower7_rnxeqh.jpg',CDN+'v1780975894/7_-_lower5_tun5wy.jpg',CDN+'v1780975894/6_-_lower4_amzrj4.jpg',CDN+'v1780975904/5_-_lower3_mdwcrr.jpg',CDN+'v1780975892/4_-_lower1_u87oap.jpg',CDN+'v1780975891/3_-_lower_asprff.jpg',CDN+'v1780975891/2_-_lower1.1_qk5a2e.jpg'],
+  features:['Private pool','3 bedrooms','Full kitchen','A/C all rooms','Jungle setting','Free parking'],retreat:true},
+  {id:'arcilla2',name:'Casa Arcilla No. 2',badge:'Signature',price:450,meta:'3 bed · 2 bath · Private pool · Jungle',desc:'Sister to Arcilla No. 1 — same earthy soul, same lush setting, slightly more intimate. Perfect for a family or small group wanting the full Nosara experience.',
+  cover:CDN+'v1780975902/19_-_grounds4_1_gm24ir.jpg',
+  images:[CDN+'v1780975902/19_-_grounds4_1_gm24ir.jpg',CDN+'v1780975905/14_-_master_5_fz39fi.jpg',CDN+'v1780975899/15_-_master3_rhnqgg.jpg',CDN+'v1780975898/12_-_master4_yy0vim.jpg',CDN+'v1780975897/11_-_master_cdplzv.jpg',CDN+'v1780975900/16_-_queen_xbq55n.jpg',CDN+'v1780975890/17_-_queen2_szlikg.jpg',CDN+'v1780975894/6_-_lower4_amzrj4.jpg',CDN+'v1780975904/5_-_lower3_mdwcrr.jpg',CDN+'v1780975891/3_-_lower_asprff.jpg'],
+  features:['Private pool','3 bedrooms','Full kitchen','A/C','Jungle views','Free parking'],retreat:true},
+  {id:'bundle-arcilla',name:'Bundle: Arcilla 1 + 2',badge:'Bundle',badgeClass:'bundle',price:900,meta:'6 bed · 5 bath · Two pools · Large groups',desc:'Rent both Arcilla homes together — two private pools, shared garden, ideal for large families, retreats, or multi-family groups. Sleeps up to 12.',
+  cover:CDN+'v1780975416/20_-_grounds_hgojyr.jpg',
+  images:[CDN+'v1780975416/20_-_grounds_hgojyr.jpg',CDN+'v1780975905/14_-_master_5_fz39fi.jpg'],
+  features:['Two private pools','6 bedrooms','Two kitchens','Shared garden','Sleeps 12+','Best value'],retreat:true},
+  {id:'ojosazules',name:'Casa Ojos Azules',badge:'Popular',price:500,meta:'3 bed · 2 bath · Pool · Tropical garden',desc:'Named for the electric blue eyes of the surrounding butterflies — a luminous, open-plan home with gorgeous tropical gardens and a pool that floats in the canopy.',
+  cover:CDN+'v1781050965/Small5_qfmiv4.jpg',
+  images:[CDN+'v1781050965/Small5_qfmiv4.jpg',CDN+'v1781051116/Small1_kyeuul.jpg',CDN+'v1781051114/Small2_z7gahl.jpg',CDN+'v1781051119/Small3_vkxkcf.jpg',CDN+'v1781051122/Small4_bckcyk.jpg',CDN+'v1781050967/Small6_xqpl0f.jpg',CDN+'v1781050983/Small7_qppaxb.jpg',CDN+'v1781050970/Small8_s2nzko.jpg',CDN+'v1781050973/Small9_crahh9.jpg',CDN+'v1781050997/Small10_c3akud.jpg'],
+  features:['Private pool','3 bedrooms','Open living','Tropical garden','A/C','Free parking'],retreat:true},
+  {id:'sol',name:'Casa Sol',badge:'Beach Side',price:300,meta:'2 bed · 2 bath · Private pool · Garden',desc:'Warm and radiant like the Guanacaste sun — opens to lush gardens and a private pool. Teak wood, organic textures, coastal light.',
+  cover:CDN+'v1781041056/Casa_Sol_y_Mar_039_ps2rfd.jpg',
+  images:[CDN+'v1781041056/Casa_Sol_y_Mar_039_ps2rfd.jpg',CDN+'v1781041060/Casa_Sol_y_Mar_040_cfcnvn.jpg',CDN+'v1781041063/Casa_Sol_y_Mar_041_yp3nwl.jpg',CDN+'v1781041048/Casa_Sol_y_Mar_033_ygkfum.jpg',CDN+'v1781041045/Casa_Sol_y_Mar_034_iys1qp.jpg',CDN+'v1781041054/Casa_Sol_y_Mar_036_rwcv2m.jpg',CDN+'v1781041015/Casa_Sol_y_Mar_016_sm0tei.jpg',CDN+'v1781041019/Casa_Sol_y_Mar_020_avb1nv.jpg',CDN+'v1781040984/Casa_Sol_y_Mar_001_c1p9lo.jpg',CDN+'v1781040984/Casa_Sol_y_Mar_002_rwlwup.jpg'],
+  features:['Private pool','2 bedrooms','Garden terrace','Full kitchen','A/C','Teak details'],retreat:false},
+  {id:'mar',name:'Casa Mar',badge:'Beach Side',price:300,meta:'2 bed · 2 bath · Private pool · Garden',desc:'Ocean-inspired twin to Casa Sol — aqua tones, fish-print linens, and a serene atmosphere that puts you right in the coastal mood.',
+  cover:CDN+'v1781041035/Casa_Sol_y_Mar_025_gr1v2w.jpg',
+  images:[CDN+'v1781041035/Casa_Sol_y_Mar_025_gr1v2w.jpg',CDN+'v1781041036/Casa_Sol_y_Mar_027_ubstlr.jpg',CDN+'v1781041039/Casa_Sol_y_Mar_028_r8ya28.jpg',CDN+'v1781041041/Casa_Sol_y_Mar_029_v404gh.jpg',CDN+'v1781041042/Casa_Sol_y_Mar_030_u0144h.jpg',CDN+'v1781041026/Casa_Sol_y_Mar_023_mb4pkw.jpg'],
+  features:['Private pool','2 bedrooms','Ocean-themed','Full kitchen','A/C','Jungle views'],retreat:false},
+  {id:'bundle-solmar',name:'Bundle: Sol + Mar',badge:'Bundle',badgeClass:'bundle',price:560,meta:'4 bed · 4 bath · Two pools · Best value',desc:'Take over both Sol and Mar — 4 bedrooms, two private pools, shared lush grounds. Perfect for two families or group retreats up to 10 guests.',
+  cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',
+  images:[CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',CDN+'v1781041056/Casa_Sol_y_Mar_039_ps2rfd.jpg',CDN+'v1781041035/Casa_Sol_y_Mar_025_gr1v2w.jpg',CDN+'v1781041063/Casa_Sol_y_Mar_041_yp3nwl.jpg'],
+  features:['Two private pools','4 bedrooms','Two kitchens','Sleeps 10','Shared grounds','Best value'],retreat:true},
+  {id:'monkey',name:'Casa Monkey',badge:'Nature',badgeClass:'eco',price:200,meta:'2 bed · 2 bath · Salt pool · Hidden Palms',desc:'Tucked inside Hidden Palms — a charming casita surrounded by tropical trees, howler monkeys, and a stunning saltwater community pool.',
+  cover:CDN+'v1781055993/piscina_casa_monkey_hidden_palms_xd5azv.png',
+  images:[CDN+'v1781055993/piscina_casa_monkey_hidden_palms_xd5azv.png',CDN+'v1781055612/foto_1_a24qfa.png',CDN+'v1781055613/foto_2_tjkpn1.png',CDN+'v1781055616/foto_3_u3ukit.png',CDN+'v1781055620/foto_4_snhoyo.png',CDN+'v1781055622/foto_5_vwmrzp.png'],
+  features:['Saltwater pool','2 bedrooms','Howler monkeys','Full kitchen','A/C','Gated community'],retreat:false},
+  {id:'h7',name:'H7 Highlands',badge:'Premium',price:300,meta:'4 bed · 4 bath · Mountain views · Modern',desc:'Striking electric-blue modernist villa on the Nosara highlands — floor-to-ceiling windows with jungle-to-ocean panoramas, double-sink master bath, sleek black hardware.',
+  cover:CDN+'v1781055843/WhatsApp_Image_2025-01-23_at_10.32.14_AM_b992us.jpg',
+  images:[CDN+'v1781055843/WhatsApp_Image_2025-01-23_at_10.32.14_AM_b992us.jpg',CDN+'v1781055820/sala_2_tdh0ml.jpg',CDN+'v1781055823/sala_3_lm5mgf.jpg',CDN+'v1781055839/sala_rawjtl.jpg',CDN+'v1781055836/main_room_z24xhi.jpg',CDN+'v1781055813/main_bath_a4mgw5.jpg',CDN+'v1781055806/cocina_m0306m.jpg',CDN+'v1781055815/room_1_hudowr.jpg'],
+  features:['Mountain views','4 bedrooms','Double garage','Panoramic windows','Black hardware','Modern design'],retreat:false}
+,
+  {id:'castillo',name:'Castillo Colonial',badge:'Estate',badgeClass:'retreat',price:0,meta:'15 bed · 15 bath · Indoor pool · Spa · Tennis · Up to 34 guests',desc:'The crown jewel of Nosara — a magnificent 15-bedroom colonial estate with indoor pool, spa, jacuzzi, tennis court, and fitness center. The ultimate venue for large groups, elite retreats, and unforgettable events.',
+  cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',
+  images:['https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg','https://imgservice.surfbreakrentals.com/500x325/castillo-colonial-nosara-b-cr-nosara-bc-14420491-1.jpg','https://imgservice.surfbreakrentals.com/500x325/castillo-colonial-nosara-b-cr-nosara-bc-14420491-2.jpg','https://imgservice.surfbreakrentals.com/500x325/castillo-colonial-nosara-b-cr-nosara-bc-14420491-3.jpg','https://imgservice.surfbreakrentals.com/500x325/castillo-colonial-nosara-b-cr-nosara-bc-14420491-4.jpg'],
+  features:['15 bedrooms','Indoor pool','Spa & Jacuzzi','Tennis court','Fitness center','Pet friendly','Free WiFi','BBQ & Terrace'],
+  retreat:true,
+  priceLabel:'Contact for pricing'}];
+
+const SERVICES=[
+  {id:'airport',icon:'✈️',name:'Airport Transfer',desc:'Private pickup from Liberia (LIR) or San José (SJO) — we arrive on time, every time.',price:190,priceLabel:'$190 + tax per transfer',fields:[{type:'select',id:'airport_name',label:'Airport',options:['Liberia (LIR)','San José SJO']},{type:'input',inputType:'date',id:'airport_date',label:'Arrival Date'},{type:'input',inputType:'time',id:'airport_time',label:'Arrival Time'},{type:'input',inputType:'text',id:'airport_flight',label:'Flight Number'}]},
+  {id:'atv',icon:'🏍️',name:'ATV Rental',desc:'Honda ATVs for 2 people — explore Nosara\'s jungle trails and hidden beaches.',price:100,priceLabel:'$100 + tax per ATV/day',fields:[{type:'input',inputType:'number',id:'atv_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'atv_qty',label:'Number of ATVs',placeholder:'e.g. 2'}]},
+  {id:'golf',icon:'⛳',name:'Golf Cart',desc:'Perfect for groups of 4 or 6. Cruise Nosara in style.',price:140,priceLabel:'$140 + tax per cart/day',fields:[{type:'input',inputType:'number',id:'golf_days',label:'Number of Days',placeholder:'e.g. 2'},{type:'select',id:'golf_pax',label:'Group Size',options:['4 passengers','6 passengers']}]},
+  {id:'car',icon:'🚗',name:'Car Rental',desc:'Full-size rental vehicles for exploring Guanacaste and beyond.',price:140,priceLabel:'$140 + tax per day',fields:[{type:'input',inputType:'date',id:'car_start',label:'Start Date'},{type:'input',inputType:'number',id:'car_days',label:'Number of Days',placeholder:'e.g. 5'}]},
+  {id:'chef',icon:'🍳',name:'Private Chef',desc:'Chef comes to your home. 1h shopping, 1h cooking, 2h serving & cleanup. Transport included.',price:50,priceLabel:'$50/hour · 4 hour minimum',fields:[{type:'input',inputType:'number',id:'chef_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'select',id:'chef_hours',label:'Hours per Day (min 4)',options:['4 hours','5 hours','6 hours','7 hours','8 hours']},{type:'textarea',id:'chef_menu',label:'Menu Preferences'}]},
+  {id:'grocery',icon:'🛒',name:'Grocery Service',desc:'Your fridge stocked and ready before you arrive. Just send us your list.',price:20,priceLabel:'$20 service fee + groceries',fields:[{type:'textarea',id:'grocery_list',label:'Grocery List'}]},
+  {id:'cleaning',icon:'🧹',name:'Extra Cleaning',desc:'Additional cleaning sessions beyond check-in/check-out.',price:100,priceLabel:'$100 per session',fields:[{type:'input',inputType:'number',id:'clean_qty',label:'Number of Sessions',placeholder:'e.g. 2'}]},
+  {id:'surf',icon:'🏄',name:'Surf Lessons',desc:'Certified instructors, all levels. Nosara is one of the best surf spots in the world.',price:80,priceLabel:'$80 per person',fields:[{type:'input',inputType:'number',id:'surf_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'surf_days',label:'Number of Sessions',placeholder:'e.g. 3'}]},
+  {id:'tennis',icon:'🎾',name:'Tennis Lessons',desc:'Private tennis lessons with a certified instructor.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'tennis_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'tennis_sessions',label:'Number of Sessions',placeholder:'e.g. 2'}]},
+  {id:'muaythai',icon:'🥊',name:'Muay Thai',desc:'Learn authentic Muay Thai from experienced trainers in a jungle setting.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'muay_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'muay_sessions',label:'Number of Sessions',placeholder:'e.g. 3'}]},
+  {id:'bjj',icon:'🥋',name:'Brazilian Jiu Jitsu',desc:'Train BJJ in paradise — private or small group sessions available.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'bjj_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'bjj_sessions',label:'Number of Sessions',placeholder:'e.g. 2'}]},
+  {id:'snorkel',icon:'🤿',name:'Snorkeling Tour',desc:'Guided snorkeling tours to discover Nosara\'s vibrant underwater world.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'snorkel_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'input',inputType:'date',id:'snorkel_date',label:'Preferred Date'}]},
+  {id:'fishing',icon:'🎣',name:'Fishing Tour',desc:'Deep sea fishing — 4 hours on the water (7:30am–11:30am). Up to 5 people. Gear & captain included.',price:1500,priceLabel:'$1,500 for up to 5 people',fields:[{type:'input',inputType:'date',id:'fishing_date',label:'Preferred Date'},{type:'input',inputType:'number',id:'fishing_pax',label:'Number of People (max 5)',placeholder:'e.g. 4'}]},
+  {id:'dolphin',icon:'🐬',name:'Dolphin Watching',desc:'Magical boat tour searching for dolphins in their natural habitat.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'dolphin_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'dolphin_date',label:'Preferred Date'}]},
+  {id:'sunset',icon:'🌅',name:'Sunset Trip',desc:'Cruise the Pacific as the sun sets over the Nosara coast.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'sunset_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'input',inputType:'date',id:'sunset_date',label:'Preferred Date'}]},
+  {id:'surftrip',icon:'🏄',name:'Surf Trip — Ostional or Marbella',desc:'Day trip to the legendary breaks of Ostional or Marbella.',price:150,priceLabel:'$150 per person',fields:[{type:'select',id:'surftrip_dest',label:'Destination',options:['Ostional','Marbella']},{type:'input',inputType:'number',id:'surftrip_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'surftrip_date',label:'Preferred Date'}]},
+  {id:'surfboard',icon:'🏄',name:'Surfboard Rental',desc:'Choose your board and hit the waves — transport to beach included.',price:30,priceLabel:'$30 per board/day',fields:[{type:'select',id:'sb_type',label:'Board Type',options:['Longboard','Mid Length','Shortboard']},{type:'input',inputType:'number',id:'sb_qty',label:'Number of Boards',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'sb_days',label:'Number of Days',placeholder:'e.g. 3'}]},
+  {id:'horseback',icon:'🐎',name:'Sunset Horseback Riding',desc:'Ride through Nosara\'s beaches and jungle trails as the sun sets.',price:95,priceLabel:'$70–$120 per person',fields:[{type:'input',inputType:'number',id:'horse_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'horse_date',label:'Preferred Date'}]},
+  {id:'massage',icon:'💆',name:'In-House Massage',desc:'Professional massage therapist comes to your home. Transport included.',price:150,priceLabel:'$150 per person',fields:[{type:'input',inputType:'number',id:'massage_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'date',id:'massage_date',label:'Preferred Date'},{type:'select',id:'massage_type',label:'Massage Type',options:['Swedish / Relaxation','Deep Tissue','Sports','Couples']}]},
+  {id:'yoga',icon:'🧘',name:'Private Yoga Class',desc:'Certified yoga instructor comes to your home or villa. All levels welcome.',price:80,priceLabel:'$80 per class',fields:[{type:'input',inputType:'number',id:'yoga_sessions',label:'Number of Sessions',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'yoga_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'select',id:'yoga_level',label:'Level',options:['Beginner','Intermediate','Advanced','Mixed']}]},
+  {id:'skate',icon:'🛹',name:'Skate Lessons',desc:'Private lessons for all ages and levels. Transport included.',price:100,priceLabel:'$100 per day per person',fields:[{type:'input',inputType:'number',id:'skate_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'skate_days',label:'Number of Days',placeholder:'e.g. 2'}]},
+  {id:'buffet',icon:'🍽️',name:'Buffet Catering',desc:'Perfect for retreats and groups. Local chef prepares everything. Transport included.',price:35,priceLabel:'From $35 per person',fields:[{type:'select',id:'buffet_meal',label:'Meal Type',options:['Breakfast Buffet','Lunch Buffet','Dinner Buffet','Full Day (all meals)']},{type:'input',inputType:'number',id:'buffet_pax',label:'Number of People',placeholder:'e.g. 12'},{type:'input',inputType:'number',id:'buffet_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'textarea',id:'buffet_notes',label:'Dietary restrictions / preferences'}]},
+  {id:'custom',icon:'✨',name:'Custom Experience',desc:'Have something special in mind? Tell us and we\'ll make it happen.',price:0,priceLabel:'Contact for pricing',fields:[{type:'textarea',id:'custom_desc',label:'Describe your dream experience'}]}
+];
+
+const RETREATS=[
+  {name:'Arcilla Compound',tag:'Full Compound · Up to 18 Guests',desc:'Both Arcilla villas together — 7 bedrooms sleeping up to 18 guests. Two private pools, two full kitchens, deep jungle seclusion. The ultimate setting for yoga, wellness, leadership, or creative retreats.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 18 guests','7 bedrooms','Two private pools','Two full kitchens','Buffet catering available','Transport included','Full concierge','Jungle immersion']},
+  {name:'Casa Ojos Azules',tag:'Intimate Retreat · Up to 10 Guests',desc:'A luminous 4-bedroom villa sleeping up to 10 guests. Open spaces, natural light, tropical gardens and a private pool. Ideal for yoga, healing, wellness, or creative retreats.',cover:CDN+'v1781050965/Small5_qfmiv4.jpg',features:['Up to 10 guests','4 bedrooms','Private pool','Garden spaces','Buffet catering available','Transport included','Close to beach','Natural light']},
+  {name:'Castillo Colonial',tag:'Crown Jewel · Up to 34 Guests',desc:'The most prestigious retreat venue in Nosara — 15 bedrooms, indoor pool, spa, jacuzzi, tennis court, and fitness center. The perfect stage for large wellness retreats, corporate events, destination weddings, and elite multi-group experiences. Nothing in Nosara compares.',cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',features:['Up to 34 guests','15 bedrooms','Indoor pool','Spa & Jacuzzi','Tennis court','Fitness center','Full kitchen','Pet friendly']},
+  {name:'Sol + Mar Bundle',tag:'Twin Villa Retreat · Up to 16 Guests',desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms sleeping up to 16 guests. Perfect for retreats where facilitators and participants need separate spaces.',cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',features:['Up to 16 guests','4 bedrooms','Two pools','Two kitchens','Buffet catering available','Transport included','Two living areas','Separate spaces']}
+];
+
+const LOTS=[
+  {icon:'🌴',name:'Lot A — Jungle View',size:'600 m²',desc:'Flat buildable lot surrounded by mature tropical trees. Water and electricity access. Close to surf beaches.',price:'Contact for pricing'},
+  {icon:'🏔️',name:'Lot B — Highland Panoramic',size:'800 m²',desc:'Elevated lot with 180° jungle-to-ocean views. Located in the Nosara highlands. Exceptional sunsets.',price:'Contact for pricing'},
+  {icon:'🌊',name:'Lot C — Beach Adjacent',size:'450 m²',desc:'Rare flat lot just minutes from Playa Guiones. Walkable to surf, restaurants, and the town center.',price:'Contact for pricing'},
+  {icon:'🌿',name:'Lot D — Nature Reserve Edge',size:'1,200 m²',desc:'Large lot bordering Nosara\'s protected nature reserve. Total privacy, incredible biodiversity.',price:'Contact for pricing'},
+  {icon:'☀️',name:'Lot E — Development Land',size:'2,500 m²',desc:'Prime larger parcel suitable for a multi-unit development, boutique hotel, or retreat center.',price:'Contact for pricing'}
+];
+
+const GUIDE=[
+  {tab:'🏠 Buying Property',articles:[
+    {icon:'📋',title:'How Foreigners Buy Property in Costa Rica',text:'<ul><li>Foreigners have the same property rights as Costa Ricans — no restrictions.</li><li>All purchases go through a registered Notary Public (Notario).</li><li>Title registration is done at the National Registry.</li><li>Typical closing costs: 3–4% of purchase price.</li><li>Always conduct a due diligence check on title and maritime zones.</li><li>Budget 3–6 months for the full process.</li></ul>'},
+    {icon:'⚠️',title:'What to Watch Out For',text:'<ul><li>Maritime Zone Law: 200m from the high tide line is restricted.</li><li>Always verify "Free and Clear" title at the National Registry before signing.</li><li>Avoid verbal agreements — everything must be in writing.</li><li>Hire a local Costa Rican attorney, not just a real estate agent.</li><li>Survey your land boundaries before purchase.</li></ul>'},
+    {icon:'💰',title:'Financing & Investment Tips',text:'<ul><li>Costa Rican banks require 30–50% down payment for foreigners.</li><li>Many buyers use seller financing (owner carry) — very common in CR.</li><li>Rental income in Nosara: average $1,500–$5,000/month for quality properties.</li><li>Property values have appreciated 8–15% annually over the last decade.</li></ul>'}
+  ]},
+  {tab:'🌎 Moving to Costa Rica',articles:[
+    {icon:'🛂',title:'Residency Options for Foreigners',text:'<ul><li><strong>Pensionado:</strong> Requires $1,000/month proven pension income.</li><li><strong>Rentista:</strong> Requires $2,500/month from foreign source for 2 years.</li><li><strong>Inversionista:</strong> Invest $150,000+ in a business or property.</li><li><strong>Digital Nomad Visa:</strong> For remote workers earning $3,000+/month.</li></ul>'},
+    {icon:'📝',title:'Documents You\'ll Need',text:'<ul><li>Valid passport (6+ months validity)</li><li>Birth certificate (apostilled)</li><li>FBI background check (apostilled)</li><li>Proof of income</li><li>All documents must be officially translated to Spanish</li><li>Process takes 6–18 months</li></ul>'},
+    {icon:'💡',title:'Practical Tips for the Move',text:'<ul><li>Open a bank account early — BAC and Scotiabank are most foreigner-friendly.</li><li>Learn basic Spanish — locals in Nosara appreciate the effort.</li><li>International driver\'s license valid for 90 days.</li><li>Ship or buy a 4x4 — Nosara roads require it in rainy season (May–Nov).</li></ul>'}
+  ]},
+  {tab:'🌴 Guanacaste Culture',articles:[
+    {icon:'🎭',title:'The Soul of Guanacaste',text:'Guanacaste is Costa Rica\'s most culturally distinct province — the heartland of the Chorotega indigenous heritage, cattle ranching, and the marimba. Life moves at a slower, warmer pace. Relationships come first.'},
+    {icon:'🎵',title:'Traditions & Celebrations',text:'<ul><li><strong>July 25:</strong> Guanacaste Annexation Day — the biggest regional holiday.</li><li>Sabanero culture (cowboys) is alive and celebrated.</li><li>Marimba music is the soundtrack of local fiestas.</li><li>Semana Santa (Easter Week) is deeply observed.</li></ul>'},
+    {icon:'🏄',title:'Nosara\'s Unique Spirit',text:'Nosara is a rare mix: one of Costa Rica\'s most pristine surf beaches, an international wellness community, and a traditional Costa Rican town all in one. Wildlife — howler monkeys, scarlet macaws, sea turtles — is part of daily life.'}
+  ]},
+  {tab:'🏡 Living in Nosara',articles:[
+    {icon:'🌧️',title:'Seasons & Climate',text:'<ul><li><strong>Dry season (Dec–Apr):</strong> Sunny, hot, 28–35°C. Peak tourist season.</li><li><strong>Rainy/green season (May–Nov):</strong> Afternoon rains, lush jungle, fewer crowds, better surf.</li><li>Humidity is high year-round.</li></ul>'},
+    {icon:'🛒',title:'Day-to-Day Life',text:'<ul><li>Supermarkets: Colmado Mery and local pulperías for basics.</li><li>Internet: Fiber optic available in most parts of Nosara — great for remote work.</li><li>Healthcare: Clinic in Nosara; La Cima Hospital in Liberia (1.5 hrs) for serious needs.</li></ul>'},
+    {icon:'🌿',title:'Community & Environment',text:'Nosara has a strong expat community — welcoming, active, and environmentally conscious. Yoga at every corner, farmers markets, beach cleanups. Dogs, horses, and wildlife roam freely.'}
+  ]}
+,
+  {tab:'🇨🇷 Costa Rican Business',articles:[
+    {icon:'🛍️',title:'Shop Local — Support Ticos',text:'Nosara\'s soul lives in its local businesses. When you spend with Costa Rican-owned shops, restaurants, and services, you invest directly in the families who built this community. The Collective is committed to making local businesses visible and accessible to every visitor.'},
+    {icon:'🌿',title:'Local Businesses Directory',text:'<ul><li><strong>Coming soon</strong> — We are curating a handpicked directory of Tico-owned businesses in Nosara.</li><li>Sodas, surf schools, artisans, farmers markets, local guides, and more.</li><li>Each listing will be verified and community-endorsed.</li><li>Want to be listed? Contact us at info@nosaracollective.com</li></ul>'},
+    {icon:'♥',title:'Why It Matters',text:'Tourism changes communities. Done right, it lifts everyone. Done wrong, it prices out the people who built the place. The Nosara Conscience Collective exists to make sure tourism works for Nosara\'s Tico community — not just visitors. 5% of every booking goes directly to local families, and this directory is how we make every dollar stretch further.'}
+  ]}];
+
+const RESTAURANTS=[
+  {name:'La Luna',cuisine:'Mediterranean · Beachfront',desc:'Iconic beachfront restaurant at Playa Pelada. Fresh seafood, wood-fired pizza, and legendary sunset views.',price:'$$',vibe:'🌅 Romantic',hours:'11am–10pm'},
+  {name:'Café de Paris',cuisine:'French · Bakery · Breakfast',desc:'The soul of Nosara mornings — French pastries, fresh bread, great coffee, and a shaded terrace.',price:'$',vibe:'☕ Casual',hours:'6:30am–9pm'},
+  {name:'Robin\'s Ice Cream',cuisine:'Ice Cream · Healthy',desc:'Handmade ice cream and healthy snacks right in the heart of Nosara. Local ingredients, creative flavors.',price:'$',vibe:'🍦 Family',hours:'8am–8pm'},
+  {name:'Marlin Bill\'s',cuisine:'Seafood · American · Bar',desc:'The classic Nosara sports bar — cold beers, fresh fish tacos, and a lively crowd of surfers and locals.',price:'$$',vibe:'🍺 Lively',hours:'11am–11pm'},
+  {name:'Organico',cuisine:'Organic · Health Food',desc:'Farm-to-table organic restaurant serving wholesome bowls, fresh juices, and plant-based options.',price:'$$',vibe:'🌿 Healthy',hours:'7am–9pm'},
+  {name:'Soda El Bambú',cuisine:'Costa Rican · Soda',desc:'Authentic local soda. Rice and beans, casado, fresh juice — real Tico food at real Tico prices.',price:'$',vibe:'🇨🇷 Local',hours:'7am–8pm'},
+  {name:'El Chivo',cuisine:'Mexican · Tacos',desc:'Wood-fired tacos, fresh guacamole, cold cervezas. Popular with the surf crowd for lunch and happy hour.',price:'$',vibe:'🌮 Fun',hours:'11am–10pm'},
+  {name:'Jalapenos',cuisine:'Tex-Mex · Bar',desc:'Lively Tex-Mex spot with great margaritas and a buzzing atmosphere.',price:'$$',vibe:'🎉 Social',hours:'11am–11pm'}
+];
+
+// ─── RENDER PROPERTIES ───
+function renderProps(){
+  document.getElementById('propsGrid').innerHTML=PROPS.map(p=>`
+    <div class="prop-card" onclick="openModal('${p.id}')">
+      <div class="prop-img-wrap">
+        <img src="${p.cover}" alt="${p.name}" onerror="this.style.display='none'" loading="lazy">
+        <div class="prop-overlay"><span>View Property</span></div>
+      </div>
+      <div class="prop-badge${p.badgeClass?' '+p.badgeClass:''}">${p.badge}</div>
+      <div class="prop-body">
+        <div class="prop-name">${p.name}</div>
+        <div class="prop-meta">${p.meta}</div>
+        <p class="prop-desc">${p.desc.substring(0,110)}…</p>
+        <div class="prop-footer">
+          <div>
+            <div class="prop-price">${p.price===0?(p.priceLabel||'Contact us'):'$'+p.price}<span>${p.price>0?'/night':''}</span></div>
+          </div>
+          <button class="prop-btn">View →</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ─── RENDER SERVICES ───
+const selected={};
+function renderServices(){
+  document.getElementById('servicesGrid').innerHTML=SERVICES.map(s=>`
+    <div class="service-card" id="sc_${s.id}" onclick="toggleService('${s.id}',event)">
+      <div class="sc-top">
+        <div>
+          <div class="sc-icon">${s.icon}</div>
+          <div class="sc-name">${s.name}</div>
+        </div>
+        <div class="sc-check" id="chk_${s.id}">✓</div>
+      </div>
+      <div class="sc-desc">${s.desc}</div>
+      <div class="sc-price">${s.priceLabel}</div>
+      <div class="sc-options" id="sco_${s.id}">
+        ${s.fields.map(f=>`
+          <div class="sc-opt">
+            <label>${f.label}</label>
+            ${f.type==='select'?`<select id="${f.id}" onchange="updateQuote()">${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`:''}
+            ${f.type==='input'?`<input type="${f.inputType}" id="${f.id}" placeholder="${f.placeholder||''}" oninput="updateQuote()">`:''}
+            ${f.type==='textarea'?`<textarea id="${f.id}" placeholder="${f.placeholder||''}"></textarea>`:''}
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function toggleService(id,e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA')return;
+  const card=document.getElementById('sc_'+id);
+  if(selected[id]){delete selected[id];card.classList.remove('selected')}
+  else{selected[id]=true;card.classList.add('selected')}
+  updateQuote();
+}
+
+function updateQuote(){
+  const items=[];let total=0;
+  SERVICES.forEach(s=>{
+    if(!selected[s.id])return;
+    let line=s.name,cost=s.price;
+    if(s.id==='airport'){cost=190}
+    if(s.id==='atv'){const d=parseInt(document.getElementById('atv_days')?.value)||1;const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=100*d*q;line+=` (${q} ATV × ${d} days)`}
+    if(s.id==='golf'){const d=parseInt(document.getElementById('golf_days')?.value)||1;cost=140*d;line+=` (${d} days)`}
+    if(s.id==='car'){const d=parseInt(document.getElementById('car_days')?.value)||1;cost=140*d;line+=` (${d} days)`}
+    if(s.id==='chef'){const d=parseInt(document.getElementById('chef_days')?.value)||1;const hStr=document.getElementById('chef_hours')?.value||'4 hours';const h=parseInt(hStr)||4;cost=50*d*h;line+=` (${d} days × ${h}h)`}
+    if(s.id==='grocery'){cost=20}
+    if(s.id==='cleaning'){const q=parseInt(document.getElementById('clean_qty')?.value)||1;cost=100*q;line+=` (${q} sessions)`}
+    if(s.id==='surf'){const p=parseInt(document.getElementById('surf_pax')?.value)||1;const d=parseInt(document.getElementById('surf_days')?.value)||1;cost=80*p*d;line+=` (${p} pax × ${d} sessions)`}
+    if(s.id==='tennis'){const p=parseInt(document.getElementById('tennis_pax')?.value)||1;const d=parseInt(document.getElementById('tennis_sessions')?.value)||1;cost=90*p*d;line+=` (${p} pax × ${d} sessions)`}
+    if(s.id==='muaythai'){const p=parseInt(document.getElementById('muay_pax')?.value)||1;const d=parseInt(document.getElementById('muay_sessions')?.value)||1;cost=90*p*d;line+=` (${p} pax × ${d} sessions)`}
+    if(s.id==='bjj'){const p=parseInt(document.getElementById('bjj_pax')?.value)||1;const d=parseInt(document.getElementById('bjj_sessions')?.value)||1;cost=90*p*d;line+=` (${p} pax × ${d} sessions)`}
+    if(s.id==='snorkel'){const p=parseInt(document.getElementById('snorkel_pax')?.value)||1;cost=180*p;line+=` (${p} people)`}
+    if(s.id==='fishing'){const p=parseInt(document.getElementById('fishing_pax')?.value)||1;cost=1500;line+=` (${p} people)`}
+    if(s.id==='dolphin'){const p=parseInt(document.getElementById('dolphin_pax')?.value)||1;cost=180*p;line+=` (${p} people)`}
+    if(s.id==='sunset'){const p=parseInt(document.getElementById('sunset_pax')?.value)||1;cost=180*p;line+=` (${p} people)`}
+    if(s.id==='surftrip'){const p=parseInt(document.getElementById('surftrip_pax')?.value)||1;const d=document.getElementById('surftrip_dest')?.value||'Ostional';cost=150*p;line+=` to ${d} (${p} people)`}
+    if(s.id==='custom'){cost=0;line+=' — we\'ll quote this for you'}
+    if(s.id==='surfboard'){const q=parseInt(document.getElementById('sb_qty')?.value)||1;const d=parseInt(document.getElementById('sb_days')?.value)||1;cost=30*q*d;line+=` (${q} boards × ${d} days)`}
+    if(s.id==='horseback'){const p=parseInt(document.getElementById('horse_pax')?.value)||1;cost=95*p;line+=` (${p} people)`}
+    if(s.id==='massage'){const p=parseInt(document.getElementById('massage_pax')?.value)||1;cost=150*p;line+=` (${p} people)`}
+    if(s.id==='yoga'){const s2=parseInt(document.getElementById('yoga_sessions')?.value)||1;cost=80*s2;line+=` (${s2} sessions)`}
+    if(s.id==='skate'){const p=parseInt(document.getElementById('skate_pax')?.value)||1;const d=parseInt(document.getElementById('skate_days')?.value)||1;cost=100*p*d;line+=` (${p} pax × ${d} days)`}
+    if(s.id==='buffet'){const p=parseInt(document.getElementById('buffet_pax')?.value)||1;const d=parseInt(document.getElementById('buffet_days')?.value)||1;cost=35*p*d;line+=` (${p} pax × ${d} days)`}
+    total+=cost;items.push({line,cost});
+  });
+  const box=document.getElementById('quoteBox');
+  if(items.length===0){box.style.display='none';return}
+  box.style.display='block';
+  document.getElementById('quoteItems').innerHTML=items.map(i=>`<li><span>${i.line}</span><span>${i.cost>0?'$'+i.cost.toLocaleString():'TBD'}</span></li>`).join('');
+  document.getElementById('quoteTotal').textContent='$'+total.toLocaleString()+'+';
+}
+
+function submitQuote(){
+  const items=[];let total=0;
+  SERVICES.forEach(s=>{if(!selected[s.id])return;items.push(`<span>${s.name}</span><span>$${s.price>0?s.price:'TBD'}</span>`);total+=s.price||0;});
+  if(items.length===0){alert('Please select at least one service.');return;}
+  showPaymentModal(total,items);
+}
+
+// ─── RENDER RETREATS ───
+function renderRetreats(){
+  document.getElementById('retreatsGrid').innerHTML=RETREATS.map(r=>`
+    <div class="retreat-card">
+      <div class="retreat-img-wrap">
+        <img src="${r.cover}" alt="${r.name}" onerror="this.style.display='none'" loading="lazy">
+      </div>
+      <div class="retreat-body">
+        <div class="retreat-tag">${r.tag}</div>
+        <div class="retreat-name">${r.name}</div>
+        <p class="retreat-desc">${r.desc}</p>
+        <div class="retreat-feats">${r.features.map(f=>`<span class="retreat-feat">${f}</span>`).join('')}</div>
+        <button class="retreat-cta" onclick="alert('Thank you! We\\'ll reach out within 24h to plan your retreat at ${r.name}.')">Inquire About This Space</button>
+      </div>
+    </div>`).join('');
+}
+
+// ─── RENDER LOTS ───
+function renderLots(){
+  document.getElementById('lotsGrid').innerHTML=LOTS.map(l=>`
+    <div class="lot-card">
+      <div class="lot-icon">${l.icon}</div>
+      <div class="lot-name">${l.name}</div>
+      <div class="lot-size">📐 ${l.size}</div>
+      <p class="lot-desc">${l.desc}</p>
+      <div class="lot-price">${l.price}</div>
+      <button class="lot-btn" onclick="alert('Thank you for your interest in ${l.name}. We\\'ll send you full details within 24 hours.')">Request Info</button>
+    </div>`).join('');
+}
+
+// ─── RENDER GUIDE ───
+function renderGuide(){
+  const tabs=document.getElementById('guideTabs');
+  const panels=document.getElementById('guidePanels');
+  GUIDE.forEach((g,i)=>{
+    const t=document.createElement('div');
+    t.className='guide-tab'+(i===0?' active':'');
+    t.textContent=g.tab;
+    t.onclick=()=>{
+      document.querySelectorAll('.guide-tab').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.guide-panel').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById('gp_'+i).classList.add('active');
+    };
+    tabs.appendChild(t);
+    const p=document.createElement('div');
+    p.className='guide-panel'+(i===0?' active':'');
+    p.id='gp_'+i;
+    p.innerHTML=`<div class="guide-articles">${g.articles.map(a=>`
+      <div class="guide-article">
+        <div class="guide-article-icon">${a.icon}</div>
+        <div class="guide-article-title">${a.title}</div>
+        <div class="guide-article-text">${a.text}</div>
+      </div>`).join('')}</div>`;
+    panels.appendChild(p);
+  });
+}
+
+// ─── RENDER RESTAURANTS ───
+function renderRestaurants(){
+  document.getElementById('restaurantsGrid').innerHTML=RESTAURANTS.map(r=>`
+    <div class="resto-card">
+      <div class="resto-name">${r.name}</div>
+      <div class="resto-cuisine">${r.cuisine}</div>
+      <p class="resto-desc">${r.desc}</p>
+      <div class="resto-footer">
+        <div class="resto-meta"><span>${r.vibe}</span><span>🕐 ${r.hours}</span></div>
+        <button class="resto-btn" onclick="bookRestaurant('${r.name}')">Reserve</button>
+      </div>
+    </div>`).join('');
+}
+
+function bookRestaurant(name){
+  const date=prompt(`Reserve at ${name}\n\nEnter your preferred date (MM/DD/YYYY):`);
+  if(!date)return;
+  const time=prompt('Preferred time? (e.g. 7:00 PM)');
+  if(!time)return;
+  const pax=prompt('How many people?');
+  if(!pax)return;
+  alert(`✓ Reservation request sent!\n\n🍽️ ${name}\n📅 ${date} at ${time}\n👥 ${pax} people\n\nWe will confirm your table within a few hours.\n\n♥ Supporting local Nosara businesses`);
+}
+
+// ─── ICAL CALENDARS ───
+const ICAL_PROXY='https://api.allorigins.win/raw?url=';
+const ICAL_FEEDS={
+  'arcilla1':'https://www.airbnb.com/calendar/ical/1364560824324105727.ics?t=36ef19af5ed1411085c3ef4d85c0cac3',
+  'arcilla2':'https://www.airbnb.com/calendar/ical/1364560764925270828.ics?t=9d789399c92d4524a05e2acf1bb6bb29',
+  'ojosazules':'https://www.airbnb.com/calendar/ical/754963035673300946.ics?t=22dc8b6d04e34ca0a78c1ee28c729f19',
+  'sol':'https://www.airbnb.com/calendar/ical/1076720749284905534.ics?t=69701c3ff73d47a69f4594ad8e1dd301',
+  'mar':'https://www.airbnb.com/calendar/ical/1075348569613326856.ics?t=c902dda31cd34a35995f770e94af9958',
+  'monkey':'https://www.airbnb.com/calendar/ical/32898115.ics?t=a9262281d6374e0f902ef7ff28c45701',
+  'h7':'https://www.airbnb.com/calendar/ical/1340590425596595717.ics?t=a7ab7730fc8746ebbb8e20aef8ede4c3'
+};
+const blockedDates={};
+
+async function fetchBlockedDates(propId){
+  if(blockedDates[propId])return;
+  const url=ICAL_FEEDS[propId];
+  if(!url)return;
+  try{const res=await fetch(ICAL_PROXY+encodeURIComponent(url));const text=await res.text();blockedDates[propId]=parseIcal(text);}
+  catch(e){console.warn('Could not load calendar for',propId);blockedDates[propId]=new Set();}
+}
+function parseIcal(text){
+  const dates=new Set();
+  const events=text.split('BEGIN:VEVENT');
+  events.slice(1).forEach(ev=>{
+    const dtstart=ev.match(/DTSTART[^:]*:(\d{8})/)?.[1];
+    const dtend=ev.match(/DTEND[^:]*:(\d{8})/)?.[1];
+    if(dtstart&&dtend){let cur=parseIcalDate(dtstart);const end=parseIcalDate(dtend);while(cur<end){dates.add(toYMD(cur));cur=new Date(cur.getTime()+86400000);}}
+  });
+  return dates;
+}
+function parseIcalDate(str){return new Date(parseInt(str.slice(0,4)),parseInt(str.slice(4,6))-1,parseInt(str.slice(6,8)));}
+function toYMD(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function isBlocked(propId,dateStr){return blockedDates[propId]?.has(dateStr)||false;}
+function isRangeBlocked(propId,checkin,checkout){
+  if(!checkin||!checkout)return false;
+  let cur=new Date(checkin);const end=new Date(checkout);
+  while(cur<end){if(isBlocked(propId,toYMD(cur)))return true;cur=new Date(cur.getTime()+86400000);}
+  return false;
+}
+
+function renderCalendar(propId){
+  const cal=document.getElementById('calendarWidget');
+  if(!cal)return;
+  const today=new Date();
+  const year=parseInt(cal.dataset.year||today.getFullYear());
+  const month=parseInt(cal.dataset.month??today.getMonth());
+  const d=new Date(year,month,1);
+  const monthName=d.toLocaleString('en',{month:'long',year:'numeric'});
+  const firstDay=d.getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+    <button onclick="calNav(-1)" style="background:rgba(245,242,236,0.08);border:1px solid rgba(245,242,236,0.15);border-radius:2px;padding:4px 10px;cursor:pointer;font-size:1rem;color:var(--white)">‹</button>
+    <strong style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--white)">${monthName}</strong>
+    <button onclick="calNav(1)" style="background:rgba(245,242,236,0.08);border:1px solid rgba(245,242,236,0.15);border-radius:2px;padding:4px 10px;cursor:pointer;font-size:1rem;color:var(--white)">›</button>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center">
+    ${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div style="font-size:0.62rem;color:var(--text-muted);font-weight:400;padding:4px 0;letter-spacing:0.06em">${d}</div>`).join('')}`;
+  for(let i=0;i<firstDay;i++)html+=`<div></div>`;
+  for(let day=1;day<=daysInMonth;day++){
+    const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const isPast=new Date(dateStr)<new Date(toYMD(today));
+    const blocked=isBlocked(propId,dateStr);
+    const isCheckIn=document.getElementById('checkin')?.value===dateStr;
+    const isCheckOut=document.getElementById('checkout')?.value===dateStr;
+    let bg='transparent',color='var(--white)',cursor='pointer',opacity='1';
+    if(isPast){color='rgba(245,242,236,0.2)';cursor='default';}
+    else if(blocked){bg='rgba(200,60,60,0.15)';color='rgba(220,100,100,0.8)';cursor='not-allowed';}
+    else if(isCheckIn||isCheckOut){bg='var(--clay)';color='white';}
+    html+=`<div onclick="selectDate('${dateStr}')" style="padding:6px 2px;border-radius:2px;font-size:0.78rem;background:${bg};color:${color};cursor:${cursor};opacity:${opacity};transition:background 0.15s">${day}</div>`;
+  }
+  html+=`</div>`;
+  cal.innerHTML=html;
+  cal.dataset.year=year;
+  cal.dataset.month=month;
+}
+
+function calNav(dir){
+  const cal=document.getElementById('calendarWidget');
+  let year=parseInt(cal.dataset.year);let month=parseInt(cal.dataset.month);
+  month+=dir;
+  if(month>11){month=0;year++;}
+  if(month<0){month=11;year--;}
+  cal.dataset.year=year;cal.dataset.month=month;
+  renderCalendar(curProp?.id);
+}
+
+function selectDate(dateStr){
+  if(!curProp)return;
+  if(isBlocked(curProp.id,dateStr))return;
+  if(new Date(dateStr)<new Date(toYMD(new Date())))return;
+  const ci=document.getElementById('checkin');
+  const co=document.getElementById('checkout');
+  if(!ci.value||(ci.value&&co.value)){ci.value=dateStr;co.value='';}
+  else{
+    if(dateStr<=ci.value){ci.value=dateStr;co.value='';}
+    else{
+      if(isRangeBlocked(curProp.id,ci.value,dateStr)){showCalMsg('⚠️ Selected range includes unavailable dates.','#E07070');ci.value='';co.value='';}
+      else{co.value=dateStr;updateNightCount();}
+    }
+  }
+  renderCalendar(curProp.id);
+}
+
+function updateNightCount(){
+  const ci=document.getElementById('checkin').value;
+  const co=document.getElementById('checkout').value;
+  const msg=document.getElementById('nightCount');
+  if(!msg)return;
+  if(ci&&co){const nights=Math.round((new Date(co)-new Date(ci))/86400000);const total=nights*(curProp?.price||0);msg.textContent=`${nights} night${nights!==1?'s':''} · Est. $${total.toLocaleString()} + taxes`;}
+  else{msg.textContent='';}
+}
+
+function showCalMsg(msg,color='var(--clay)'){
+  const el=document.getElementById('calMsg');
+  if(!el)return;
+  el.textContent=msg;el.style.color=color;
+  setTimeout(()=>el.textContent='',4000);
+}
+
+// ─── MODAL ───
+let curProp=null,galIdx=0;
+async function openModal(id){
+  curProp=PROPS.find(p=>p.id===id);galIdx=0;
+  document.getElementById('modalImg').src=curProp.images[0];
+  document.getElementById('modalTitle').textContent=curProp.name;
+  document.getElementById('modalMeta').textContent=curProp.meta;
+  document.getElementById('modalPrice').textContent='$'+curProp.price;
+  document.getElementById('modalDesc').textContent=curProp.desc;
+  document.getElementById('modalFeats').innerHTML=curProp.features.map(f=>`<div class="modal-feat">✓ ${f}</div>`).join('');
+  document.getElementById('galDots').innerHTML=curProp.images.map((_,i)=>`<button class="gal-dot${i===0?' active':''}" onclick="goGal(${i})"></button>`).join('');
+  document.getElementById('checkin').value='';
+  document.getElementById('checkout').value='';
+  document.getElementById('nightCount').textContent='';
+  const cal=document.getElementById('calendarWidget');
+  const today=new Date();
+  cal.dataset.year=today.getFullYear();
+  cal.dataset.month=today.getMonth();
+  cal.innerHTML='<div style="text-align:center;padding:1.5rem;color:var(--text-muted);font-size:0.82rem">Loading availability...</div>';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  if(ICAL_FEEDS[curProp.id]){await fetchBlockedDates(curProp.id);}
+  else{blockedDates[curProp.id]=new Set();}
+  renderCalendar(curProp.id);
+}
+function updateGal(){document.getElementById('modalImg').src=curProp.images[galIdx];document.querySelectorAll('.gal-dot').forEach((d,i)=>d.classList.toggle('active',i===galIdx));}
+function galPrev(e){e.stopPropagation();galIdx=(galIdx-1+curProp.images.length)%curProp.images.length;updateGal()}
+function galNext(e){e.stopPropagation();galIdx=(galIdx+1)%curProp.images.length;updateGal()}
+function goGal(i){galIdx=i;updateGal()}
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect()}
+function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''}
+function submitBooking(){
+  const ci=document.getElementById('checkin').value;
+  const co=document.getElementById('checkout').value;
+  if(!ci||!co){showCalMsg('Please select check-in and check-out dates.');return;}
+  if(isRangeBlocked(curProp.id,ci,co)){showCalMsg('⚠️ Those dates are not available.','#E07070');return;}
+  const nights=Math.round((new Date(co)-new Date(ci))/86400000);
+  alert(`✓ Reservation request sent for ${curProp.name}!\n\n📅 ${ci} → ${co} (${nights} nights)\n💰 Est. $${(nights*curProp.price).toLocaleString()} + taxes\n\nWe'll confirm within 24 hours.\n\n♥ Your booking contributes 5% to local Nosara families.`);
+  closeModalDirect();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalDirect()});
+
+// ─── WAVE CONDITIONS ───
+async function loadSurfConditions(){
+  try{
+    const res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=9.976&longitude=-85.653&hourly=wave_height,wind_speed_10m&timezone=America/Costa_Rica&forecast_days=1');
+    const data=await res.json();
+    if(data.hourly){
+      const wh=data.hourly.wave_height;const ws=data.hourly.wind_speed_10m;
+      if(wh&&wh.length){
+        const avgWave=(wh.slice(6,18).reduce((a,b)=>a+(b||0),0)/12).toFixed(1);
+        const avgWind=(ws.slice(6,18).reduce((a,b)=>a+(b||0),0)/12).toFixed(0);
+        const el=document.getElementById('waveToday');
+        const el2=document.getElementById('waveTodayDesc');
+        const el3=document.getElementById('windToday');
+        const el4=document.getElementById('windTodayDesc');
+        if(el)el.textContent=avgWave+'m';
+        if(el2)el2.textContent=avgWave<0.8?'Small — great for beginners':avgWave<1.5?'Fun size — good for all levels':avgWave<2?'Solid — intermediate/advanced':'Big — experienced surfers';
+        if(el3)el3.textContent=avgWind+'km/h';
+        if(el4)el4.textContent=avgWind<15?'Light winds — clean conditions':avgWind<25?'Moderate breeze':'Strong wind — choppy surface';
+      }
+    }
+  }catch(e){const el=document.getElementById('waveTodayDesc');if(el)el.textContent='Check local conditions';}
+}
+
+// ─── PAYMENT MODAL ───
+function showPaymentModal(total,items){
+  const existing=document.getElementById('paymentModal');if(existing)existing.remove();
+  const modal=document.createElement('div');
+  modal.id='paymentModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(10,10,8,0.92);z-index:400;display:flex;align-items:center;justify-content:center;padding:1rem';
+  modal.innerHTML=`
+    <div style="background:var(--black2);border:1px solid var(--border);border-radius:2px;max-width:500px;width:100%;padding:2.5rem;animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--white)">Complete Payment</div>
+        <button onclick="document.getElementById('paymentModal').remove()" style="background:rgba(245,242,236,0.08);border:1px solid var(--border);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;color:var(--white)">✕</button>
+      </div>
+      <div style="background:rgba(245,242,236,0.04);border:1px solid var(--border);border-radius:2px;padding:1.25rem;margin-bottom:1.5rem">
+        <div style="font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem">Order Summary</div>
+        ${items.map(i=>`<div style="display:flex;justify-content:space-between;font-size:0.83rem;padding:5px 0;border-bottom:1px solid var(--border);color:var(--text-muted)">${i}</div>`).join('')}
+        <div style="display:flex;justify-content:space-between;font-weight:400;margin-top:1rem;font-size:1rem;color:var(--white)">
+          <span>Total</span><span style="color:var(--clay);font-family:'Cormorant Garamond',serif;font-size:1.5rem">$${total.toLocaleString()}</span>
+        </div>
+        <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.4rem">+ taxes · 5% goes to Nosara families ♥</div>
+      </div>
+      <div style="margin-bottom:1.5rem">
+        <div style="font-size:0.65rem;font-weight:400;margin-bottom:1rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase">Choose Payment Method</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
+          <button onclick="payWithStripe()" style="background:var(--white);color:var(--black);border:none;padding:14px;border-radius:2px;cursor:pointer;font-size:0.78rem;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.06em;text-transform:uppercase">
+            💳 Stripe
+          </button>
+          <button onclick="payWithWise()" style="background:#163300;color:white;border:none;padding:14px;border-radius:2px;cursor:pointer;font-size:0.78rem;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.06em;text-transform:uppercase">
+            🌍 Wise
+          </button>
+        </div>
+      </div>
+      <div style="background:rgba(43,95,107,0.15);border:1px solid rgba(43,95,107,0.3);border-radius:2px;padding:1rem;font-size:0.75rem;color:#7DD4E0;line-height:1.65">
+        <strong>🔒 Secure payment.</strong> Stripe accepts all major credit/debit cards. Wise is ideal for international bank transfers with low fees.
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function payWithWise(){document.getElementById('paymentModal').remove();alert('✓ Wise payment details:\n\nAccount: Nosara Conscience Collective\nEmail: info@nosaracollective.com\n\n(Connect your Wise account to show live payment details)');}
+
+// ─── ADD SERVICES TO CART ───
+function addServicesToCart(){
+  let added = 0;
+  SERVICES.forEach(s=>{
+    if(!selected[s.id]) return;
+    let cost = s.price||0;
+    let label = s.name;
+    if(s.id==='atv'){const d=parseInt(document.getElementById('atv_days')?.value)||1;const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=100*d*q;label+=` (${q}×${d}d)`}
+    if(s.id==='golf'){const d=parseInt(document.getElementById('golf_days')?.value)||1;cost=140*d;label+=` (${d}d)`}
+    if(s.id==='car'){const d=parseInt(document.getElementById('car_days')?.value)||1;cost=140*d;label+=` (${d}d)`}
+    if(s.id==='chef'){const d=parseInt(document.getElementById('chef_days')?.value)||1;const hStr=document.getElementById('chef_hours')?.value||'4 hours';const h=parseInt(hStr)||4;cost=50*d*h;label+=` (${d}d×${h}h)`}
+    if(s.id==='grocery'){cost=20}
+    if(s.id==='cleaning'){const q=parseInt(document.getElementById('clean_qty')?.value)||1;cost=100*q;label+=` (${q} sessions)`}
+    if(s.id==='surf'){const p=parseInt(document.getElementById('surf_pax')?.value)||1;const d=parseInt(document.getElementById('surf_days')?.value)||1;cost=80*p*d;label+=` (${p}pax×${d})`}
+    if(s.id==='tennis'){const p=parseInt(document.getElementById('tennis_pax')?.value)||1;const d=parseInt(document.getElementById('tennis_sessions')?.value)||1;cost=90*p*d;label+=` (${p}pax×${d})`}
+    if(s.id==='muaythai'){const p=parseInt(document.getElementById('muay_pax')?.value)||1;const d=parseInt(document.getElementById('muay_sessions')?.value)||1;cost=90*p*d;label+=` (${p}pax×${d})`}
+    if(s.id==='bjj'){const p=parseInt(document.getElementById('bjj_pax')?.value)||1;const d=parseInt(document.getElementById('bjj_sessions')?.value)||1;cost=90*p*d;label+=` (${p}pax×${d})`}
+    if(s.id==='snorkel'){const p=parseInt(document.getElementById('snorkel_pax')?.value)||1;cost=180*p;label+=` (${p}pax)`}
+    if(s.id==='fishing'){cost=1500;label+=` (up to 5 pax)`}
+    if(s.id==='dolphin'){const p=parseInt(document.getElementById('dolphin_pax')?.value)||1;cost=180*p;label+=` (${p}pax)`}
+    if(s.id==='sunset'){const p=parseInt(document.getElementById('sunset_pax')?.value)||1;cost=180*p;label+=` (${p}pax)`}
+    if(s.id==='surftrip'){const p=parseInt(document.getElementById('surftrip_pax')?.value)||1;const d=document.getElementById('surftrip_dest')?.value||'Ostional';cost=150*p;label+=` to ${d} (${p}pax)`}
+    if(s.id==='surfboard'){const q=parseInt(document.getElementById('sb_qty')?.value)||1;const d=parseInt(document.getElementById('sb_days')?.value)||1;const t=document.getElementById('sb_type')?.value||'Longboard';cost=30*q*d;label+=` ${t} (${q}×${d}d)`}
+    if(s.id==='horseback'){const p=parseInt(document.getElementById('horse_pax')?.value)||1;cost=95*p;label+=` (${p}pax)`}
+    if(s.id==='massage'){const p=parseInt(document.getElementById('massage_pax')?.value)||1;cost=150*p;label+=` (${p}pax)`}
+    if(s.id==='yoga'){const ss=parseInt(document.getElementById('yoga_sessions')?.value)||1;cost=80*ss;label+=` (${ss} sessions)`}
+    if(s.id==='skate'){const p=parseInt(document.getElementById('skate_pax')?.value)||1;const d=parseInt(document.getElementById('skate_days')?.value)||1;cost=100*p*d;label+=` (${p}pax×${d}d)`}
+    if(s.id==='buffet'){const p=parseInt(document.getElementById('buffet_pax')?.value)||1;const d=parseInt(document.getElementById('buffet_days')?.value)||1;const m=document.getElementById('buffet_meal')?.value||'Buffet';cost=35*p*d;label+=` ${m} (${p}pax×${d}d)`}
+    addToCart({id:'svc_'+s.id,name:label,price:cost,img:'',meta:'Concierge Service',icon:s.icon});
+    added++;
+  });
+  if(added===0){alert('Select at least one service first.');return;}
+  // Clear selections
+  Object.keys(selected).forEach(k=>delete selected[k]);
+  document.querySelectorAll('.service-card.selected').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('quoteBox').style.display='none';
+}
+
+// ─── INIT ───
+try{renderProps();}catch(e){console.warn('renderProps',e);}
+try{renderServices();}catch(e){console.warn('renderServices',e);}
+try{renderRetreats();}catch(e){console.warn('renderRetreats',e);}
+try{renderLots();}catch(e){console.warn('renderLots',e);}
+try{renderGuide();}catch(e){console.warn('renderGuide',e);}
+if(document.getElementById('restaurantsGrid')){try{renderRestaurants();}catch(e){console.warn('renderRestaurants',e);}}
+if(document.getElementById('waveToday')){try{loadSurfConditions();}catch(e){console.warn('loadSurf',e);}}
+</script>
+
+<!-- ─── SHOPPING CART PANEL ─── -->
+<div class="cart-backdrop" id="cartBackdrop" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <div class="cart-header-title">Your Order</div>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">🛒</div>
+      <div class="cart-empty-text">Your cart is empty<br>Add a property or service</div>
+    </div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-subtotal">
+      <div class="cart-subtotal-label">Subtotal</div>
+      <div class="cart-subtotal-price" id="cartTotal">$0</div>
+    </div>
+    <div class="cart-note">♥ 5% of this order goes to Nosara families</div>
+    <button class="cart-checkout" onclick="proceedToCheckout()">Checkout →</button>
+    <div class="cart-payment-icons">
+      <span>🌍 Wise</span><span>·</span><span>🅿️ PayPal</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CART SYSTEM ───
+const cart = [];
+
+function toggleCart(){
+  const panel = document.getElementById('cartPanel');
+  const backdrop = document.getElementById('cartBackdrop');
+  panel.classList.toggle('open');
+  backdrop.classList.toggle('open');
+  document.body.style.overflow = panel.classList.contains('open') ? 'hidden' : '';
+  renderCart();
+}
+
+function addToCart(item){
+  // Check if already in cart
+  const existing = cart.findIndex(c => c.id === item.id);
+  if(existing >= 0){
+    cart[existing] = item;
+  } else {
+    cart.push(item);
+  }
+  updateCartCount();
+  renderCart();
+  // Show cart
+  const panel = document.getElementById('cartPanel');
+  const backdrop = document.getElementById('cartBackdrop');
+  if(!panel.classList.contains('open')){
+    panel.classList.add('open');
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function removeFromCart(id){
+  const idx = cart.findIndex(c => c.id === id);
+  if(idx >= 0) cart.splice(idx,1);
+  updateCartCount();
+  renderCart();
+}
+
+function updateCartCount(){
+  const el = document.getElementById('cartCount');
+  if(el) el.textContent = cart.length;
+}
+
+function renderCart(){
+  const body = document.getElementById('cartBody');
+  const empty = document.getElementById('cartEmpty');
+  const items = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+  const totalEl = document.getElementById('cartTotal');
+
+  if(cart.length === 0){
+    empty.style.display = 'block';
+    items.innerHTML = '';
+    footer.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  footer.style.display = 'block';
+
+  let total = 0;
+  items.innerHTML = cart.map(item => {
+    total += item.price || 0;
+    const imgHtml = item.img
+      ? `<img class="cart-item-img" src="${item.img}" alt="${item.name}" onerror="this.style.display='none'">`
+      : `<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:var(--bg2)">${item.icon||'📦'}</div>`;
+    return `<div class="cart-item">
+      ${imgHtml}
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-meta">${item.meta||''}</div>
+        <div class="cart-item-price">${item.price > 0 ? '$'+item.price.toLocaleString() : 'TBD'}</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">✕</button>
+    </div>`;
+  }).join('');
+
+  if(totalEl) totalEl.textContent = '$' + total.toLocaleString() + '+';
+}
+
+function proceedToCheckout(){
+  if(cart.length === 0) return;
+  showPaymentModal(cart.reduce((s,i)=>s+(i.price||0),0), cart.map(i=>`<span>${i.name}</span><span>${i.price>0?'$'+i.price:'TBD'}</span>`));
+}
+</script>
+
+<script>
+// ─── SCROLL ANIMATIONS ───
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible','revealed');
+      // Stagger children if needed
+      if(e.target.classList.contains('stagger')){
+        e.target.classList.add('visible');
+      }
+    }
+  });
+},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+
+document.querySelectorAll('section,.fade-up,.stagger').forEach(el=>{
+  el.classList.add('fade-up');
+  observer.observe(el);
+});
+
+// Nav scroll effect
+window.addEventListener('scroll',()=>{
+  const nav = document.querySelector('nav');
+  if(nav) nav.classList.toggle('scrolled', window.scrollY > 20);
+},{ passive: true });
+
+// ─── CART BOUNCE ANIMATION ───
+const _origAddToCart = addToCart;
+function addToCart(item){
+  _origAddToCart(item);
+  const btn = document.getElementById('cartCount');
+  if(btn){
+    btn.parentElement.classList.remove('cart-bounce');
+    void btn.parentElement.offsetWidth; // reflow
+    btn.parentElement.classList.add('cart-bounce');
+    setTimeout(()=>btn.parentElement.classList.remove('cart-bounce'),400);
+  }
+}
+
+// ─── MARQUEE INJECTION ───
+function injectMarquee(){
+  const items = [
+    '🌊 Nosara · Costa Rica','◈ 5% to Local Families','🏄 Playa Guiones','◈ Luxury Stays',
+    '🌴 Guanacaste','◈ Surf · Skate · Soul','🐢 Ostional Turtles','◈ Build Your Stay',
+    '🌊 Nosara · Costa Rica','◈ 5% to Local Families','🏄 Playa Guiones','◈ Luxury Stays',
+    '🌴 Guanacaste','◈ Surf · Skate · Soul','🐢 Ostional Turtles','◈ Build Your Stay'
+  ];
+  const html = `<div class="marquee-wrap"><div class="marquee-track">${items.map(i=>`<div class="marquee-item"><span>◈</span>${i}</div>`).join('')}</div></div>`;
+  // Insert after hero
+  const hero = document.querySelector('.hero');
+  if(hero) hero.insertAdjacentHTML('afterend', html);
+}
+injectMarquee();
+
+// ─── PROP CARD ADD TO CART OVERRIDE ───
+// Override renderProps to include cart functionality
+const _origRenderProps = renderProps;
+function renderProps(){
+  _origRenderProps();
+  // Update overlays with real cart data
+  document.querySelectorAll('.prop-card').forEach((card, i)=>{
+    const prop = PROPS[i];
+    if(!prop) return;
+    // Replace overlay inner with working cart button
+    const overlay = card.querySelector('.prop-overlay');
+    if(overlay){
+      overlay.innerHTML = `
+        <button class="prop-overlay-add" onclick="event.stopPropagation();addToCart({id:'prop_${prop?.id||i}',name:'${prop?.name||'Property'}',price:${prop?.price||0},img:'${prop?.cover||''}',meta:'${prop?.meta||''}',icon:'🏡'});return false">🛒 Add to Cart</button>
+        <button class="prop-overlay-view" onclick="event.stopPropagation();openModal('${prop?.id||''}')">View Details</button>`;
+    }
+  });
+}
+</script>
+
+<!-- WhatsApp Floating -->
+<div id="waFloat" style="position:fixed;bottom:2rem;right:2rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:0.75rem">
+  <div id="waTooltip" style="display:none;background:#1A1916;color:#F5F0E8;padding:0.9rem 1.25rem;font-size:0.72rem;font-family:'Space Grotesk',sans-serif;font-weight:400;line-height:1.65;max-width:230px;border:1px solid rgba(253,250,245,0.12);box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative">
+    <div style="font-weight:700;font-size:0.75rem;margin-bottom:0.3rem;color:#F5F0E8">Need help planning your<br>Nosara trip? 🌴</div>
+    <div style="color:rgba(245,240,232,0.65)">Chat with us directly — we respond fast.</div>
+    <div style="position:absolute;bottom:-7px;right:22px;width:14px;height:14px;background:#1A1916;border-right:1px solid rgba(253,250,245,0.12);border-bottom:1px solid rgba(253,250,245,0.12);transform:rotate(45deg)"></div>
+  </div>
+  <a href="https://wa.me/50612345678?text=Hi!%20I'm%20interested%20in%20planning%20a%20trip%20to%20Nosara%20🌴" target="_blank" id="waBtn"
+    style="width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;border:3px solid #fff"
+    onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 8px 32px rgba(37,211,102,0.5)'"
+    onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(37,211,102,0.4)'">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+<script>
+// Show tooltip after 4 seconds
+setTimeout(()=>{
+  const t = document.getElementById('waTooltip');
+  if(t){ t.style.display='block'; setTimeout(()=>t.style.display='none', 6000); }
+}, 4000);
+</script>
+
+
+<script src="/src/components/booking.js"></script>
+</body>
+</html>

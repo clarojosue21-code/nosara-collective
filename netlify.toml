@@ -1,0 +1,23 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+  command = "npm install"
+
+[functions]
+  node_bundler = "esbuild"
+
+[dev]
+  command = "npx netlify-cli dev"
+  port = 8888
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.cloudinary.com *.paypal.com *.supabase.co *.netlify.app *.netlify.com *.googleapis.com *.gstatic.com *.airbnb.com api.allorigins.win api.open-meteo.com fonts.googleapis.com fonts.gstatic.com resend.com"

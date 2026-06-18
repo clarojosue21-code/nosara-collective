@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\jcc_2\\\\OneDrive\\\\Desktop\\\\mkdir nosara-collective && cd nosara-collective\" -Recurse | Where-Object { !$_.PSIsContainer } | Select-Object @{N='Path';E={$_.FullName.Replace\\(\"C:\\\\Users\\\\jcc_2\\\\OneDrive\\\\Desktop\\\\mkdir nosara-collective && cd nosara-collective\\\\\",\"\"\\)}} | Format-Table -AutoSize)"
+    ]
+  }
+}
