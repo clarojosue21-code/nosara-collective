@@ -2032,14 +2032,91 @@ function galNext(e){e.stopPropagation();galIdx=(galIdx+1)%curProp.images.length;
 function goGal(i){galIdx=i;updateGal()}
 function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect()}
 function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''}
-function submitBooking(){
+async function submitBooking(){
   const ci=document.getElementById('checkin').value;
   const co=document.getElementById('checkout').value;
   if(!ci||!co){showCalMsg('Please select check-in and check-out dates.');return;}
   if(isRangeBlocked(curProp.id,ci,co)){showCalMsg('⚠️ Those dates are not available.','#E07070');return;}
-  const nights=Math.round((new Date(co)-new Date(ci))/86400000);
-  alert(`✓ Reservation request sent for ${curProp.name}!\n\n📅 ${ci} → ${co} (${nights} nights)\n💰 Est. $${(nights*curProp.price).toLocaleString()} + taxes\n\nWe'll confirm within 24 hours.\n\n♥ Your booking contributes 5% to local Nosara families.`);
-  closeModalDirect();
+
+  const guestName=document.getElementById('guestName')?.value?.trim();
+  const guestEmail=document.getElementById('guestEmail')?.value?.trim();
+  const guestPhone=document.getElementById('guestPhone')?.value?.trim();
+  const numGuests=document.getElementById('numGuests')?.value||'1';
+  const paymentMethod=document.querySelector('input[name="paymentMethod"]:checked')?.value||'wise';
+
+  if(!guestName||!guestEmail){showCalMsg('Please fill in your name and email.');return;}
+
+  const btn=document.querySelector('.book-btn');
+  if(btn){btn.textContent='Processing...';btn.disabled=true;btn.style.background='var(--clay)';}
+
+  try{
+    const res=await fetch('/api/create-reservation',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        property_id:curProp.id,
+        guest_name:guestName,
+        guest_email:guestEmail,
+        guest_phone:guestPhone||null,
+        check_in:ci,
+        check_out:co,
+        num_guests:parseInt(numGuests)||1,
+        payment_method:paymentMethod
+      })
+    });
+    const data=await res.json();
+    if(!res.ok){showCalMsg(data.error||'Reservation failed. Please try again.');return;}
+
+    if(paymentMethod==='paypal'&&data.paypal_approval_url){
+      window.location.href=data.paypal_approval_url;
+    } else if(paymentMethod==='wise'){
+      closeModalDirect();
+      showWiseInstructions(data);
+    }
+  }catch(e){
+    console.error('Booking error:',e);
+    showCalMsg('Connection error. Please try again.');
+  }finally{
+    if(btn){btn.textContent='Reserve Now';btn.disabled=false;btn.style.background='';}
+  }
+}
+
+function showWiseInstructions(data){
+  const ref=data.reference;
+  const amount=data.grand_total;
+  const impact=data.community_impact;
+  const modal=document.createElement('div');
+  modal.id='wiseModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(20,18,16,0.88);z-index:600;display:flex;align-items:center;justify-content:center;padding:1rem';
+  modal.innerHTML=`
+    <div style="background:var(--white);max-width:480px;width:100%;border:2px solid var(--border);animation:slideUp 0.25s ease;max-height:90vh;overflow-y:auto">
+      <div style="background:var(--bg);padding:1.5rem;border-bottom:2px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase">Booking Confirmed ✓</div>
+        <button onclick="document.getElementById('wiseModal').remove()" style="background:none;border:none;cursor:pointer;font-size:1.1rem;width:32px;height:32px">✕</button>
+      </div>
+      <div style="padding:2rem">
+        <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem">Your Reference</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--clay);margin-bottom:1.5rem">${ref}</div>
+        <div style="background:rgba(43,122,142,0.08);border:1px solid rgba(43,122,142,0.2);padding:1.25rem;margin-bottom:1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ocean);margin-bottom:0.75rem;font-weight:600">Wise Transfer Details</div>
+          <table style="width:100%;font-size:0.8rem;border-collapse:collapse">
+            <tr><td style="padding:5px 0;color:var(--text-muted);font-size:0.72rem">Account Name</td><td style="text-align:right;font-weight:600;color:var(--text)">Nosara Collective Conscience</td></tr>
+            <tr><td style="padding:5px 0;color:var(--text-muted);font-size:0.72rem">Email</td><td style="text-align:right;color:var(--text)">info@nosaracollective.com</td></tr>
+            <tr><td style="padding:5px 0;color:var(--text-muted);font-size:0.72rem">Amount</td><td style="text-align:right;font-weight:700;color:var(--text);font-size:1rem">$${amount.toLocaleString()} USD</td></tr>
+            <tr><td style="padding:5px 0;color:var(--text-muted);font-size:0.72rem">Reference</td><td style="text-align:right;font-family:'DM Mono',monospace;color:var(--clay);font-weight:700">${ref}</td></tr>
+          </table>
+        </div>
+        <div style="background:rgba(196,120,74,0.08);border:1px solid rgba(196,120,74,0.2);padding:1rem;margin-bottom:1.5rem;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--clay-dark);line-height:1.7">
+          ⚠️ Include <strong>${ref}</strong> in your payment description. We confirm within 24 hours.
+        </div>
+        <div style="background:rgba(43,122,142,0.06);border:1px solid rgba(43,122,142,0.15);padding:1rem;margin-bottom:1.5rem;font-size:0.78rem;color:var(--ocean);line-height:1.7">
+          🌱 <strong>$${impact.toLocaleString()} goes to local Nosara families</strong> from your stay.
+        </div>
+        <button onclick="document.getElementById('wiseModal').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.65rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Space Grotesk',sans-serif">Done</button>
+        <div style="text-align:center;margin-top:1rem;font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--text-muted)">Questions? <a href="https://wa.me/50672935565" style="color:var(--clay)">WhatsApp us</a></div>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalDirect()});
 
