@@ -2462,17 +2462,20 @@ setTimeout(()=>{
   if(!ref&&!orderId)return;
   window.history.replaceState({},'',window.location.pathname);
 
-  // Capture the payment
+  // Show success immediately — PayPal already charged the customer
+  setTimeout(()=>showPayPalSuccess(ref),400);
+
+  // Capture the payment server-side (update DB + send email)
   try{
-    const apiBase=(window.location.origin&&window.location.origin!=='null')?window.location.origin:'https://nosara-collective.netlify.app';
+    const apiBase='https://nosara-collective.netlify.app';
     const res=await fetch(apiBase+'/.netlify/functions/capture-paypal-order',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({order_id:orderId,reference:ref})
     });
     const data=await res.json();
-    if(data.success){
-      showPayPalSuccess(ref);
+    if(!data.success){
+      console.error('Capture failed:',data);
     }
   }catch(e){
     console.error('PayPal capture error:',e);
