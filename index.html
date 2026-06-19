@@ -2068,8 +2068,12 @@ async function submitBooking(){
     const data=await res.json();
     if(!res.ok){showCalMsg(data.error||'Reservation failed. Please try again.');return;}
 
-    if(paymentMethod==='paypal'&&data.paypal_approval_url){
-      window.location.href=data.paypal_approval_url;
+    if(paymentMethod==='paypal'){
+      if(data.paypal_approval_url){
+        window.location.href=data.paypal_approval_url;
+      } else {
+        showCalMsg('PayPal error: '+(data.error||'No approval URL returned'));
+      }
     } else if(paymentMethod==='wise'){
       closeModalDirect();
       showWiseInstructions(data);
