@@ -2050,10 +2050,13 @@ async function submitBooking(){
   if(btn){btn.textContent='Processing...';btn.disabled=true;btn.style.background='var(--clay)';}
 
   try{
-    const apiBase=(window.location.origin&&window.location.origin!=='null')?window.location.origin:'https://nosara-collective.netlify.app';
+    const apiBase='https://nosara-collective.netlify.app';
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),15000);
     const res=await fetch(apiBase+'/.netlify/functions/create-reservation',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
+      signal:controller.signal,
       body:JSON.stringify({
         property_id:curProp.id,
         guest_name:guestName,
@@ -2065,22 +2068,25 @@ async function submitBooking(){
         payment_method:paymentMethod
       })
     });
-    const data=await res.json();
-    if(!res.ok){showCalMsg(data.error||'Reservation failed. Please try again.');return;}
+    clearTimeout(timeout);
+    const text=await res.text();
+    let data;
+    try{data=JSON.parse(text);}catch{alert('Server response: '+text.slice(0,300));return;}
+    if(!res.ok){alert('Error '+res.status+': '+(data.error||text));return;}
 
     if(paymentMethod==='paypal'){
       if(data.paypal_approval_url){
         window.location.href=data.paypal_approval_url;
       } else {
-        showCalMsg('PayPal error: '+(data.error||'No approval URL returned'));
+        alert('PayPal error: no approval URL. Response: '+JSON.stringify(data).slice(0,300));
       }
     } else if(paymentMethod==='wise'){
       closeModalDirect();
       showWiseInstructions(data);
     }
   }catch(e){
+    alert('Error: '+e.message);
     console.error('Booking error:',e);
-    showCalMsg('Connection error. Please try again.');
   }finally{
     if(btn){btn.textContent='Reserve Now';btn.disabled=false;btn.style.background='';}
   }
