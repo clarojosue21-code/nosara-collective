@@ -112,7 +112,7 @@ async function sendConfirmationEmail(reservation, propertyName) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Nosara Collective <onboarding@resend.dev>',
+        from: 'Nosara Collective <bookings@nosaracollectiveconscience.com>',
         to,
         subject,
         html,

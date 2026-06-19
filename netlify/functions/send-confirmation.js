@@ -13,8 +13,7 @@ async function sendEmail({ to, subject, html }) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      // Use Resend's onboarding domain until nosaracollective.com is verified in Resend
-      from: 'Nosara Collective <onboarding@resend.dev>',
+      from: 'Nosara Collective <bookings@nosaracollectiveconscience.com>',
       to,
       subject,
       html,
