@@ -2075,8 +2075,8 @@ async function submitBooking(){
       showWiseInstructions(data);
     }
   }catch(e){
-    alert('CATCH ERROR: '+e.message);
     console.error('Booking error:',e);
+    showCalMsg('Connection error. Please try again.');
   }finally{
     if(btn){btn.textContent='Reserve Now';btn.disabled=false;btn.style.background='';}
   }
@@ -2442,5 +2442,54 @@ setTimeout(()=>{
 </script>
 
 
+<script>
+// ─── PAYPAL RETURN HANDLER ───
+(async function(){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('payment')!=='success')return;
+  const ref=params.get('ref');
+  const orderId=params.get('token'); // PayPal adds ?token=ORDER_ID on return
+  if(!ref&&!orderId)return;
+  window.history.replaceState({},'',window.location.pathname);
+
+  // Capture the payment
+  try{
+    const apiBase=(window.location.origin&&window.location.origin!=='null')?window.location.origin:'https://nosara-collective.netlify.app';
+    const res=await fetch(apiBase+'/.netlify/functions/capture-paypal-order',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({order_id:orderId,reference:ref})
+    });
+    const data=await res.json();
+    if(data.success){
+      showPayPalSuccess(ref);
+    }
+  }catch(e){
+    console.error('PayPal capture error:',e);
+  }
+})();
+
+function showPayPalSuccess(ref){
+  const modal=document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;background:rgba(20,18,16,0.88);z-index:600;display:flex;align-items:center;justify-content:center;padding:1rem';
+  modal.innerHTML=`
+    <div style="background:var(--white);max-width:440px;width:100%;border:2px solid var(--border);animation:slideUp 0.25s ease">
+      <div style="background:var(--text);padding:2rem;text-align:center">
+        <div style="font-size:2rem;margin-bottom:0.5rem;color:var(--bg)">✓</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:var(--bg);letter-spacing:0.04em;text-transform:uppercase">Payment Confirmed</div>
+      </div>
+      <div style="padding:2rem">
+        <div style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem">Your Reference</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--clay);margin-bottom:1.5rem">${ref}</div>
+        <div style="background:rgba(43,122,142,0.06);border:1px solid rgba(43,122,142,0.15);padding:1rem;margin-bottom:1.5rem;font-size:0.78rem;color:var(--ocean);line-height:1.7">
+          🌱 <strong>5% of your stay goes directly to local Nosara families.</strong><br>Thank you for traveling with purpose.
+        </div>
+        <p style="font-size:0.78rem;color:var(--text-muted);line-height:1.8;margin-bottom:1.5rem">A confirmation email has been sent to your inbox.</p>
+        <button onclick="this.closest('div[style]').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.65rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Space Grotesk',sans-serif">Done</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+</script>
 </body>
 </html>
