@@ -2072,7 +2072,7 @@ async function submitBooking(){
     const text=await res.text();
     let data;
     try{data=JSON.parse(text);}catch{alert('Server response: '+text.slice(0,300));return;}
-    if(!res.ok){alert('Error '+res.status+': '+(data.error||text));return;}
+    if(!res.ok){alert('Error '+res.status+': '+(data.detail||data.error||text));return;}
 
     if(paymentMethod==='paypal'){
       if(data.paypal_approval_url){

@@ -30,8 +30,13 @@ async function createPayPalOrder(amount, reference) {
     },
     body: 'grant_type=client_credentials',
   });
-  const { access_token } = await tokenRes.json();
+  const tokenData = await tokenRes.json();
+  if (!tokenData.access_token) {
+    throw new Error(`PayPal token failed: ${JSON.stringify(tokenData)}`);
+  }
+  const access_token = tokenData.access_token;
 
+  const siteUrl = process.env.SITE_URL || 'https://nosara-collective.netlify.app';
   const orderRes = await fetch(`${baseUrl}/v2/checkout/orders`, {
     method: 'POST',
     headers: {
@@ -48,8 +53,8 @@ async function createPayPalOrder(amount, reference) {
         },
       ],
       application_context: {
-        return_url: `${process.env.SITE_URL || 'https://nosaracollective.com'}/?payment=success&ref=${reference}`,
-        cancel_url: `${process.env.SITE_URL || 'https://nosaracollective.com'}/?payment=cancelled`,
+        return_url: `${siteUrl}/?payment=success&ref=${reference}`,
+        cancel_url: `${siteUrl}/?payment=cancelled`,
         brand_name: 'Nosara Collective Conscience',
         user_action: 'PAY_NOW',
       },
@@ -57,7 +62,13 @@ async function createPayPalOrder(amount, reference) {
   });
 
   const order = await orderRes.json();
+  if (!order.id) {
+    throw new Error(`PayPal order failed: ${JSON.stringify(order)}`);
+  }
   const approvalUrl = order.links?.find((l) => l.rel === 'approve')?.href;
+  if (!approvalUrl) {
+    throw new Error(`PayPal no approval URL: ${JSON.stringify(order)}`);
+  }
   return { orderId: order.id, approvalUrl };
 }
 
@@ -183,7 +194,7 @@ exports.handler = async (event) => {
       response.paypal_approval_url = approvalUrl;
     } catch (e) {
       console.error('PayPal order error:', e);
-      return { statusCode: 500, body: JSON.stringify({ error: 'PayPal order creation failed' }) };
+      return { statusCode: 500, body: JSON.stringify({ error: 'PayPal order creation failed', detail: e.message }) };
     }
   } else if (payment_method === 'wise') {
     response.wise_instructions = {
