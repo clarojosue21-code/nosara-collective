@@ -1904,8 +1904,8 @@ async function fetchBlockedDates(propId){
   try{
     const prop=PROPS.find(p=>p.id===propId);
     const uuid=prop?.dbId;
-    if(!uuid){blockedDates[propId]=new Set();return;}
-    const res=await fetch(`https://nosara-collective.netlify.app/.netlify/functions/check-availability?property_id=${uuid}`);
+    const param=uuid?`property_id=${uuid}`:`slug=${propId}`;
+    const res=await fetch(`https://nosara-collective.netlify.app/.netlify/functions/check-availability?${param}`);
     if(!res.ok){blockedDates[propId]=new Set();return;}
     const data=await res.json();
     blockedDates[propId]=new Set(data.blocked_dates||[]);

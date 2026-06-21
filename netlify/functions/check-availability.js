@@ -13,6 +13,7 @@ const ICAL_FEEDS = {
   mar: 'https://www.airbnb.com/calendar/ical/1075348569613326856.ics?t=c902dda31cd34a35995f770e94af9958',
   monkey: 'https://www.airbnb.com/calendar/ical/32898115.ics?t=a9262281d6374e0f902ef7ff28c45701',
   h7: 'https://www.airbnb.com/calendar/ical/1340590425596595717.ics?t=a7ab7730fc8746ebbb8e20aef8ede4c3',
+  'sol-mar-bundle': 'https://www.airbnb.com/calendar/ical/1338591346598949808.ics?t=7c55ce1e08da47c79e2da8e87eb3c704',
 };
 
 function parseIcal(text, propertyId) {
@@ -68,17 +69,18 @@ async function syncIcal(propertyId, slug) {
 }
 
 exports.handler = async (event) => {
-  const { property_id, check_in, check_out } = event.queryStringParameters || {};
+  const { property_id, slug, check_in, check_out } = event.queryStringParameters || {};
 
-  if (!property_id) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'property_id required' }) };
+  if (!property_id && !slug) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'property_id or slug required' }) };
   }
 
-  // Get property slug to look up iCal
+  // Get property by UUID or slug
+  const isUUID = property_id && /^[0-9a-f-]{36}$/.test(property_id);
   const { data: property } = await supabase
     .from('properties')
     .select('id, slug')
-    .eq('id', property_id)
+    .eq(isUUID ? 'id' : 'slug', isUUID ? property_id : (slug || property_id))
     .single();
 
   if (property) {
@@ -89,7 +91,7 @@ exports.handler = async (event) => {
   const query = supabase
     .from('blocked_dates')
     .select('date')
-    .eq('property_id', property_id);
+    .eq('property_id', property?.id || property_id);
 
   if (check_in && check_out) {
     query.gte('date', check_in).lt('date', check_out);
