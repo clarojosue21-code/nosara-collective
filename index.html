@@ -1901,10 +1901,18 @@ const blockedDates={};
 
 async function fetchBlockedDates(propId){
   if(blockedDates[propId])return;
-  const url=ICAL_FEEDS[propId];
-  if(!url)return;
-  try{const res=await fetch(ICAL_PROXY+encodeURIComponent(url));const text=await res.text();blockedDates[propId]=parseIcal(text);}
-  catch(e){console.warn('Could not load calendar for',propId);blockedDates[propId]=new Set();}
+  try{
+    const prop=PROPS.find(p=>p.id===propId);
+    const uuid=prop?.dbId;
+    if(!uuid){blockedDates[propId]=new Set();return;}
+    const res=await fetch(`https://nosara-collective.netlify.app/.netlify/functions/check-availability?property_id=${uuid}`);
+    if(!res.ok){blockedDates[propId]=new Set();return;}
+    const data=await res.json();
+    blockedDates[propId]=new Set(data.blocked_dates||[]);
+  }catch(e){
+    console.warn('Could not load calendar for',propId);
+    blockedDates[propId]=new Set();
+  }
 }
 function parseIcal(text){
   const dates=new Set();
