@@ -2232,10 +2232,40 @@ function addServicesToCart(){
   document.getElementById('quoteBox').style.display='none';
 }
 
+// ─── LOAD PROPERTIES FROM SUPABASE ───
+const SUPABASE_URL='https://gvslmjrwgfdbymmrbcur.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2c2xtanJ3Z2ZkYnltbXJiY3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3Mjk4NDYsImV4cCI6MjA5NzMwNTg0Nn0.4cqzx-9dGdYxn7jVUDpuZBb-mbePQu1WnJy1h-LJv_I';
+
+async function loadPropsFromSupabase(){
+  try{
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/properties?is_active=eq.true&order=created_at.asc`,{
+      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+    });
+    if(!res.ok)return;
+    const rows=await res.json();
+    rows.forEach(row=>{
+      const p=PROPS.find(p=>p.id===row.slug);
+      if(!p)return;
+      // Update with Supabase data
+      if(row.price_per_night) p.price=row.price_per_night;
+      if(row.cover_image) p.cover=row.cover_image;
+      if(row.images && row.images.length) p.images=row.images;
+      if(row.features && row.features.length) p.features=row.features;
+      if(row.description) p.desc=row.description;
+      if(row.max_guests) p.maxGuests=row.max_guests;
+      p.dbId=row.id; // store UUID for booking
+    });
+  }catch(e){
+    console.warn('Could not load properties from Supabase, using local data',e);
+  }
+}
+
 // ─── INIT ───
-try{renderProps();}catch(e){console.warn('renderProps',e);}
+loadPropsFromSupabase().then(()=>{
+  try{renderProps();}catch(e){console.warn('renderProps',e);}
+  try{renderRetreats();}catch(e){console.warn('renderRetreats',e);}
+});
 try{renderServices();}catch(e){console.warn('renderServices',e);}
-try{renderRetreats();}catch(e){console.warn('renderRetreats',e);}
 try{renderLots();}catch(e){console.warn('renderLots',e);}
 try{renderGuide();}catch(e){console.warn('renderGuide',e);}
 if(document.getElementById('restaurantsGrid')){try{renderRestaurants();}catch(e){console.warn('renderRestaurants',e);}}
