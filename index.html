@@ -681,7 +681,7 @@ section{padding:5rem 3rem}
 }
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .modal-gal{position:relative;height:380px;overflow:hidden}
-.modal-gal img{width:100%;height:380px;object-fit:cover;filter:saturate(0.88);transition:opacity 0.18s ease;}
+.modal-gal img{width:100%;height:380px;object-fit:cover;filter:saturate(0.88);transition:opacity 0.5s ease, transform 0.5s ease;}
 .modal-close{
   position:absolute;top:0;right:0;
   background:var(--bg);border:none;
@@ -2034,7 +2034,12 @@ let galTimer=null;
 function updateGal(){
   const img=document.getElementById('modalImg');
   img.style.opacity='0';
-  setTimeout(()=>{img.src=curProp.images[galIdx];img.style.opacity='1';},180);
+  img.style.transform='scale(1.03)';
+  setTimeout(()=>{
+    img.src=curProp.images[galIdx];
+    img.style.opacity='1';
+    img.style.transform='scale(1)';
+  },500);
   document.querySelectorAll('.gal-dot').forEach((d,i)=>d.classList.toggle('active',i===galIdx));
 }
 function startAutoSlide(){
