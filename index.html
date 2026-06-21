@@ -1705,7 +1705,10 @@ function renderProps(){
     <div class="prop-card" onclick="openModal('${p.id}')">
       <div class="prop-img-wrap">
         <img src="${p.cover}" alt="${p.name}" onerror="this.style.display='none'" loading="lazy">
-        <div class="prop-overlay"><span>View Property</span></div>
+        <div class="prop-overlay">
+          <button class="prop-overlay-add" onclick="event.stopPropagation();addToCart({id:'prop_${p.id}',name:'${p.name}',price:${p.price||0},img:'${p.cover||''}',meta:'${p.meta||''}',icon:'🏡'});return false">🛒 Add to Cart</button>
+          <button class="prop-overlay-view" onclick="event.stopPropagation();openModal('${p.id}')">View Details</button>
+        </div>
       </div>
       <div class="prop-badge${p.badgeClass?' '+p.badgeClass:''}">${p.badge}</div>
       <div class="prop-body">
@@ -2440,23 +2443,6 @@ function injectMarquee(){
 injectMarquee();
 
 // ─── PROP CARD ADD TO CART OVERRIDE ───
-// Override renderProps to include cart functionality
-const _origRenderProps = renderProps;
-function renderProps(){
-  _origRenderProps();
-  // Update overlays with real cart data
-  document.querySelectorAll('.prop-card').forEach((card, i)=>{
-    const prop = PROPS[i];
-    if(!prop) return;
-    // Replace overlay inner with working cart button
-    const overlay = card.querySelector('.prop-overlay');
-    if(overlay){
-      overlay.innerHTML = `
-        <button class="prop-overlay-add" onclick="event.stopPropagation();addToCart({id:'prop_${prop?.id||i}',name:'${prop?.name||'Property'}',price:${prop?.price||0},img:'${prop?.cover||''}',meta:'${prop?.meta||''}',icon:'🏡'});return false">🛒 Add to Cart</button>
-        <button class="prop-overlay-view" onclick="event.stopPropagation();openModal('${prop?.id||''}')">View Details</button>`;
-    }
-  });
-}
 </script>
 
 <!-- WhatsApp Floating -->
