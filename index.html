@@ -681,7 +681,7 @@ section{padding:5rem 3rem}
 }
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .modal-gal{position:relative;height:380px;overflow:hidden}
-.modal-gal img{width:100%;height:380px;object-fit:cover;filter:saturate(0.88)}
+.modal-gal img{width:100%;height:380px;object-fit:cover;filter:saturate(0.88);transition:opacity 0.18s ease;}
 .modal-close{
   position:absolute;top:0;right:0;
   background:var(--bg);border:none;
@@ -695,15 +695,15 @@ section{padding:5rem 3rem}
 .modal-close:hover{background:var(--clay);color:var(--white)}
 .modal-arrow{
   position:absolute;top:50%;transform:translateY(-50%);
-  background:rgba(242,237,228,0.88);
-  border:1px solid var(--border-med);
-  width:38px;height:38px;cursor:pointer;
-  font-size:1.1rem;display:flex;align-items:center;justify-content:center;
-  color:var(--text);transition:background 0.15s;
+  background:rgba(20,18,16,0.55);
+  border:none;
+  width:52px;height:72px;cursor:pointer;
+  font-size:2rem;display:flex;align-items:center;justify-content:center;
+  color:#fff;transition:background 0.2s;z-index:10;
 }
-.modal-arrow:hover{background:var(--clay);color:var(--white)}
-.modal-arrow.prev{left:1rem}
-.modal-arrow.next{right:1rem}
+.modal-arrow:hover{background:rgba(196,120,74,0.85)}
+.modal-arrow.prev{left:0}
+.modal-arrow.next{right:0}
 .gal-dots{position:absolute;bottom:0.75rem;left:50%;transform:translateX(-50%);display:flex;gap:4px}
 .gal-dot{width:5px;height:5px;background:rgba(20,18,16,0.3);border:none;cursor:pointer;transition:background 0.15s}
 .gal-dot.active{background:var(--text)}
@@ -2025,16 +2025,28 @@ async function openModal(id){
   cal.innerHTML='<div style="text-align:center;padding:1.5rem;color:var(--text-muted);font-size:0.82rem">Loading availability...</div>';
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+  startAutoSlide();
   if(ICAL_FEEDS[curProp.id]){await fetchBlockedDates(curProp.id);}
   else{blockedDates[curProp.id]=new Set();}
   renderCalendar(curProp.id);
 }
-function updateGal(){document.getElementById('modalImg').src=curProp.images[galIdx];document.querySelectorAll('.gal-dot').forEach((d,i)=>d.classList.toggle('active',i===galIdx));}
-function galPrev(e){e.stopPropagation();galIdx=(galIdx-1+curProp.images.length)%curProp.images.length;updateGal()}
-function galNext(e){e.stopPropagation();galIdx=(galIdx+1)%curProp.images.length;updateGal()}
-function goGal(i){galIdx=i;updateGal()}
+let galTimer=null;
+function updateGal(){
+  const img=document.getElementById('modalImg');
+  img.style.opacity='0';
+  setTimeout(()=>{img.src=curProp.images[galIdx];img.style.opacity='1';},180);
+  document.querySelectorAll('.gal-dot').forEach((d,i)=>d.classList.toggle('active',i===galIdx));
+}
+function startAutoSlide(){
+  stopAutoSlide();
+  if(curProp&&curProp.images.length>1) galTimer=setInterval(()=>{galIdx=(galIdx+1)%curProp.images.length;updateGal();},4000);
+}
+function stopAutoSlide(){clearInterval(galTimer);}
+function galPrev(e){e.stopPropagation();galIdx=(galIdx-1+curProp.images.length)%curProp.images.length;updateGal();startAutoSlide();}
+function galNext(e){e.stopPropagation();galIdx=(galIdx+1)%curProp.images.length;updateGal();startAutoSlide();}
+function goGal(i){galIdx=i;updateGal();startAutoSlide();}
 function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect()}
-function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''}
+function closeModalDirect(){stopAutoSlide();document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''}
 async function submitBooking(){
   const ci=document.getElementById('checkin').value;
   const co=document.getElementById('checkout').value;
