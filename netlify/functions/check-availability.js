@@ -5,15 +5,17 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// Multiple iCal feeds per property — all sources are merged
 const ICAL_FEEDS = {
-  arcilla1: 'https://www.airbnb.com/calendar/ical/1364560824324105727.ics?t=36ef19af5ed1411085c3ef4d85c0cac3',
-  arcilla2: 'https://www.airbnb.com/calendar/ical/1364560764925270828.ics?t=9d789399c92d4524a05e2acf1bb6bb29',
-  ojosazules: 'https://www.airbnb.com/calendar/ical/754963035673300946.ics?t=22dc8b6d04e34ca0a78c1ee28c729f19',
-  sol: 'https://www.airbnb.com/calendar/ical/1076720749284905534.ics?t=69701c3ff73d47a69f4594ad8e1dd301',
-  mar: 'https://www.airbnb.com/calendar/ical/1075348569613326856.ics?t=c902dda31cd34a35995f770e94af9958',
-  monkey: 'https://www.airbnb.com/calendar/ical/32898115.ics?t=a9262281d6374e0f902ef7ff28c45701',
-  h7: 'https://www.airbnb.com/calendar/ical/1340590425596595717.ics?t=a7ab7730fc8746ebbb8e20aef8ede4c3',
-  'sol-mar-bundle': 'https://www.airbnb.com/calendar/ical/1338591346598949808.ics?t=7c55ce1e08da47c79e2da8e87eb3c704',
+  arcilla1:       ['https://www.airbnb.com/calendar/ical/1364560824324105727.ics?t=36ef19af5ed1411085c3ef4d85c0cac3'],
+  arcilla2:       ['https://www.airbnb.com/calendar/ical/1364560764925270828.ics?t=9d789399c92d4524a05e2acf1bb6bb29'],
+  ojosazules:     ['https://www.airbnb.com/calendar/ical/754963035673300946.ics?t=22dc8b6d04e34ca0a78c1ee28c729f19',
+                   'https://ical.booking.com/v1/export?t=7d88ee6c-c15e-4e79-966e-dade1c93501b'],
+  sol:            ['https://www.airbnb.com/calendar/ical/1076720749284905534.ics?t=69701c3ff73d47a69f4594ad8e1dd301'],
+  mar:            ['https://www.airbnb.com/calendar/ical/1075348569613326856.ics?t=c902dda31cd34a35995f770e94af9958'],
+  monkey:         ['https://www.airbnb.com/calendar/ical/32898115.ics?t=a9262281d6374e0f902ef7ff28c45701'],
+  h7:             ['https://www.airbnb.com/calendar/ical/1340590425596595717.ics?t=a7ab7730fc8746ebbb8e20aef8ede4c3'],
+  'sol-mar-bundle': ['https://www.airbnb.com/calendar/ical/1338591346598949808.ics?t=7c55ce1e08da47c79e2da8e87eb3c704'],
 };
 
 function parseIcal(text, propertyId) {
@@ -44,32 +46,35 @@ function parseIcal(text, propertyId) {
 }
 
 async function syncIcal(propertyId, slug) {
-  const url = ICAL_FEEDS[slug];
-  if (!url) { console.log('No iCal URL for', slug); return; }
+  const urls = ICAL_FEEDS[slug];
+  if (!urls || !urls.length) { console.log('No iCal URLs for', slug); return; }
 
-  try {
-    const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; CalendarSync/1.0)',
-        'Accept': 'text/calendar',
-      }
-    });
-    console.log('iCal fetch status for', slug, ':', res.status);
-    if (!res.ok) { console.log('iCal fetch failed:', res.status); return; }
-    const text = await res.text();
-    console.log('iCal text length for', slug, ':', text.length);
-    const dates = parseIcal(text, propertyId);
-    console.log('Parsed', dates.length, 'blocked dates for', slug);
-
-    // Always delete old airbnb dates and re-insert (even if 0, means property is free)
-    await supabase.from('blocked_dates').delete()
-      .eq('property_id', propertyId).eq('source', 'airbnb');
-
-    if (dates.length > 0) {
-      await supabase.from('blocked_dates').upsert(dates, { onConflict: 'property_id,date' });
+  const allDates = [];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CalendarSync/1.0)', 'Accept': 'text/calendar' }
+      });
+      if (!res.ok) { console.log('iCal fetch failed for', slug, url, res.status); continue; }
+      const text = await res.text();
+      const dates = parseIcal(text, propertyId);
+      console.log('Parsed', dates.length, 'dates from', url);
+      allDates.push(...dates);
+    } catch (e) {
+      console.error('iCal fetch error for', slug, e.message);
     }
-  } catch (e) {
-    console.error('iCal sync failed for', slug, e.message);
+  }
+
+  // Deduplicate by date
+  const seen = new Set();
+  const unique = allDates.filter(d => seen.has(d.date) ? false : seen.add(d.date));
+  console.log('Total unique blocked dates for', slug, ':', unique.length);
+
+  await supabase.from('blocked_dates').delete()
+    .eq('property_id', propertyId).eq('source', 'airbnb');
+
+  if (unique.length > 0) {
+    await supabase.from('blocked_dates').upsert(unique, { onConflict: 'property_id,date' });
   }
 }
 
