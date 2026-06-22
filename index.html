@@ -2180,42 +2180,6 @@ function showPaymentModal(total,items){
 function payWithWise(){document.getElementById('paymentModal').remove();alert('✓ Wise payment details:\n\nAccount: Nosara Conscience Collective\nEmail: info@nosaracollective.com\n\n(Connect your Wise account to show live payment details)');}
 
 // ─── ADD SERVICES TO CART ───
-function addServicesToCart(){
-  let added = 0;
-  SERVICES.forEach(s=>{
-    if(!selected[s.id]) return;
-    let cost = s.price||0;
-    let label = s.name;
-    if(s.id==='atv'){const d=parseInt(document.getElementById('atv_days')?.value)||1;const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=100*d*q;label+=` (${q}×${d}d)`}
-    if(s.id==='golf'){const d=parseInt(document.getElementById('golf_days')?.value)||1;cost=140*d;label+=` (${d}d)`}
-    if(s.id==='car'){const d=parseInt(document.getElementById('car_days')?.value)||1;cost=140*d;label+=` (${d}d)`}
-    if(s.id==='chef'){const d=parseInt(document.getElementById('chef_days')?.value)||1;const hStr=document.getElementById('chef_hours')?.value||'4 hours';const h=parseInt(hStr)||4;cost=50*d*h;label+=` (${d}d×${h}h)`}
-    if(s.id==='grocery'){cost=20}
-    if(s.id==='cleaning'){const q=parseInt(document.getElementById('clean_qty')?.value)||1;cost=100*q;label+=` (${q} sessions)`}
-    if(s.id==='surf'){const p=parseInt(document.getElementById('surf_pax')?.value)||1;const d=parseInt(document.getElementById('surf_days')?.value)||1;cost=80*p*d;label+=` (${p}pax×${d})`}
-    if(s.id==='tennis'){const p=parseInt(document.getElementById('tennis_pax')?.value)||1;const d=parseInt(document.getElementById('tennis_sessions')?.value)||1;cost=90*p*d;label+=` (${p}pax×${d})`}
-    if(s.id==='muaythai'){const p=parseInt(document.getElementById('muay_pax')?.value)||1;const d=parseInt(document.getElementById('muay_sessions')?.value)||1;cost=90*p*d;label+=` (${p}pax×${d})`}
-    if(s.id==='bjj'){const p=parseInt(document.getElementById('bjj_pax')?.value)||1;const d=parseInt(document.getElementById('bjj_sessions')?.value)||1;cost=90*p*d;label+=` (${p}pax×${d})`}
-    if(s.id==='snorkel'){const p=parseInt(document.getElementById('snorkel_pax')?.value)||1;cost=180*p;label+=` (${p}pax)`}
-    if(s.id==='fishing'){cost=1500;label+=` (up to 5 pax)`}
-    if(s.id==='dolphin'){const p=parseInt(document.getElementById('dolphin_pax')?.value)||1;cost=180*p;label+=` (${p}pax)`}
-    if(s.id==='sunset'){const p=parseInt(document.getElementById('sunset_pax')?.value)||1;cost=180*p;label+=` (${p}pax)`}
-    if(s.id==='surftrip'){const p=parseInt(document.getElementById('surftrip_pax')?.value)||1;const d=document.getElementById('surftrip_dest')?.value||'Ostional';cost=150*p;label+=` to ${d} (${p}pax)`}
-    if(s.id==='surfboard'){const q=parseInt(document.getElementById('sb_qty')?.value)||1;const d=parseInt(document.getElementById('sb_days')?.value)||1;const t=document.getElementById('sb_type')?.value||'Longboard';cost=30*q*d;label+=` ${t} (${q}×${d}d)`}
-    if(s.id==='horseback'){const p=parseInt(document.getElementById('horse_pax')?.value)||1;cost=95*p;label+=` (${p}pax)`}
-    if(s.id==='massage'){const p=parseInt(document.getElementById('massage_pax')?.value)||1;cost=150*p;label+=` (${p}pax)`}
-    if(s.id==='yoga'){const ss=parseInt(document.getElementById('yoga_sessions')?.value)||1;cost=80*ss;label+=` (${ss} sessions)`}
-    if(s.id==='skate'){const p=parseInt(document.getElementById('skate_pax')?.value)||1;const d=parseInt(document.getElementById('skate_days')?.value)||1;cost=100*p*d;label+=` (${p}pax×${d}d)`}
-    if(s.id==='buffet'){const p=parseInt(document.getElementById('buffet_pax')?.value)||1;const d=parseInt(document.getElementById('buffet_days')?.value)||1;const m=document.getElementById('buffet_meal')?.value||'Buffet';cost=35*p*d;label+=` ${m} (${p}pax×${d}d)`}
-    addToCart({id:'svc_'+s.id,name:label,price:cost,img:'',meta:'Concierge Service',icon:s.icon});
-    added++;
-  });
-  if(added===0){alert('Select at least one service first.');return;}
-  // Clear selections
-  Object.keys(selected).forEach(k=>delete selected[k]);
-  document.querySelectorAll('.service-card.selected').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('quoteBox').style.display='none';
-}
 
 // ─── LOAD PROPERTIES FROM SUPABASE ───
 const SUPABASE_URL='https://gvslmjrwgfdbymmrbcur.supabase.co';
@@ -2298,22 +2262,24 @@ function toggleCart(){
 }
 
 function addToCart(item){
-  // Check if already in cart
   const existing = cart.findIndex(c => c.id === item.id);
-  if(existing >= 0){
-    cart[existing] = item;
-  } else {
-    cart.push(item);
-  }
+  if(existing >= 0){ cart[existing] = item; } else { cart.push(item); }
   updateCartCount();
   renderCart();
-  // Show cart
   const panel = document.getElementById('cartPanel');
   const backdrop = document.getElementById('cartBackdrop');
-  if(!panel.classList.contains('open')){
+  if(panel && !panel.classList.contains('open')){
     panel.classList.add('open');
-    backdrop.classList.add('open');
+    if(backdrop) backdrop.classList.add('open');
     document.body.style.overflow = 'hidden';
+  }
+  // bounce animation
+  const countEl = document.getElementById('cartCount');
+  if(countEl){
+    countEl.parentElement.classList.remove('cart-bounce');
+    void countEl.parentElement.offsetWidth;
+    countEl.parentElement.classList.add('cart-bounce');
+    setTimeout(()=>countEl.parentElement.classList.remove('cart-bounce'),400);
   }
 }
 
@@ -2551,18 +2517,6 @@ window.addEventListener('scroll',()=>{
   if(nav) nav.classList.toggle('scrolled', window.scrollY > 20);
 },{ passive: true });
 
-// ─── CART BOUNCE ANIMATION ───
-const _origAddToCart = addToCart;
-function addToCart(item){
-  _origAddToCart(item);
-  const btn = document.getElementById('cartCount');
-  if(btn){
-    btn.parentElement.classList.remove('cart-bounce');
-    void btn.parentElement.offsetWidth; // reflow
-    btn.parentElement.classList.add('cart-bounce');
-    setTimeout(()=>btn.parentElement.classList.remove('cart-bounce'),400);
-  }
-}
 
 // ─── MARQUEE INJECTION ───
 function injectMarquee(){
