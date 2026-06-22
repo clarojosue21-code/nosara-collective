@@ -419,32 +419,24 @@ section{padding:5rem 3rem}
 @media(max-width:768px){.builder-grid{grid-template-columns:1fr}}
 .service-card{
   background:var(--white);padding:1.5rem;
-  cursor:pointer;transition:background 0.15s;position:relative;
+  transition:background 0.15s;position:relative;
+  display:flex;flex-direction:column;
 }
 .service-card:hover{background:var(--bg)}
-.service-card.selected{background:var(--bg);outline:2px solid var(--clay)}
-.sc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.5rem}
-.sc-icon{font-size:1.2rem;margin-bottom:0.4rem}
+.sc-top{display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:0.5rem}
+.sc-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
 .sc-name{
   font-family:'Space Grotesk',sans-serif;
-  font-size:0.78rem;font-weight:700;
-  margin-bottom:0.2rem;color:var(--text);
-  text-transform:uppercase;letter-spacing:0.06em;
+  font-size:0.85rem;font-weight:700;
+  color:var(--text);letter-spacing:0.02em;line-height:1.3;
 }
-.sc-desc{font-size:0.72rem;color:var(--text-muted);line-height:1.65;font-weight:300}
+.sc-desc{font-size:0.78rem;color:var(--text-muted);line-height:1.7;margin-bottom:0.5rem}
 .sc-price{
   font-family:'DM Mono',monospace;
-  font-size:0.62rem;font-weight:400;color:var(--clay);
-  margin-top:0.6rem;letter-spacing:0.04em;
+  font-size:0.62rem;font-weight:500;color:var(--clay);
+  letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;
 }
-.sc-check{
-  width:20px;height:20px;border:2px solid var(--border-med);
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.7rem;flex-shrink:0;transition:all 0.15s;color:transparent;
-}
-.service-card.selected .sc-check{background:var(--clay);border-color:var(--clay);color:var(--white)}
-.sc-options{margin-top:1rem;display:none;flex-direction:column;gap:0.5rem}
-.service-card.selected .sc-options{display:flex}
+.sc-options{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;flex:1}
 .sc-opt{display:flex;flex-direction:column;gap:3px}
 .sc-opt label{
   font-family:'DM Mono',monospace;
@@ -457,6 +449,16 @@ section{padding:5rem 3rem}
   color:var(--text);font-family:'Space Grotesk',sans-serif;
   outline:none;transition:border-color 0.15s;width:100%;
 }
+.sc-add-btn{
+  margin-top:auto;width:100%;padding:10px;
+  background:var(--text);color:var(--white);
+  border:none;cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.72rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  transition:background 0.15s;
+}
+.sc-add-btn:hover{background:var(--clay)}
 .sc-opt input:focus,.sc-opt select:focus,.sc-opt textarea:focus{border-color:var(--clay)}
 .sc-opt textarea{resize:vertical;min-height:65px}
 
@@ -1296,18 +1298,6 @@ nav.scrolled{
     <h2 class="section-title">Build Your Perfect Stay</h2>
     <p class="section-sub">Select everything you need — from airport pickup to private chef — and we'll have it all ready when you arrive.</p>
     <div class="builder-grid" id="servicesGrid"></div>
-    <div class="quote-box" id="quoteBox" style="display:none">
-      <div class="quote-title">Your Package Quote</div>
-      <ul class="quote-items" id="quoteItems"></ul>
-      <div class="quote-total">
-        <div>
-          <div class="quote-total-label">Estimated Total</div>
-          <div class="quote-note">+ taxes · final quote sent within 24h</div>
-        </div>
-        <div class="quote-total-price" id="quoteTotal">$0</div>
-      </div>
-      <button class="submit-quote" onclick="addServicesToCart()">🛒 Add All to Cart ♥</button>
-    </div>
   </div>
 </section>
 
@@ -1690,7 +1680,7 @@ function renderProps(){
       <div class="prop-img-wrap">
         <img src="${p.cover}" alt="${p.name}" onerror="this.style.display='none'" loading="lazy">
         <div class="prop-overlay">
-          <button class="prop-overlay-add" onclick="event.stopPropagation();addToCart({id:'prop_${p.id}',name:'${p.name}',price:${p.price||0},img:'${p.cover||''}',meta:'${p.meta||''}',icon:'🏡'});return false">🛒 Add to Cart</button>
+          <button class="prop-overlay-add" onclick="event.stopPropagation();openModal('${p.id}');return false">Select Dates →</button>
           <button class="prop-overlay-view" onclick="event.stopPropagation();openModal('${p.id}')">View Details</button>
         </div>
       </div>
@@ -1710,81 +1700,63 @@ function renderProps(){
 }
 
 // ─── RENDER SERVICES ───
-const selected={};
 function renderServices(){
   document.getElementById('servicesGrid').innerHTML=SERVICES.map(s=>`
-    <div class="service-card" id="sc_${s.id}" onclick="toggleService('${s.id}',event)">
+    <div class="service-card" id="sc_${s.id}">
       <div class="sc-top">
-        <div>
-          <div class="sc-icon">${s.icon}</div>
-          <div class="sc-name">${s.name}</div>
-        </div>
-        <div class="sc-check" id="chk_${s.id}">✓</div>
+        <div class="sc-icon">${s.icon}</div>
+        <div class="sc-name">${s.name}</div>
       </div>
       <div class="sc-desc">${s.desc}</div>
       <div class="sc-price">${s.priceLabel}</div>
-      <div class="sc-options" id="sco_${s.id}">
+      <div class="sc-options">
         ${s.fields.map(f=>`
           <div class="sc-opt">
             <label>${f.label}</label>
-            ${f.type==='select'?`<select id="${f.id}" onchange="updateQuote()">${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`:''}
-            ${f.type==='input'?`<input type="${f.inputType}" id="${f.id}" placeholder="${f.placeholder||''}" oninput="updateQuote()">`:''}
+            ${f.type==='select'?`<select id="${f.id}">${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`:''}
+            ${f.type==='input'?`<input type="${f.inputType}" id="${f.id}" placeholder="${f.placeholder||''}">`:''}
             ${f.type==='textarea'?`<textarea id="${f.id}" placeholder="${f.placeholder||''}"></textarea>`:''}
           </div>`).join('')}
       </div>
+      <button class="sc-add-btn" onclick="addServiceToCart('${s.id}')">🛒 Add to Cart</button>
     </div>`).join('');
 }
 
-function toggleService(id,e){
-  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA')return;
-  const card=document.getElementById('sc_'+id);
-  if(selected[id]){delete selected[id];card.classList.remove('selected')}
-  else{selected[id]=true;card.classList.add('selected')}
-  updateQuote();
+function calcServiceCost(id){
+  const s=SERVICES.find(x=>x.id===id);
+  if(!s)return{cost:0,label:s?.name||''};
+  let label=s.name,cost=s.price;
+  if(id==='atv'){const d=parseInt(document.getElementById('atv_days')?.value)||1;const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=100*d*q;label+=` (${q} ATV × ${d} days)`}
+  else if(id==='golf'){const d=parseInt(document.getElementById('golf_days')?.value)||1;cost=140*d;label+=` (${d} days)`}
+  else if(id==='car'){const d=parseInt(document.getElementById('car_days')?.value)||1;cost=140*d;label+=` (${d} days)`}
+  else if(id==='chef'){const d=parseInt(document.getElementById('chef_days')?.value)||1;const h=parseInt(document.getElementById('chef_hours')?.value)||4;cost=50*d*h;label+=` (${d} days × ${h}h)`}
+  else if(id==='cleaning'){const q=parseInt(document.getElementById('clean_qty')?.value)||1;cost=100*q;label+=` (${q} sessions)`}
+  else if(id==='surf'){const p=parseInt(document.getElementById('surf_pax')?.value)||1;const d=parseInt(document.getElementById('surf_days')?.value)||1;cost=80*p*d;label+=` (${p} pax × ${d} sessions)`}
+  else if(id==='tennis'){const p=parseInt(document.getElementById('tennis_pax')?.value)||1;const d=parseInt(document.getElementById('tennis_sessions')?.value)||1;cost=90*p*d;label+=` (${p} pax × ${d} sessions)`}
+  else if(id==='muaythai'){const p=parseInt(document.getElementById('muay_pax')?.value)||1;const d=parseInt(document.getElementById('muay_sessions')?.value)||1;cost=90*p*d;label+=` (${p} pax × ${d} sessions)`}
+  else if(id==='bjj'){const p=parseInt(document.getElementById('bjj_pax')?.value)||1;const d=parseInt(document.getElementById('bjj_sessions')?.value)||1;cost=90*p*d;label+=` (${p} pax × ${d} sessions)`}
+  else if(id==='snorkel'){const p=parseInt(document.getElementById('snorkel_pax')?.value)||1;cost=180*p;label+=` (${p} people)`}
+  else if(id==='fishing'){const p=parseInt(document.getElementById('fishing_pax')?.value)||1;cost=1500;label+=` (${p} people)`}
+  else if(id==='dolphin'){const p=parseInt(document.getElementById('dolphin_pax')?.value)||1;cost=180*p;label+=` (${p} people)`}
+  else if(id==='sunset'){const p=parseInt(document.getElementById('sunset_pax')?.value)||1;cost=180*p;label+=` (${p} people)`}
+  else if(id==='surftrip'){const p=parseInt(document.getElementById('surftrip_pax')?.value)||1;const d=document.getElementById('surftrip_dest')?.value||'Ostional';cost=150*p;label+=` to ${d} (${p} people)`}
+  else if(id==='surfboard'){const q=parseInt(document.getElementById('sb_qty')?.value)||1;const d=parseInt(document.getElementById('sb_days')?.value)||1;cost=30*q*d;label+=` (${q} boards × ${d} days)`}
+  else if(id==='horseback'){const p=parseInt(document.getElementById('horse_pax')?.value)||1;cost=95*p;label+=` (${p} people)`}
+  else if(id==='massage'){const p=parseInt(document.getElementById('massage_pax')?.value)||1;cost=150*p;label+=` (${p} people)`}
+  else if(id==='yoga'){const sessions=parseInt(document.getElementById('yoga_sessions')?.value)||1;cost=80*sessions;label+=` (${sessions} sessions)`}
+  else if(id==='skate'){const p=parseInt(document.getElementById('skate_pax')?.value)||1;const d=parseInt(document.getElementById('skate_days')?.value)||1;cost=100*p*d;label+=` (${p} pax × ${d} days)`}
+  else if(id==='buffet'){const p=parseInt(document.getElementById('buffet_pax')?.value)||1;const d=parseInt(document.getElementById('buffet_days')?.value)||1;cost=35*p*d;label+=` (${p} pax × ${d} days)`}
+  else if(id==='custom'){cost=0;label+=' — we\'ll quote this for you'}
+  return{cost,label};
 }
 
-function updateQuote(){
-  const items=[];let total=0;
-  SERVICES.forEach(s=>{
-    if(!selected[s.id])return;
-    let line=s.name,cost=s.price;
-    if(s.id==='airport'){cost=190}
-    if(s.id==='atv'){const d=parseInt(document.getElementById('atv_days')?.value)||1;const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=100*d*q;line+=` (${q} ATV × ${d} days)`}
-    if(s.id==='golf'){const d=parseInt(document.getElementById('golf_days')?.value)||1;cost=140*d;line+=` (${d} days)`}
-    if(s.id==='car'){const d=parseInt(document.getElementById('car_days')?.value)||1;cost=140*d;line+=` (${d} days)`}
-    if(s.id==='chef'){const d=parseInt(document.getElementById('chef_days')?.value)||1;const hStr=document.getElementById('chef_hours')?.value||'4 hours';const h=parseInt(hStr)||4;cost=50*d*h;line+=` (${d} days × ${h}h)`}
-    if(s.id==='grocery'){cost=20}
-    if(s.id==='cleaning'){const q=parseInt(document.getElementById('clean_qty')?.value)||1;cost=100*q;line+=` (${q} sessions)`}
-    if(s.id==='surf'){const p=parseInt(document.getElementById('surf_pax')?.value)||1;const d=parseInt(document.getElementById('surf_days')?.value)||1;cost=80*p*d;line+=` (${p} pax × ${d} sessions)`}
-    if(s.id==='tennis'){const p=parseInt(document.getElementById('tennis_pax')?.value)||1;const d=parseInt(document.getElementById('tennis_sessions')?.value)||1;cost=90*p*d;line+=` (${p} pax × ${d} sessions)`}
-    if(s.id==='muaythai'){const p=parseInt(document.getElementById('muay_pax')?.value)||1;const d=parseInt(document.getElementById('muay_sessions')?.value)||1;cost=90*p*d;line+=` (${p} pax × ${d} sessions)`}
-    if(s.id==='bjj'){const p=parseInt(document.getElementById('bjj_pax')?.value)||1;const d=parseInt(document.getElementById('bjj_sessions')?.value)||1;cost=90*p*d;line+=` (${p} pax × ${d} sessions)`}
-    if(s.id==='snorkel'){const p=parseInt(document.getElementById('snorkel_pax')?.value)||1;cost=180*p;line+=` (${p} people)`}
-    if(s.id==='fishing'){const p=parseInt(document.getElementById('fishing_pax')?.value)||1;cost=1500;line+=` (${p} people)`}
-    if(s.id==='dolphin'){const p=parseInt(document.getElementById('dolphin_pax')?.value)||1;cost=180*p;line+=` (${p} people)`}
-    if(s.id==='sunset'){const p=parseInt(document.getElementById('sunset_pax')?.value)||1;cost=180*p;line+=` (${p} people)`}
-    if(s.id==='surftrip'){const p=parseInt(document.getElementById('surftrip_pax')?.value)||1;const d=document.getElementById('surftrip_dest')?.value||'Ostional';cost=150*p;line+=` to ${d} (${p} people)`}
-    if(s.id==='custom'){cost=0;line+=' — we\'ll quote this for you'}
-    if(s.id==='surfboard'){const q=parseInt(document.getElementById('sb_qty')?.value)||1;const d=parseInt(document.getElementById('sb_days')?.value)||1;cost=30*q*d;line+=` (${q} boards × ${d} days)`}
-    if(s.id==='horseback'){const p=parseInt(document.getElementById('horse_pax')?.value)||1;cost=95*p;line+=` (${p} people)`}
-    if(s.id==='massage'){const p=parseInt(document.getElementById('massage_pax')?.value)||1;cost=150*p;line+=` (${p} people)`}
-    if(s.id==='yoga'){const s2=parseInt(document.getElementById('yoga_sessions')?.value)||1;cost=80*s2;line+=` (${s2} sessions)`}
-    if(s.id==='skate'){const p=parseInt(document.getElementById('skate_pax')?.value)||1;const d=parseInt(document.getElementById('skate_days')?.value)||1;cost=100*p*d;line+=` (${p} pax × ${d} days)`}
-    if(s.id==='buffet'){const p=parseInt(document.getElementById('buffet_pax')?.value)||1;const d=parseInt(document.getElementById('buffet_days')?.value)||1;cost=35*p*d;line+=` (${p} pax × ${d} days)`}
-    total+=cost;items.push({line,cost});
-  });
-  const box=document.getElementById('quoteBox');
-  if(items.length===0){box.style.display='none';return}
-  box.style.display='block';
-  document.getElementById('quoteItems').innerHTML=items.map(i=>`<li><span>${i.line}</span><span>${i.cost>0?'$'+i.cost.toLocaleString():'TBD'}</span></li>`).join('');
-  document.getElementById('quoteTotal').textContent='$'+total.toLocaleString()+'+';
-}
-
-function submitQuote(){
-  const items=[];let total=0;
-  SERVICES.forEach(s=>{if(!selected[s.id])return;items.push(`<span>${s.name}</span><span>$${s.price>0?s.price:'TBD'}</span>`);total+=s.price||0;});
-  if(items.length===0){alert('Please select at least one service.');return;}
-  showPaymentModal(total,items);
+function addServiceToCart(id){
+  const s=SERVICES.find(x=>x.id===id);
+  if(!s)return;
+  const{cost,label}=calcServiceCost(id);
+  const btn=document.getElementById('sc_'+id)?.querySelector('.sc-add-btn');
+  addToCart({id:'svc_'+id,name:label,price:cost,img:'',meta:'Concierge Service',icon:s.icon,type:'service'});
+  if(btn){btn.textContent='✓ Added';btn.style.background='var(--teal)';setTimeout(()=>{btn.textContent='🛒 Add to Cart';btn.style.background='';},2000);}
 }
 
 // ─── RENDER RETREATS ───
