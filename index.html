@@ -1900,7 +1900,6 @@ const ICAL_FEEDS={
 const blockedDates={};
 
 async function fetchBlockedDates(propId){
-  if(blockedDates[propId])return;
   try{
     const prop=PROPS.find(p=>p.id===propId);
     const uuid=prop?.dbId;
