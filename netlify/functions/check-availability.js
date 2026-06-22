@@ -45,26 +45,31 @@ function parseIcal(text, propertyId) {
 
 async function syncIcal(propertyId, slug) {
   const url = ICAL_FEEDS[slug];
-  if (!url) return;
+  if (!url) { console.log('No iCal URL for', slug); return; }
 
   try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'NosarCollective/1.0' } });
-    if (!res.ok) return;
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; CalendarSync/1.0)',
+        'Accept': 'text/calendar',
+      }
+    });
+    console.log('iCal fetch status for', slug, ':', res.status);
+    if (!res.ok) { console.log('iCal fetch failed:', res.status); return; }
     const text = await res.text();
+    console.log('iCal text length for', slug, ':', text.length);
     const dates = parseIcal(text, propertyId);
+    console.log('Parsed', dates.length, 'blocked dates for', slug);
+
+    // Always delete old airbnb dates and re-insert (even if 0, means property is free)
+    await supabase.from('blocked_dates').delete()
+      .eq('property_id', propertyId).eq('source', 'airbnb');
 
     if (dates.length > 0) {
-      // Remove old airbnb-sourced dates for this property, then re-insert
-      await supabase
-        .from('blocked_dates')
-        .delete()
-        .eq('property_id', propertyId)
-        .eq('source', 'airbnb');
-
       await supabase.from('blocked_dates').upsert(dates, { onConflict: 'property_id,date' });
     }
   } catch (e) {
-    console.warn('iCal sync failed for', slug, e.message);
+    console.error('iCal sync failed for', slug, e.message);
   }
 }
 
