@@ -866,24 +866,60 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
 .footer-bottom-links a:hover{color:#F0EDE6}
 
 /* ─── RESPONSIVE ─── */
+/* ═══ RESPONSIVE ═══ */
 @media(max-width:900px){
   .nav-links{display:none}
+  .nav-inner{padding:0 1.25rem}
   section,#surf,#impact{padding:4rem 1.5rem}
-  .hero{padding:0 1.5rem 4rem}
+  .hero{padding:0 1.5rem 3.5rem}
   .impact-grid-row{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr}
+  .impact-banner-big{padding:2rem;flex-direction:column;gap:1.25rem}
+  .impact-banner-right{border-left:none;border-top:1px solid rgba(253,250,245,0.2);padding-left:0;padding-top:1.25rem;max-width:100%}
+  .modal{margin:0;border-radius:0;border-left:none;border-right:none}
+  .modal-overlay{padding:0}
+  .modal-gal{height:280px}
+  .modal-gal img{height:280px}
+  .modal-body{padding:1.25rem}
+  .modal-hdr{gap:0.5rem}
+  .retreats-grid{grid-template-columns:1fr}
 }
 @media(max-width:600px){
   .props-grid,.retreats-grid,.lots-grid,.guide-articles{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
   .builder-grid{grid-template-columns:1fr}
-  .hero-title{font-size:clamp(3rem,14vw,4.5rem)}
-  .impact-stats-grid{grid-template-columns:1fr 1fr}
-  .hero-actions{flex-direction:column}
-  .cart-panel{width:100%}
+  .hero-title{font-size:clamp(2.8rem,13vw,4rem)}
+  .hero-sub{font-size:0.78rem}
+  .hero-actions{flex-direction:column;width:100%}
+  .hero-actions .btn-primary,.hero-actions .btn-secondary{width:100%;text-align:center;justify-content:center}
+  .hero-badge{display:none}
+  .hero-scroll{display:none}
+  .cart-panel{width:100%;max-width:100%}
   .footer-grid{grid-template-columns:1fr}
-  .guide-tabs{border-bottom:none}
-  .guide-tab{border-bottom:2px solid var(--border-light)}
+  .guide-tabs{border-bottom:none;flex-wrap:wrap;gap:0}
+  .guide-tab{border-bottom:2px solid var(--border-light);width:100%}
+  .impact-stats{grid-template-columns:1fr 1fr}
+  section,#surf,#impact{padding:3rem 1rem}
+  .hero{padding:0 1rem 3rem}
+  .section-title{font-size:clamp(1.8rem,8vw,3rem)}
+  .section-sub{font-size:0.8rem}
+  .modal-feats{grid-template-columns:1fr 1fr}
+  .modal-title{font-size:1.05rem}
+  .modal-price{font-size:1.8rem}
+  .modal-gal{height:240px}
+  .modal-gal img{height:240px}
+  .modal-arrow{width:40px;height:56px;font-size:1.5rem}
+  .modal-body{padding:1rem}
+  .modal-book{padding:1rem}
+  .prop-overlay{opacity:1;background:linear-gradient(to top,rgba(20,18,16,0.75) 0%,transparent 60%)}
+  .prop-overlay-add,.prop-overlay-view{font-size:0.55rem;padding:7px 10px}
+  .impact-banner-big{padding:1.5rem}
+  footer{padding:3rem 1rem 1.5rem}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:0.5rem}
+  .nav-cart{padding:7px 12px;font-size:0.55rem}
+  .hero-eyebrow{font-size:0.5rem}
+  #impact{padding:3rem 1rem}
+  .impact-pct{font-size:clamp(3rem,15vw,5rem)}
 }
 
 /* ═══ IMPACT SECTION ═══ */
