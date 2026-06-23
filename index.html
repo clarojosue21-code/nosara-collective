@@ -500,6 +500,17 @@ section{padding:5rem 3rem}
 .sc-add-btn:hover{background:var(--clay)}
 .sc-opt input:focus,.sc-opt select:focus,.sc-opt textarea:focus{border-color:var(--clay)}
 .services-tax-note{font-size:0.78rem;color:var(--text-muted);margin-top:0.5rem;padding:0 0.25rem;}
+.chef-days-title{font-size:0.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin:0.75rem 0 0.4rem;}
+.chef-day-row{border:1px solid var(--border-light);border-radius:6px;margin-bottom:0.5rem;overflow:hidden;}
+.chef-day-name{font-size:0.82rem;font-weight:600;color:var(--text);background:var(--bg);padding:0.4rem 0.75rem;border-bottom:1px solid var(--border-light);}
+.chef-day-meals{display:flex;flex-wrap:wrap;gap:0.25rem;padding:0.5rem 0.75rem;}
+.chef-meal-opt{display:flex;align-items:center;gap:0.3rem;font-size:0.8rem;color:var(--text);background:var(--white);border:1px solid var(--border-light);border-radius:4px;padding:0.3rem 0.6rem;cursor:pointer;transition:background 0.15s;}
+.chef-meal-opt:hover{background:var(--bg);}
+.chef-meal-opt input{cursor:pointer;accent-color:var(--clay);}
+.chef-meal-price{font-size:0.72rem;color:var(--text-muted);margin-left:2px;}
+.chef-custom-label{display:flex;align-items:center;gap:0.4rem;font-size:0.82rem;color:var(--text);margin-top:0.6rem;cursor:pointer;}
+.chef-custom-label input{accent-color:var(--clay);}
+.chef-custom-note{font-size:0.75rem;color:var(--text-muted);}
 .sc-opt textarea{resize:vertical;min-height:65px}
 
 /* ─── RETREATS ─── */
@@ -1680,27 +1691,27 @@ const PROPS=[
 const SERVICES=[
   {id:'airport_arrival',icon:'✈️',name:'Airport Arrival Transfer',desc:'Private pickup from Liberia (LIR) or San José (SJO) — we arrive on time, every time.',price:190,priceLabel:'$190 per transfer',fields:[{type:'select',id:'airport_arrival_name',label:'Airport',options:['Liberia (LIR)','San José (SJO)']},{type:'input',inputType:'date',id:'airport_arrival_date',label:'Arrival Date'},{type:'input',inputType:'time',id:'airport_arrival_time',label:'Arrival Time'},{type:'input',inputType:'text',id:'airport_arrival_flight',label:'Flight Number'}]},
   {id:'airport_departure',icon:'✈️',name:'Airport Departure Transfer',desc:'We pick you up from your villa and get you to Liberia (LIR) or San José (SJO) on time, every time.',price:190,priceLabel:'$190 per transfer',fields:[{type:'select',id:'airport_departure_name',label:'Airport',options:['Liberia (LIR)','San José (SJO)']},{type:'input',inputType:'date',id:'airport_departure_date',label:'Departure Date'},{type:'input',inputType:'time',id:'airport_departure_time',label:'Pickup Time'},{type:'input',inputType:'text',id:'airport_departure_flight',label:'Flight Number'}]},
-  {id:'atv',icon:'🚜',name:'ATV Rental',desc:'Honda ATVs for 2 people — explore Nosara\'s jungle trails and hidden beaches.',price:100,priceLabel:'$100 per ATV/day',fields:[{type:'input',inputType:'number',id:'atv_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'atv_qty',label:'Number of ATVs',placeholder:'e.g. 2'}]},
-  {id:'golf',icon:'⛳',name:'Golf Cart',desc:'Perfect for groups of 4 or 6. Cruise Nosara in style.',price:140,priceLabel:'$140 per cart/day',fields:[{type:'input',inputType:'number',id:'golf_days',label:'Number of Days',placeholder:'e.g. 2'},{type:'select',id:'golf_pax',label:'Group Size',options:['4 passengers','6 passengers']}]},
-  {id:'car',icon:'🚗',name:'Car Rental',desc:'Full-size rental vehicles for exploring Guanacaste and beyond.',price:140,priceLabel:'$140 per day',fields:[{type:'input',inputType:'date',id:'car_start',label:'Start Date'},{type:'input',inputType:'number',id:'car_days',label:'Number of Days',placeholder:'e.g. 5'}]},
-  {id:'chef',icon:'🍳',name:'Private Chef',desc:'Chef comes to your home. 1h shopping, 1h cooking, 2h serving & cleanup. Transport included.',price:50,priceLabel:'$50/hour · 4 hour minimum',fields:[{type:'input',inputType:'number',id:'chef_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'select',id:'chef_hours',label:'Hours per Day (min 4)',options:['4 hours','5 hours','6 hours','7 hours','8 hours']},{type:'textarea',id:'chef_menu',label:'Menu Preferences'}]},
-  {id:'grocery',icon:'🛒',name:'Grocery Service',desc:'Your fridge stocked and ready before you arrive. Just send us your list.',price:20,priceLabel:'$20 service fee + groceries',fields:[{type:'textarea',id:'grocery_list',label:'Grocery List'}]},
-  {id:'cleaning',icon:'🧹',name:'Extra Cleaning',desc:'Additional cleaning sessions beyond check-in/check-out.',price:100,priceLabel:'$100 per session',fields:[{type:'input',inputType:'number',id:'clean_qty',label:'Number of Sessions',placeholder:'e.g. 2'}]},
-  {id:'surf',icon:'🏄',name:'Surf Lessons',desc:'Certified instructors, all levels. Nosara is one of the best surf spots in the world.',price:80,priceLabel:'$80 per person',fields:[{type:'input',inputType:'number',id:'surf_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'surf_days',label:'Number of Sessions',placeholder:'e.g. 3'}]},
-  {id:'tennis',icon:'🎾',name:'Tennis Lessons',desc:'Private tennis lessons with a certified instructor.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'tennis_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'tennis_sessions',label:'Number of Sessions',placeholder:'e.g. 2'}]},
-  {id:'muaythai',icon:'🥊',name:'Muay Thai',desc:'Learn authentic Muay Thai from experienced trainers in a jungle setting.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'muay_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'muay_sessions',label:'Number of Sessions',placeholder:'e.g. 3'}]},
-  {id:'bjj',icon:'🥋',name:'Brazilian Jiu Jitsu',desc:'Train BJJ in paradise — private or small group sessions available.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'bjj_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'bjj_sessions',label:'Number of Sessions',placeholder:'e.g. 2'}]},
-  {id:'snorkel',icon:'🤿',name:'Snorkeling Tour',desc:'Guided snorkeling tours to discover Nosara\'s vibrant underwater world.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'snorkel_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'input',inputType:'date',id:'snorkel_date',label:'Preferred Date'}]},
-  {id:'fishing',icon:'🎣',name:'Fishing Tour',desc:'Deep sea fishing — 4 hours on the water (7:30am–11:30am). Up to 5 people. Gear & captain included.',price:1500,priceLabel:'$1,500 for up to 5 people',fields:[{type:'input',inputType:'date',id:'fishing_date',label:'Preferred Date'},{type:'input',inputType:'number',id:'fishing_pax',label:'Number of People (max 5)',placeholder:'e.g. 4'}]},
-  {id:'dolphin',icon:'🐬',name:'Dolphin Watching',desc:'Magical boat tour searching for dolphins in their natural habitat.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'dolphin_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'dolphin_date',label:'Preferred Date'}]},
+  {id:'atv',icon:'🚜',name:'ATV Rental',desc:'Honda ATVs for 2 people — explore Nosara\'s jungle trails and hidden beaches.',price:120,priceLabel:'$120 per ATV/day',fields:[{type:'input',inputType:'date',id:'atv_start',label:'Start Date'},{type:'input',inputType:'date',id:'atv_end',label:'End Date'},{type:'input',inputType:'number',id:'atv_qty',label:'Number of ATVs',placeholder:'e.g. 2'}]},
+  {id:'golf',icon:'⛳',name:'Golf Cart',desc:'Perfect for groups of 4 or 6. Cruise Nosara in style.',price:130,priceLabel:'4 pax $130 · 6 pax $140 per cart/day',fields:[{type:'input',inputType:'date',id:'golf_start',label:'Start Date'},{type:'input',inputType:'date',id:'golf_end',label:'End Date'},{type:'select',id:'golf_size',label:'Cart Size',options:['4 passengers — $130/day','6 passengers — $140/day']},{type:'input',inputType:'number',id:'golf_qty',label:'Number of Carts',placeholder:'e.g. 1'}]},
+  {id:'chef',icon:'🍳',name:'Private Chef',desc:'Chef comes to your home. Shopping, cooking, serving &amp; cleanup included.',price:0,priceLabel:'Breakfast $50 · Lunch $80 · Dinner $100 · Premium $140 /person',fields:[{type:'input',inputType:'date',id:'chef_start',label:'First Day',onChange:'chefBuildDays()'},{type:'input',inputType:'date',id:'chef_end',label:'Last Day',onChange:'chefBuildDays()'},{type:'input',inputType:'number',id:'chef_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'html',html:'<div id="chef_days_container"></div><label class="chef-custom-label"><input type="checkbox" id="chef_custom" onchange="void 0"> Custom menu <span class="chef-custom-note">(+20% — we\'ll tailor every dish)</span></label>'}]},
+  {id:'grocery',icon:'🛒',name:'Grocery Service',desc:'Your fridge stocked and ready before you arrive. Just send us your list.',price:40,priceLabel:'$40 service fee + cost of groceries',fields:[{type:'textarea',id:'grocery_list',label:'Grocery List',placeholder:'e.g. fruits, vegetables, water, snacks...'}]},
+  {id:'cleaning',icon:'🧹',name:'Extra Cleaning',desc:'Additional cleaning sessions beyond check-in/check-out.',price:100,priceLabel:'$100 per session',fields:[{type:'input',inputType:'number',id:'clean_qty',label:'Number of Sessions',placeholder:'e.g. 2'},{type:'input',inputType:'time',id:'clean_time',label:'Preferred Time for Each Session'}]},
+  {id:'surf',icon:'🏄',name:'Surf Lessons',desc:'Certified instructors, all levels. Nosara is one of the best surf spots in the world.',price:80,priceLabel:'$80 per person',fields:[{type:'input',inputType:'number',id:'surf_adults',label:'Number of Adults',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'surf_children',label:'Number of Children',placeholder:'e.g. 0'},{type:'input',inputType:'text',id:'surf_ages',label:'Children\'s Ages',placeholder:'e.g. 8, 11'},{type:'input',inputType:'number',id:'surf_sessions',label:'Number of Sessions',placeholder:'e.g. 3'}]},
+  {id:'tennis',icon:'🎾',name:'Tennis Lessons',desc:'Private tennis lessons with a certified instructor.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'tennis_adults',label:'Number of Adults',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'tennis_children',label:'Number of Children',placeholder:'e.g. 0'},{type:'input',inputType:'text',id:'tennis_ages',label:'Children\'s Ages',placeholder:'e.g. 9, 13'},{type:'input',inputType:'number',id:'tennis_sessions',label:'Number of Sessions',placeholder:'e.g. 2'}]},
+  {id:'muaythai',icon:'🥊',name:'Muay Thai',desc:'Learn authentic Muay Thai from experienced trainers in a jungle setting.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'muay_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'muay_sessions',label:'Number of Sessions',placeholder:'e.g. 3'},{type:'textarea',id:'muay_notes',label:'Notes / Questions',placeholder:'Experience level, goals, anything you\'d like us to know...'}]},
+  {id:'bjj',icon:'🥋',name:'Brazilian Jiu Jitsu',desc:'Train BJJ in paradise — private or small group sessions available.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'bjj_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'bjj_sessions',label:'Number of Sessions',placeholder:'e.g. 2'},{type:'textarea',id:'bjj_notes',label:'Notes / Questions',placeholder:'Belt level, goals, anything you\'d like us to know...'}]},
+  {id:'snorkel',icon:'🤿',name:'Snorkeling Tour',desc:'Guided snorkeling tours to discover Nosara\'s vibrant underwater world.',price:120,priceLabel:'$120 per person',fields:[{type:'input',inputType:'number',id:'snorkel_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'input',inputType:'date',id:'snorkel_date',label:'Preferred Date'}]},
+  {id:'fishing',icon:'🎣',name:'Fishing Tour',desc:'Deep sea fishing — 4 hours on the water (7:30am–11:30am). Up to 5 people. Gear, captain &amp; fresh fruits included.',price:1500,priceLabel:'$1,500 for up to 5 people',fields:[{type:'input',inputType:'date',id:'fishing_date',label:'Preferred Date'},{type:'input',inputType:'number',id:'fishing_pax',label:'Number of People (max 5)',placeholder:'e.g. 4'},{type:'select',id:'fishing_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']}]},
+  {id:'dolphin',icon:'🐬',name:'Dolphin Watching',desc:'Magical boat tour searching for dolphins in their natural habitat. Fresh fruits included.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'dolphin_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'dolphin_date',label:'Preferred Date'},{type:'select',id:'dolphin_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']}]},
   {id:'sunset',icon:'🌅',name:'Sunset Trip',desc:'Cruise the Pacific as the sun sets over the Nosara coast.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'sunset_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'input',inputType:'date',id:'sunset_date',label:'Preferred Date'}]},
-  {id:'surftrip',icon:'🏄',name:'Surf Trip — Ostional or Marbella',desc:'Day trip to the legendary breaks of Ostional or Marbella.',price:150,priceLabel:'$150 per person',fields:[{type:'select',id:'surftrip_dest',label:'Destination',options:['Ostional','Marbella']},{type:'input',inputType:'number',id:'surftrip_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'surftrip_date',label:'Preferred Date'}]},
+  {id:'surftrip',icon:'🏄',name:'Surf Trip — Ostional or Marbella',desc:'Day trip to the legendary breaks of Ostional or Marbella. Fresh fruits included.',price:150,priceLabel:'$150 per person',fields:[{type:'select',id:'surftrip_dest',label:'Destination',options:['Ostional','Marbella']},{type:'input',inputType:'number',id:'surftrip_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'surftrip_date',label:'Preferred Date'},{type:'select',id:'surftrip_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']}]},
   {id:'surfboard',icon:'🏄',name:'Surfboard Rental',desc:'Choose your board and hit the waves — transport to beach included.',price:30,priceLabel:'$30 per board/day',fields:[{type:'select',id:'sb_type',label:'Board Type',options:['Longboard','Mid Length','Shortboard']},{type:'input',inputType:'number',id:'sb_qty',label:'Number of Boards',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'sb_days',label:'Number of Days',placeholder:'e.g. 3'}]},
-  {id:'horseback',icon:'🐎',name:'Sunset Horseback Riding',desc:'Ride through Nosara\'s beaches and jungle trails as the sun sets.',price:95,priceLabel:'$70–$120 per person',fields:[{type:'input',inputType:'number',id:'horse_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'horse_date',label:'Preferred Date'}]},
-  {id:'massage',icon:'💆',name:'In-House Massage',desc:'Professional massage therapist comes to your home. Transport included.',price:150,priceLabel:'$150 per person',fields:[{type:'input',inputType:'number',id:'massage_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'date',id:'massage_date',label:'Preferred Date'},{type:'select',id:'massage_type',label:'Massage Type',options:['Swedish / Relaxation','Deep Tissue','Sports','Couples']}]},
-  {id:'yoga',icon:'🧘',name:'Private Yoga Class',desc:'Certified yoga instructor comes to your home or villa. All levels welcome.',price:80,priceLabel:'$80 per class',fields:[{type:'input',inputType:'number',id:'yoga_sessions',label:'Number of Sessions',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'yoga_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'select',id:'yoga_level',label:'Level',options:['Beginner','Intermediate','Advanced','Mixed']}]},
-  {id:'skate',icon:'🛹',name:'Skate Lessons',desc:'Private lessons for all ages and levels. Transport included.',price:100,priceLabel:'$100 per day per person',fields:[{type:'input',inputType:'number',id:'skate_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'skate_days',label:'Number of Days',placeholder:'e.g. 2'}]},
-  {id:'buffet',icon:'🍽️',name:'Buffet Catering',desc:'Perfect for retreats and groups. Local chef prepares everything. Transport included.',price:35,priceLabel:'From $35 per person',fields:[{type:'select',id:'buffet_meal',label:'Meal Type',options:['Breakfast Buffet','Lunch Buffet','Dinner Buffet','Full Day (all meals)']},{type:'input',inputType:'number',id:'buffet_pax',label:'Number of People',placeholder:'e.g. 12'},{type:'input',inputType:'number',id:'buffet_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'textarea',id:'buffet_notes',label:'Dietary restrictions / preferences'}]},
+  {id:'horseback',icon:'🐎',name:'Sunset Horseback Riding',desc:'Private sunset ride through Nosara\'s beaches and jungle trails.',price:140,priceLabel:'$140 per person',fields:[{type:'input',inputType:'number',id:'horse_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'horse_date',label:'Preferred Date'}]},
+  {id:'massage',icon:'💆',name:'In-House Massage',desc:'Professional massage therapist comes to your home.',price:120,priceLabel:'1 hr $120 · 90 min $180 per person',fields:[{type:'input',inputType:'number',id:'massage_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'date',id:'massage_date',label:'Preferred Date'},{type:'select',id:'massage_duration',label:'Duration',options:['1 hour — $120/person','90 minutes — $180/person']},{type:'select',id:'massage_type',label:'Massage Type',options:['Swedish / Relaxation','Deep Tissue','Sports','Couples','Surfer Massage']}]},
+  {id:'yoga',icon:'🧘',name:'Private Yoga Class',desc:'Certified yoga instructor comes to your home or villa. All levels welcome.',price:60,priceLabel:'$60 per person',fields:[{type:'input',inputType:'number',id:'yoga_sessions',label:'Number of Sessions',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'yoga_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'select',id:'yoga_level',label:'Level',options:['Beginner','Intermediate','Advanced','Mixed']}]},
+  {id:'skate',icon:'🛹',name:'Skate Lessons',desc:'Private lessons for all ages and levels.',price:70,priceLabel:'$70 per person/day',fields:[{type:'input',inputType:'number',id:'skate_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'skate_days',label:'Number of Days',placeholder:'e.g. 2'}]},
+  {id:'turtles',icon:'🐢',name:'Ostional Turtles Tour',desc:'Witness one of nature\'s most magical events — sea turtles nesting on Ostional Beach. Transport and certified guide included.',price:90,priceLabel:'$90 per person',fields:[{type:'input',inputType:'number',id:'turtles_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'turtles_date',label:'Preferred Date'}]},
+  {id:'buffet',icon:'🍽️',name:'Buffet Catering',desc:'Perfect for retreats and groups. Local chef prepares everything. Transport included.',price:40,priceLabel:'$40 per person',fields:[{type:'select',id:'buffet_meal',label:'Meal Type',options:['Breakfast Buffet','Lunch Buffet','Dinner Buffet','Full Day (all meals)']},{type:'input',inputType:'number',id:'buffet_pax',label:'Number of People',placeholder:'e.g. 12'},{type:'input',inputType:'number',id:'buffet_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'textarea',id:'buffet_notes',label:'Dietary restrictions / preferences'}]},
   {id:'custom',icon:'✨',name:'Custom Experience',desc:'Have something special in mind? Tell us and we\'ll make it happen.',price:0,priceLabel:'Contact for pricing',fields:[{type:'textarea',id:'custom_desc',label:'Describe your dream experience'}]}
 ];
 
@@ -1811,8 +1822,9 @@ function renderServices(){
             <div class="sc-opt">
               <label>${f.label}</label>
               ${f.type==='select'?`<select id="${f.id}">${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`:''}
-              ${f.type==='input'?`<input type="${f.inputType}" id="${f.id}" placeholder="${f.placeholder||''}">`:''}
+              ${f.type==='input'?`<input type="${f.inputType}" id="${f.id}" placeholder="${f.placeholder||''}" ${f.onChange?`onchange="${f.onChange}"`:''}>`:'' }
               ${f.type==='textarea'?`<textarea id="${f.id}" placeholder="${f.placeholder||''}"></textarea>`:''}
+              ${f.type==='html'?f.html:''}
             </div>`).join('')}
         </div>
         <button class="sc-add-btn" onclick="addServiceToCart('${s.id}')">🛒 Add to Cart</button>
@@ -1822,32 +1834,65 @@ function renderServices(){
 
 function calcServiceCost(id){
   const s=SERVICES.find(x=>x.id===id);
-  if(!s)return{cost:0,label:s?.name||''};
+  if(!s)return{cost:0,label:''};
   let label=s.name,cost=s.price;
-  if(id==='airport_arrival'){const airport=document.getElementById('airport_arrival_name')?.value||'';const date=document.getElementById('airport_arrival_date')?.value||'';const flight=document.getElementById('airport_arrival_flight')?.value||'';label+=airport?` — ${airport}`:'';if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=190;}
-  else if(id==='airport_departure'){const airport=document.getElementById('airport_departure_name')?.value||'';const date=document.getElementById('airport_departure_date')?.value||'';const flight=document.getElementById('airport_departure_flight')?.value||'';label+=airport?` — ${airport}`:'';if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=190;}
-  else if(id==='atv'){const d=parseInt(document.getElementById('atv_days')?.value)||1;const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=100*d*q;label+=` (${q} ATV × ${d} days)`}
-  else if(id==='golf'){const d=parseInt(document.getElementById('golf_days')?.value)||1;cost=140*d;label+=` (${d} days)`}
-  else if(id==='car'){const d=parseInt(document.getElementById('car_days')?.value)||1;cost=140*d;label+=` (${d} days)`}
-  else if(id==='chef'){const d=parseInt(document.getElementById('chef_days')?.value)||1;const h=parseInt(document.getElementById('chef_hours')?.value)||4;cost=50*d*h;label+=` (${d} days × ${h}h)`}
-  else if(id==='cleaning'){const q=parseInt(document.getElementById('clean_qty')?.value)||1;cost=100*q;label+=` (${q} sessions)`}
-  else if(id==='surf'){const p=parseInt(document.getElementById('surf_pax')?.value)||1;const d=parseInt(document.getElementById('surf_days')?.value)||1;cost=80*p*d;label+=` (${p} pax × ${d} sessions)`}
-  else if(id==='tennis'){const p=parseInt(document.getElementById('tennis_pax')?.value)||1;const d=parseInt(document.getElementById('tennis_sessions')?.value)||1;cost=90*p*d;label+=` (${p} pax × ${d} sessions)`}
-  else if(id==='muaythai'){const p=parseInt(document.getElementById('muay_pax')?.value)||1;const d=parseInt(document.getElementById('muay_sessions')?.value)||1;cost=90*p*d;label+=` (${p} pax × ${d} sessions)`}
-  else if(id==='bjj'){const p=parseInt(document.getElementById('bjj_pax')?.value)||1;const d=parseInt(document.getElementById('bjj_sessions')?.value)||1;cost=90*p*d;label+=` (${p} pax × ${d} sessions)`}
-  else if(id==='snorkel'){const p=parseInt(document.getElementById('snorkel_pax')?.value)||1;cost=180*p;label+=` (${p} people)`}
-  else if(id==='fishing'){const p=parseInt(document.getElementById('fishing_pax')?.value)||1;cost=1500;label+=` (${p} people)`}
-  else if(id==='dolphin'){const p=parseInt(document.getElementById('dolphin_pax')?.value)||1;cost=180*p;label+=` (${p} people)`}
-  else if(id==='sunset'){const p=parseInt(document.getElementById('sunset_pax')?.value)||1;cost=180*p;label+=` (${p} people)`}
-  else if(id==='surftrip'){const p=parseInt(document.getElementById('surftrip_pax')?.value)||1;const d=document.getElementById('surftrip_dest')?.value||'Ostional';cost=150*p;label+=` to ${d} (${p} people)`}
-  else if(id==='surfboard'){const q=parseInt(document.getElementById('sb_qty')?.value)||1;const d=parseInt(document.getElementById('sb_days')?.value)||1;cost=30*q*d;label+=` (${q} boards × ${d} days)`}
-  else if(id==='horseback'){const p=parseInt(document.getElementById('horse_pax')?.value)||1;cost=95*p;label+=` (${p} people)`}
-  else if(id==='massage'){const p=parseInt(document.getElementById('massage_pax')?.value)||1;cost=150*p;label+=` (${p} people)`}
-  else if(id==='yoga'){const sessions=parseInt(document.getElementById('yoga_sessions')?.value)||1;cost=80*sessions;label+=` (${sessions} sessions)`}
-  else if(id==='skate'){const p=parseInt(document.getElementById('skate_pax')?.value)||1;const d=parseInt(document.getElementById('skate_days')?.value)||1;cost=100*p*d;label+=` (${p} pax × ${d} days)`}
-  else if(id==='buffet'){const p=parseInt(document.getElementById('buffet_pax')?.value)||1;const d=parseInt(document.getElementById('buffet_days')?.value)||1;cost=35*p*d;label+=` (${p} pax × ${d} days)`}
-  else if(id==='custom'){cost=0;label+=' — we\'ll quote this for you'}
+  function days(startId,endId){const a=document.getElementById(startId)?.value,b=document.getElementById(endId)?.value;return(a&&b)?Math.max(1,Math.round((new Date(b)-new Date(a))/86400000)):1;}
+  if(id==='airport_arrival'){const airport=document.getElementById('airport_arrival_name')?.value||'';const date=document.getElementById('airport_arrival_date')?.value||'';const flight=document.getElementById('airport_arrival_flight')?.value||'';if(airport)label+=` — ${airport}`;if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=190;}
+  else if(id==='airport_departure'){const airport=document.getElementById('airport_departure_name')?.value||'';const date=document.getElementById('airport_departure_date')?.value||'';const flight=document.getElementById('airport_departure_flight')?.value||'';if(airport)label+=` — ${airport}`;if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=190;}
+  else if(id==='atv'){const d=days('atv_start','atv_end');const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=120*d*q;label+=` (${q} ATV × ${d} days)`;}
+  else if(id==='golf'){const d=days('golf_start','golf_end');const sz=document.getElementById('golf_size')?.value||'';const price=sz.includes('6')?140:130;const qty=parseInt(document.getElementById('golf_qty')?.value)||1;cost=price*d*qty;label+=` (${qty} cart${qty>1?'s':''} × ${d} days)`;}
+  else if(id==='chef'){const pax=parseInt(document.getElementById('chef_pax')?.value)||1;const custom=document.getElementById('chef_custom')?.checked?1.2:1;let mealTotal=0;document.querySelectorAll('#sc_chef .chef-meal-cb:checked').forEach(cb=>mealTotal+=parseInt(cb.dataset.price||0));cost=Math.round(mealTotal*pax*custom);const start=document.getElementById('chef_start')?.value||'';const end=document.getElementById('chef_end')?.value||'';label+=` (${pax} people${start?' · '+start+' → '+end:''}${custom>1?' · custom menu':''})`;}
+  else if(id==='grocery'){cost=40;label+=' (service fee)';}
+  else if(id==='cleaning'){const q=parseInt(document.getElementById('clean_qty')?.value)||1;const t=document.getElementById('clean_time')?.value||'';cost=100*q;label+=` (${q} session${q>1?'s':''}${t?' at '+t:''})`;}
+  else if(id==='surf'){const adults=parseInt(document.getElementById('surf_adults')?.value)||0;const children=parseInt(document.getElementById('surf_children')?.value)||0;const sessions=parseInt(document.getElementById('surf_sessions')?.value)||1;cost=80*(adults+children)*sessions;label+=` (${adults} adult${adults!==1?'s':''}${children>0?`, ${children} child${children!==1?'ren':''}`:''} × ${sessions} session${sessions!==1?'s':''})`;}
+  else if(id==='tennis'){const adults=parseInt(document.getElementById('tennis_adults')?.value)||0;const children=parseInt(document.getElementById('tennis_children')?.value)||0;const sessions=parseInt(document.getElementById('tennis_sessions')?.value)||1;cost=90*(adults+children)*sessions;label+=` (${adults} adult${adults!==1?'s':''}${children>0?`, ${children} child${children!==1?'ren':''}`:''} × ${sessions} session${sessions!==1?'s':''})`;}
+  else if(id==='muaythai'){const p=parseInt(document.getElementById('muay_pax')?.value)||1;const d=parseInt(document.getElementById('muay_sessions')?.value)||1;cost=90*p*d;label+=` (${p} people × ${d} sessions)`;}
+  else if(id==='bjj'){const p=parseInt(document.getElementById('bjj_pax')?.value)||1;const d=parseInt(document.getElementById('bjj_sessions')?.value)||1;cost=90*p*d;label+=` (${p} people × ${d} sessions)`;}
+  else if(id==='snorkel'){const p=parseInt(document.getElementById('snorkel_pax')?.value)||1;cost=120*p;label+=` (${p} people)`;}
+  else if(id==='fishing'){const p=parseInt(document.getElementById('fishing_pax')?.value)||1;const drinks=document.getElementById('fishing_drinks')?.value||'';cost=1500;label+=` (${p} people · ${drinks})`;}
+  else if(id==='dolphin'){const p=parseInt(document.getElementById('dolphin_pax')?.value)||1;const drinks=document.getElementById('dolphin_drinks')?.value||'';cost=180*p;label+=` (${p} people · ${drinks})`;}
+  else if(id==='sunset'){const p=parseInt(document.getElementById('sunset_pax')?.value)||1;cost=180*p;label+=` (${p} people)`;}
+  else if(id==='surftrip'){const p=parseInt(document.getElementById('surftrip_pax')?.value)||1;const dest=document.getElementById('surftrip_dest')?.value||'Ostional';const drinks=document.getElementById('surftrip_drinks')?.value||'';cost=150*p;label+=` to ${dest} (${p} people · ${drinks})`;}
+  else if(id==='surfboard'){const q=parseInt(document.getElementById('sb_qty')?.value)||1;const d=parseInt(document.getElementById('sb_days')?.value)||1;cost=30*q*d;label+=` (${q} board${q>1?'s':''} × ${d} days)`;}
+  else if(id==='horseback'){const p=parseInt(document.getElementById('horse_pax')?.value)||1;cost=140*p;label+=` (${p} people)`;}
+  else if(id==='massage'){const p=parseInt(document.getElementById('massage_pax')?.value)||1;const dur=document.getElementById('massage_duration')?.value||'';const price=dur.includes('90')?180:120;cost=price*p;label+=` (${p} people · ${dur.includes('90')?'90 min':'1 hr'})`;}
+  else if(id==='yoga'){const sessions=parseInt(document.getElementById('yoga_sessions')?.value)||1;const pax=parseInt(document.getElementById('yoga_pax')?.value)||1;cost=60*pax*sessions;label+=` (${pax} people × ${sessions} sessions)`;}
+  else if(id==='skate'){const p=parseInt(document.getElementById('skate_pax')?.value)||1;const d=parseInt(document.getElementById('skate_days')?.value)||1;cost=70*p*d;label+=` (${p} people × ${d} days)`;}
+  else if(id==='turtles'){const p=parseInt(document.getElementById('turtles_pax')?.value)||1;cost=90*p;label+=` (${p} people)`;}
+  else if(id==='buffet'){const p=parseInt(document.getElementById('buffet_pax')?.value)||1;const d=parseInt(document.getElementById('buffet_days')?.value)||1;cost=40*p*d;label+=` (${p} people × ${d} days)`;}
+  else if(id==='custom'){cost=0;label+=' — we\'ll quote this for you';}
   return{cost,label};
+}
+
+function chefBuildDays(){
+  const start=document.getElementById('chef_start')?.value;
+  const end=document.getElementById('chef_end')?.value;
+  const container=document.getElementById('chef_days_container');
+  if(!container)return;
+  if(!start||!end){container.innerHTML='';return;}
+  const s=new Date(start+'T00:00:00'),e=new Date(end+'T00:00:00');
+  if(e<=s){container.innerHTML='';return;}
+  const MEALS=[{id:'breakfast',label:'Breakfast',price:50},{id:'lunch',label:'Lunch',price:80},{id:'dinner',label:'Dinner',price:100},{id:'premium',label:'Premium Dinner',price:140}];
+  let html='<div class="chef-days-title">Select meals for each day:</div>';
+  let cur=new Date(s);
+  while(cur<e){
+    const d=cur.toISOString().slice(0,10);
+    const dayLabel=cur.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    html+=`<div class="chef-day-row"><div class="chef-day-name">${dayLabel}</div><div class="chef-day-meals">${MEALS.map(m=>`<label class="chef-meal-opt"><input type="checkbox" class="chef-meal-cb" data-date="${d}" data-price="${m.price}" data-meal="${m.id}"> ${m.label} <span class="chef-meal-price">$${m.price}/pp</span></label>`).join('')}</div></div>`;
+    cur.setDate(cur.getDate()+1);
+  }
+  container.innerHTML=html;
+  container.querySelectorAll('.chef-meal-cb').forEach(cb=>{
+    if(cb.dataset.meal==='dinner'||cb.dataset.meal==='premium'){
+      cb.addEventListener('change',function(){
+        if(this.checked){
+          const other=this.dataset.meal==='dinner'?'premium':'dinner';
+          const sibling=container.querySelector(`.chef-meal-cb[data-date="${this.dataset.date}"][data-meal="${other}"]`);
+          if(sibling)sibling.checked=false;
+        }
+      });
+    }
+  });
 }
 
 function addServiceToCart(id){
