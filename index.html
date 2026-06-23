@@ -499,6 +499,7 @@ section{padding:5rem 3rem}
 }
 .sc-add-btn:hover{background:var(--clay)}
 .sc-opt input:focus,.sc-opt select:focus,.sc-opt textarea:focus{border-color:var(--clay)}
+.services-tax-note{font-size:0.78rem;color:var(--text-muted);margin-top:0.5rem;padding:0 0.25rem;}
 .sc-opt textarea{resize:vertical;min-height:65px}
 
 /* ─── RETREATS ─── */
@@ -1379,6 +1380,7 @@ nav.scrolled{
     <h2 class="section-title">Build Your Perfect Stay</h2>
     <p class="section-sub">Select everything you need — from airport pickup to private chef — and we'll have it all ready when you arrive.</p>
     <div class="builder-grid" id="servicesGrid"></div>
+    <p class="services-tax-note">* Prices shown do not include 13% IVA tax. Taxes are calculated and added at checkout.</p>
   </div>
 </section>
 
@@ -1676,10 +1678,11 @@ const PROPS=[
   priceLabel:'Contact for pricing'}];
 
 const SERVICES=[
-  {id:'airport',icon:'✈️',name:'Airport Transfer',desc:'Private pickup from Liberia (LIR) or San José (SJO) — we arrive on time, every time.',price:190,priceLabel:'$190 + tax per transfer',fields:[{type:'select',id:'airport_name',label:'Airport',options:['Liberia (LIR)','San José SJO']},{type:'input',inputType:'date',id:'airport_date',label:'Arrival Date'},{type:'input',inputType:'time',id:'airport_time',label:'Arrival Time'},{type:'input',inputType:'text',id:'airport_flight',label:'Flight Number'}]},
-  {id:'atv',icon:'🏍️',name:'ATV Rental',desc:'Honda ATVs for 2 people — explore Nosara\'s jungle trails and hidden beaches.',price:100,priceLabel:'$100 + tax per ATV/day',fields:[{type:'input',inputType:'number',id:'atv_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'atv_qty',label:'Number of ATVs',placeholder:'e.g. 2'}]},
-  {id:'golf',icon:'⛳',name:'Golf Cart',desc:'Perfect for groups of 4 or 6. Cruise Nosara in style.',price:140,priceLabel:'$140 + tax per cart/day',fields:[{type:'input',inputType:'number',id:'golf_days',label:'Number of Days',placeholder:'e.g. 2'},{type:'select',id:'golf_pax',label:'Group Size',options:['4 passengers','6 passengers']}]},
-  {id:'car',icon:'🚗',name:'Car Rental',desc:'Full-size rental vehicles for exploring Guanacaste and beyond.',price:140,priceLabel:'$140 + tax per day',fields:[{type:'input',inputType:'date',id:'car_start',label:'Start Date'},{type:'input',inputType:'number',id:'car_days',label:'Number of Days',placeholder:'e.g. 5'}]},
+  {id:'airport_arrival',icon:'✈️',name:'Airport Arrival Transfer',desc:'Private pickup from Liberia (LIR) or San José (SJO) — we arrive on time, every time.',price:190,priceLabel:'$190 per transfer',fields:[{type:'select',id:'airport_arrival_name',label:'Airport',options:['Liberia (LIR)','San José (SJO)']},{type:'input',inputType:'date',id:'airport_arrival_date',label:'Arrival Date'},{type:'input',inputType:'time',id:'airport_arrival_time',label:'Arrival Time'},{type:'input',inputType:'text',id:'airport_arrival_flight',label:'Flight Number'}]},
+  {id:'airport_departure',icon:'✈️',name:'Airport Departure Transfer',desc:'We pick you up from your villa and get you to Liberia (LIR) or San José (SJO) on time, every time.',price:190,priceLabel:'$190 per transfer',fields:[{type:'select',id:'airport_departure_name',label:'Airport',options:['Liberia (LIR)','San José (SJO)']},{type:'input',inputType:'date',id:'airport_departure_date',label:'Departure Date'},{type:'input',inputType:'time',id:'airport_departure_time',label:'Pickup Time'},{type:'input',inputType:'text',id:'airport_departure_flight',label:'Flight Number'}]},
+  {id:'atv',icon:'🏍️',name:'ATV Rental',desc:'Honda ATVs for 2 people — explore Nosara\'s jungle trails and hidden beaches.',price:100,priceLabel:'$100 per ATV/day',fields:[{type:'input',inputType:'number',id:'atv_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'atv_qty',label:'Number of ATVs',placeholder:'e.g. 2'}]},
+  {id:'golf',icon:'⛳',name:'Golf Cart',desc:'Perfect for groups of 4 or 6. Cruise Nosara in style.',price:140,priceLabel:'$140 per cart/day',fields:[{type:'input',inputType:'number',id:'golf_days',label:'Number of Days',placeholder:'e.g. 2'},{type:'select',id:'golf_pax',label:'Group Size',options:['4 passengers','6 passengers']}]},
+  {id:'car',icon:'🚗',name:'Car Rental',desc:'Full-size rental vehicles for exploring Guanacaste and beyond.',price:140,priceLabel:'$140 per day',fields:[{type:'input',inputType:'date',id:'car_start',label:'Start Date'},{type:'input',inputType:'number',id:'car_days',label:'Number of Days',placeholder:'e.g. 5'}]},
   {id:'chef',icon:'🍳',name:'Private Chef',desc:'Chef comes to your home. 1h shopping, 1h cooking, 2h serving & cleanup. Transport included.',price:50,priceLabel:'$50/hour · 4 hour minimum',fields:[{type:'input',inputType:'number',id:'chef_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'select',id:'chef_hours',label:'Hours per Day (min 4)',options:['4 hours','5 hours','6 hours','7 hours','8 hours']},{type:'textarea',id:'chef_menu',label:'Menu Preferences'}]},
   {id:'grocery',icon:'🛒',name:'Grocery Service',desc:'Your fridge stocked and ready before you arrive. Just send us your list.',price:20,priceLabel:'$20 service fee + groceries',fields:[{type:'textarea',id:'grocery_list',label:'Grocery List'}]},
   {id:'cleaning',icon:'🧹',name:'Extra Cleaning',desc:'Additional cleaning sessions beyond check-in/check-out.',price:100,priceLabel:'$100 per session',fields:[{type:'input',inputType:'number',id:'clean_qty',label:'Number of Sessions',placeholder:'e.g. 2'}]},
@@ -1821,7 +1824,9 @@ function calcServiceCost(id){
   const s=SERVICES.find(x=>x.id===id);
   if(!s)return{cost:0,label:s?.name||''};
   let label=s.name,cost=s.price;
-  if(id==='atv'){const d=parseInt(document.getElementById('atv_days')?.value)||1;const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=100*d*q;label+=` (${q} ATV × ${d} days)`}
+  if(id==='airport_arrival'){const airport=document.getElementById('airport_arrival_name')?.value||'';const date=document.getElementById('airport_arrival_date')?.value||'';const flight=document.getElementById('airport_arrival_flight')?.value||'';label+=airport?` — ${airport}`:'';if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=190;}
+  else if(id==='airport_departure'){const airport=document.getElementById('airport_departure_name')?.value||'';const date=document.getElementById('airport_departure_date')?.value||'';const flight=document.getElementById('airport_departure_flight')?.value||'';label+=airport?` — ${airport}`:'';if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=190;}
+  else if(id==='atv'){const d=parseInt(document.getElementById('atv_days')?.value)||1;const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=100*d*q;label+=` (${q} ATV × ${d} days)`}
   else if(id==='golf'){const d=parseInt(document.getElementById('golf_days')?.value)||1;cost=140*d;label+=` (${d} days)`}
   else if(id==='car'){const d=parseInt(document.getElementById('car_days')?.value)||1;cost=140*d;label+=` (${d} days)`}
   else if(id==='chef'){const d=parseInt(document.getElementById('chef_days')?.value)||1;const h=parseInt(document.getElementById('chef_hours')?.value)||4;cost=50*d*h;label+=` (${d} days × ${h}h)`}
