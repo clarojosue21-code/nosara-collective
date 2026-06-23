@@ -426,34 +426,50 @@ section{padding:5rem 3rem}
 /* ─── CONCIERGE ─── */
 #concierge{background:var(--bg2);border-top:2px solid var(--border)}
 .builder-grid{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:2px;background:var(--border);margin-bottom:2rem;
-}
-@media(max-width:768px){.builder-grid{grid-template-columns:1fr}}
-.service-card{
-  background:var(--white);padding:1.5rem;
-  transition:background 0.15s;position:relative;
   display:flex;flex-direction:column;
+  border:1px solid var(--border-med);margin-bottom:2rem;
+  background:var(--white);
 }
-.service-card:hover{background:var(--bg)}
-.sc-top{display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:0.5rem}
-.sc-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+.service-card{
+  border-bottom:1px solid var(--border-light);
+  background:var(--white);transition:background 0.15s;
+}
+.service-card:last-child{border-bottom:none}
+.sc-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.75rem 1rem;cursor:pointer;gap:0.75rem;
+  user-select:none;
+}
+.sc-header:hover{background:var(--bg)}
+.sc-header-left{display:flex;align-items:center;gap:0.6rem}
+.sc-icon{font-size:1rem;flex-shrink:0}
 .sc-name{
   font-family:'Space Grotesk',sans-serif;
-  font-size:0.85rem;font-weight:700;
-  color:var(--text);letter-spacing:0.02em;line-height:1.3;
+  font-size:0.82rem;font-weight:600;
+  color:var(--text);letter-spacing:0.01em;
 }
-.sc-desc{font-size:0.78rem;color:var(--text-muted);line-height:1.7;margin-bottom:0.5rem}
-.sc-price{
+.sc-price-inline{
   font-family:'DM Mono',monospace;
-  font-size:0.62rem;font-weight:500;color:var(--clay);
-  letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;
+  font-size:0.58rem;color:var(--clay);
+  letter-spacing:0.04em;margin-left:auto;flex-shrink:0;
 }
-.sc-options{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;flex:1}
+.sc-chevron{
+  font-size:0.6rem;color:var(--text-muted);
+  transition:transform 0.2s;flex-shrink:0;
+}
+.service-card.open .sc-chevron{transform:rotate(180deg)}
+.sc-body{
+  display:none;padding:0 1rem 1rem;
+  border-top:1px solid var(--border-light);
+  background:var(--bg);
+}
+.service-card.open .sc-body{display:block}
+.sc-desc{font-size:0.75rem;color:var(--text-muted);line-height:1.7;margin-bottom:0.75rem;margin-top:0.75rem}
+.sc-options{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.75rem}
 .sc-opt{display:flex;flex-direction:column;gap:3px}
 .sc-opt label{
   font-family:'DM Mono',monospace;
-  font-size:0.55rem;color:var(--text-muted);
+  font-size:0.52rem;color:var(--text-muted);
   font-weight:400;letter-spacing:0.1em;text-transform:uppercase;
 }
 .sc-opt input,.sc-opt select,.sc-opt textarea{
@@ -462,6 +478,16 @@ section{padding:5rem 3rem}
   color:var(--text);font-family:'Space Grotesk',sans-serif;
   outline:none;transition:border-color 0.15s;width:100%;
 }
+.sc-add-btn{
+  width:100%;padding:9px;
+  background:var(--text);color:var(--white);
+  border:none;cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.68rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  transition:background 0.15s;
+}
+.sc-add-btn:hover{background:var(--clay)}
 .sc-add-btn{
   margin-top:auto;width:100%;padding:10px;
   background:var(--text);color:var(--white);
@@ -1765,25 +1791,37 @@ function renderProps(){
 }
 
 // ─── RENDER SERVICES ───
+function toggleServiceCard(id){
+  const card=document.getElementById('sc_'+id);
+  const isOpen=card.classList.contains('open');
+  document.querySelectorAll('.service-card.open').forEach(c=>c.classList.remove('open'));
+  if(!isOpen) card.classList.add('open');
+}
+
 function renderServices(){
   document.getElementById('servicesGrid').innerHTML=SERVICES.map(s=>`
     <div class="service-card" id="sc_${s.id}">
-      <div class="sc-top">
-        <div class="sc-icon">${s.icon}</div>
-        <div class="sc-name">${s.name}</div>
+      <div class="sc-header" onclick="toggleServiceCard('${s.id}')">
+        <div class="sc-header-left">
+          <span class="sc-icon">${s.icon}</span>
+          <span class="sc-name">${s.name}</span>
+        </div>
+        <span class="sc-price-inline">${s.priceLabel}</span>
+        <span class="sc-chevron">▼</span>
       </div>
-      <div class="sc-desc">${s.desc}</div>
-      <div class="sc-price">${s.priceLabel}</div>
-      <div class="sc-options">
-        ${s.fields.map(f=>`
-          <div class="sc-opt">
-            <label>${f.label}</label>
-            ${f.type==='select'?`<select id="${f.id}">${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`:''}
-            ${f.type==='input'?`<input type="${f.inputType}" id="${f.id}" placeholder="${f.placeholder||''}">`:''}
-            ${f.type==='textarea'?`<textarea id="${f.id}" placeholder="${f.placeholder||''}"></textarea>`:''}
-          </div>`).join('')}
+      <div class="sc-body">
+        <div class="sc-desc">${s.desc}</div>
+        <div class="sc-options">
+          ${s.fields.map(f=>`
+            <div class="sc-opt">
+              <label>${f.label}</label>
+              ${f.type==='select'?`<select id="${f.id}">${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`:''}
+              ${f.type==='input'?`<input type="${f.inputType}" id="${f.id}" placeholder="${f.placeholder||''}">`:''}
+              ${f.type==='textarea'?`<textarea id="${f.id}" placeholder="${f.placeholder||''}"></textarea>`:''}
+            </div>`).join('')}
+        </div>
+        <button class="sc-add-btn" onclick="addServiceToCart('${s.id}')">🛒 Add to Cart</button>
       </div>
-      <button class="sc-add-btn" onclick="addServiceToCart('${s.id}')">🛒 Add to Cart</button>
     </div>`).join('');
 }
 
