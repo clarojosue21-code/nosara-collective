@@ -500,6 +500,22 @@ section{padding:5rem 3rem}
 .sc-add-btn:hover{background:var(--clay)}
 .sc-opt input:focus,.sc-opt select:focus,.sc-opt textarea:focus{border-color:var(--clay)}
 .services-tax-note{font-size:0.78rem;color:var(--text-muted);margin-top:0.5rem;padding:0 0.25rem;}
+.cdp-input{cursor:pointer;background:var(--white);caret-color:transparent;}
+.cdp-input::placeholder{color:var(--text-muted);}
+.cdp-popup{position:absolute;z-index:99999;background:var(--bg,#F5F0E8);border:1.5px solid var(--clay,#C4714A);border-radius:10px;padding:0.85rem;width:272px;box-shadow:0 8px 32px rgba(0,0,0,0.14);display:none;}
+.cdp-popup.open{display:block;}
+.cdp-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;}
+.cdp-nav{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--clay,#C4714A);padding:0 0.4rem;line-height:1;font-weight:300;}
+.cdp-nav:hover{opacity:0.7;}
+.cdp-month{font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;color:var(--text,#3A3632);}
+.cdp-dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
+.cdp-dow span{text-align:center;font-size:0.62rem;font-weight:600;color:var(--text-muted,#8A8580);font-family:'DM Mono',monospace;padding:2px 0;}
+.cdp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cdp-d{text-align:center;padding:6px 2px;font-size:0.8rem;cursor:pointer;border-radius:5px;color:var(--text,#3A3632);font-family:'Space Grotesk',sans-serif;transition:background 0.1s;}
+.cdp-d:hover{background:var(--clay,#C4714A);color:#fff;}
+.cdp-d.cdp-today{font-weight:700;color:var(--clay,#C4714A);}
+.cdp-d.cdp-sel{background:var(--clay,#C4714A)!important;color:#fff!important;font-weight:600;}
+.cdp-d.cdp-empty{cursor:default;pointer-events:none;}
 .whatsapp-fab{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:flex;align-items:center;justify-content:center;background:#25D366;color:#fff;border-radius:50%;width:56px;height:56px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,0.18);transition:transform 0.2s,box-shadow 0.2s;}
 .whatsapp-fab:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(0,0,0,0.22);}
 .whatsapp-fab-label{display:none;}
@@ -1703,7 +1719,7 @@ const SERVICES=[
   {id:'tennis',icon:'🎾',name:'Tennis Lessons',desc:'Private tennis lessons with a certified instructor.',price:90,priceLabel:'$90 per person / per session',fields:[{type:'input',inputType:'number',id:'tennis_adults',label:'Number of Adults',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'tennis_children',label:'Number of Children',placeholder:'e.g. 0'},{type:'input',inputType:'text',id:'tennis_ages',label:'Children\'s Ages',placeholder:'e.g. 9, 13'},{type:'input',inputType:'number',id:'tennis_sessions',label:'Number of Sessions',placeholder:'e.g. 2'},{type:'textarea',id:'tennis_notes',label:'Level & Notes',placeholder:'e.g. Beginner, never played before. Preferred days: June 24 & 26. Any other info to help us prepare...'}]},
   {id:'muaythai',icon:'🥊',name:'Muay Thai',desc:'Learn authentic Muay Thai from experienced trainers in a jungle setting.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'muay_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'muay_sessions',label:'Number of Sessions',placeholder:'e.g. 3'},{type:'textarea',id:'muay_notes',label:'Notes / Questions',placeholder:'Experience level, goals, anything you\'d like us to know...'}]},
   {id:'bjj',icon:'🥋',name:'Brazilian Jiu Jitsu',desc:'Train BJJ in paradise — private or small group sessions available.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'bjj_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'bjj_sessions',label:'Number of Sessions',placeholder:'e.g. 2'},{type:'textarea',id:'bjj_notes',label:'Notes / Questions',placeholder:'Belt level, goals, anything you\'d like us to know...'}]},
-  {id:'snorkel',icon:'🤿',name:'Snorkeling Tour',desc:'Guided snorkeling tours to discover Nosara\'s vibrant underwater world.',price:120,priceLabel:'$120 per person',fields:[{type:'input',inputType:'number',id:'snorkel_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'input',inputType:'date',id:'snorkel_date',label:'Preferred Date'}]},
+  {id:'snorkel',icon:'🤿',name:'Snorkeling Tour',desc:'Guided snorkeling tours to discover Nosara\'s vibrant underwater world.',price:120,priceLabel:'$120 per person',fields:[{type:'input',inputType:'number',id:'snorkel_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'input',inputType:'date',id:'snorkel_date',label:'Preferred Date'},{type:'input',inputType:'text',id:'snorkel_ages',label:'Ages of Participants',placeholder:'e.g. 35, 38, 10, 12'},{type:'textarea',id:'snorkel_notes',label:'Notes / Special Requests',placeholder:'Swim level, any concerns, anything we should know...'}]},
   {id:'fishing',icon:'🎣',name:'Fishing Tour',desc:'Deep sea fishing — 4 hours on the water (7:30am–11:30am). Up to 5 people. Gear, captain &amp; fresh fruits included.',price:1500,priceLabel:'$1,500 for up to 5 people',fields:[{type:'input',inputType:'date',id:'fishing_date',label:'Preferred Date'},{type:'input',inputType:'number',id:'fishing_pax',label:'Number of People (max 5)',placeholder:'e.g. 4'},{type:'select',id:'fishing_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']}]},
   {id:'dolphin',icon:'🐬',name:'Dolphin Watching',desc:'Magical boat tour searching for dolphins in their natural habitat. Fresh fruits included.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'dolphin_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'dolphin_date',label:'Preferred Date'},{type:'select',id:'dolphin_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']}]},
   {id:'sunset',icon:'🌅',name:'Sunset Trip',desc:'Cruise the Pacific as the sun sets over the Nosara coast.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'sunset_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'input',inputType:'date',id:'sunset_date',label:'Preferred Date'}]},
@@ -1712,9 +1728,9 @@ const SERVICES=[
   {id:'horseback',icon:'🐎',name:'Sunset Horseback Riding',desc:'Private sunset ride through Nosara\'s beaches and jungle trails.',price:140,priceLabel:'$140 per person',fields:[{type:'input',inputType:'number',id:'horse_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'horse_date',label:'Preferred Date'}]},
   {id:'massage',icon:'💆',name:'In-House Massage',desc:'Professional massage therapist comes to your home.',price:120,priceLabel:'1 hr $120 · 90 min $180 per person',fields:[{type:'input',inputType:'number',id:'massage_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'date',id:'massage_date',label:'Preferred Date'},{type:'select',id:'massage_duration',label:'Duration',options:['1 hour — $120/person','90 minutes — $180/person']},{type:'select',id:'massage_type',label:'Massage Type',options:['Swedish / Relaxation','Deep Tissue','Sports','Couples','Surfer Massage']}]},
   {id:'yoga',icon:'🧘',name:'Private Yoga Class',desc:'Certified yoga instructor comes to your home or villa. All levels welcome.',price:60,priceLabel:'$60 per person',fields:[{type:'input',inputType:'number',id:'yoga_sessions',label:'Number of Sessions',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'yoga_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'select',id:'yoga_level',label:'Level',options:['Beginner','Intermediate','Advanced','Mixed']}]},
-  {id:'skate',icon:'🛹',name:'Skate Lessons',desc:'Private lessons for all ages and levels.',price:70,priceLabel:'$70 per person/day',fields:[{type:'input',inputType:'number',id:'skate_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'skate_days',label:'Number of Days',placeholder:'e.g. 2'}]},
-  {id:'turtles',icon:'🐢',name:'Ostional Turtles Tour',desc:'Witness one of nature\'s most magical events — sea turtles nesting on Ostional Beach. Transport and certified guide included.',price:90,priceLabel:'$90 per person',fields:[{type:'input',inputType:'number',id:'turtles_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'turtles_date',label:'Preferred Date'}]},
-  {id:'buffet',icon:'🍽️',name:'Buffet Catering',desc:'Perfect for retreats and groups. Local chef prepares everything. Transport included.',price:40,priceLabel:'$40 per person',fields:[{type:'select',id:'buffet_meal',label:'Meal Type',options:['Breakfast Buffet','Lunch Buffet','Dinner Buffet','Full Day (all meals)']},{type:'input',inputType:'number',id:'buffet_pax',label:'Number of People',placeholder:'e.g. 12'},{type:'input',inputType:'number',id:'buffet_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'textarea',id:'buffet_notes',label:'Dietary restrictions / preferences'}]},
+  {id:'skate',icon:'🛹',name:'Skate Lessons',desc:'Private lessons for all ages and levels.',price:70,priceLabel:'$70 per person/day',fields:[{type:'input',inputType:'date',id:'skate_date',label:'Preferred Date'},{type:'input',inputType:'number',id:'skate_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'skate_days',label:'Number of Days',placeholder:'e.g. 2'}]},
+  {id:'turtles',icon:'🐢',name:'Ostional Turtles Tour',desc:'✨ This is a special experience — availability must be confirmed before payment. Add it to your cart and we will contact you to confirm the date and details.',price:0,priceLabel:'Contact for availability',fields:[{type:'input',inputType:'number',id:'turtles_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'turtles_date',label:'Preferred Date'},{type:'textarea',id:'turtles_notes',label:'Notes / Questions',placeholder:'Any questions or special requests...'}]},
+  {id:'buffet',icon:'🍽️',name:'Buffet Catering',desc:'Perfect for retreats and groups. Local chef prepares everything. Transport included.',price:40,priceLabel:'$40 per person',fields:[{type:'input',inputType:'date',id:'buffet_date',label:'Date'},{type:'select',id:'buffet_meal',label:'Meal Type',options:['Breakfast Buffet','Lunch Buffet','Dinner Buffet','Full Day (all meals)']},{type:'input',inputType:'number',id:'buffet_pax',label:'Number of People',placeholder:'e.g. 12'},{type:'input',inputType:'number',id:'buffet_days',label:'Number of Days',placeholder:'e.g. 3'},{type:'textarea',id:'buffet_notes',label:'Dietary restrictions / preferences'}]},
   {id:'custom',icon:'✨',name:'Custom Experience',desc:'Have something special in mind? Tell us and we\'ll make it happen.',price:0,priceLabel:'Contact for pricing',fields:[{type:'textarea',id:'custom_desc',label:'Describe your dream experience'}]}
 ];
 
@@ -1825,7 +1841,8 @@ function renderServices(){
             <div class="sc-opt">
               <label>${f.label}</label>
               ${f.type==='select'?`<select id="${f.id}">${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`:''}
-              ${f.type==='input'?`<input type="${f.inputType}" id="${f.id}" placeholder="${f.placeholder||''}" ${f.onChange?`onchange="${f.onChange}"`:''}>`:'' }
+              ${f.type==='input'&&f.inputType==='date'?`<input type="text" id="${f.id}" data-cdp="true" readonly placeholder="Select date" ${f.onChange?`data-onchange="${f.onChange}"`:''} class="cdp-input">`:'' }
+              ${f.type==='input'&&f.inputType!=='date'?`<input type="${f.inputType}" id="${f.id}" placeholder="${f.placeholder||''}" ${f.onChange?`onchange="${f.onChange}"`:''}>`:'' }
               ${f.type==='textarea'?`<textarea id="${f.id}" placeholder="${f.placeholder||''}"></textarea>`:''}
               ${f.type==='html'?f.html:''}
             </div>`).join('')}
@@ -1852,7 +1869,7 @@ function calcServiceCost(id){
   else if(id==='muaythai'){const p=parseInt(document.getElementById('muay_pax')?.value)||1;const d=parseInt(document.getElementById('muay_sessions')?.value)||1;cost=90*p*d;label+=` (${p} people × ${d} sessions)`;}
   else if(id==='bjj'){const p=parseInt(document.getElementById('bjj_pax')?.value)||1;const d=parseInt(document.getElementById('bjj_sessions')?.value)||1;cost=90*p*d;label+=` (${p} people × ${d} sessions)`;}
   else if(id==='snorkel'){const p=parseInt(document.getElementById('snorkel_pax')?.value)||1;cost=120*p;label+=` (${p} people)`;}
-  else if(id==='fishing'){const p=parseInt(document.getElementById('fishing_pax')?.value)||1;const drinks=document.getElementById('fishing_drinks')?.value||'';cost=1500;label+=` (${p} people · ${drinks})`;}
+  else if(id==='fishing'){const p=parseInt(document.getElementById('fishing_pax')?.value)||1;const drinks=document.getElementById('fishing_drinks')?.value||'';const extra=Math.max(0,p-4);cost=1500+(extra*100);label+=` (${p} people${extra>0?` · +$${extra*100} for ${extra} extra`:''} · ${drinks})`;}
   else if(id==='dolphin'){const p=parseInt(document.getElementById('dolphin_pax')?.value)||1;const drinks=document.getElementById('dolphin_drinks')?.value||'';cost=180*p;label+=` (${p} people · ${drinks})`;}
   else if(id==='sunset'){const p=parseInt(document.getElementById('sunset_pax')?.value)||1;cost=180*p;label+=` (${p} people)`;}
   else if(id==='surftrip'){const p=parseInt(document.getElementById('surftrip_pax')?.value)||1;const dest=document.getElementById('surftrip_dest')?.value||'Ostional';const drinks=document.getElementById('surftrip_drinks')?.value||'';cost=150*p;label+=` to ${dest} (${p} people · ${drinks})`;}
@@ -1861,7 +1878,7 @@ function calcServiceCost(id){
   else if(id==='massage'){const p=parseInt(document.getElementById('massage_pax')?.value)||1;const dur=document.getElementById('massage_duration')?.value||'';const price=dur.includes('90')?180:120;cost=price*p;label+=` (${p} people · ${dur.includes('90')?'90 min':'1 hr'})`;}
   else if(id==='yoga'){const sessions=parseInt(document.getElementById('yoga_sessions')?.value)||1;const pax=parseInt(document.getElementById('yoga_pax')?.value)||1;cost=60*pax*sessions;label+=` (${pax} people × ${sessions} sessions)`;}
   else if(id==='skate'){const p=parseInt(document.getElementById('skate_pax')?.value)||1;const d=parseInt(document.getElementById('skate_days')?.value)||1;cost=70*p*d;label+=` (${p} people × ${d} days)`;}
-  else if(id==='turtles'){const p=parseInt(document.getElementById('turtles_pax')?.value)||1;cost=90*p;label+=` (${p} people)`;}
+  else if(id==='turtles'){cost=0;label+=' — availability to be confirmed';}
   else if(id==='buffet'){const p=parseInt(document.getElementById('buffet_pax')?.value)||1;const d=parseInt(document.getElementById('buffet_days')?.value)||1;cost=40*p*d;label+=` (${p} people × ${d} days)`;}
   else if(id==='custom'){cost=0;label+=' — we\'ll quote this for you';}
   return{cost,label};
@@ -1902,7 +1919,7 @@ function addServiceToCart(id){
   const s=SERVICES.find(x=>x.id===id);
   if(!s)return;
   const{cost,label}=calcServiceCost(id);
-  const cartId=id==='chef'?'svc_chef_'+Date.now():'svc_'+id;
+  const cartId='svc_'+id+'_'+Date.now();
   const btn=document.getElementById('sc_'+id)?.querySelector('.sc-add-btn');
   addToCart({id:cartId,name:label,price:cost,img:'',meta:'Concierge Service',icon:s.icon,type:'service'});
   if(btn){btn.textContent='✓ Added';btn.style.background='var(--teal)';setTimeout(()=>{btn.textContent='🛒 Add to Cart';btn.style.background='';},2000);}
@@ -2810,6 +2827,88 @@ function showPayPalSuccess(ref){
     </div>`;
   document.body.appendChild(modal);
 }
+</script>
+<script>
+// ─── CUSTOM DATE PICKER ───
+const CDP=(function(){
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DOW=['Su','Mo','Tu','We','Th','Fr','Sa'];
+  let popup,activeInput,yr,mo;
+
+  function init(){
+    popup=document.createElement('div');
+    popup.className='cdp-popup';
+    popup.innerHTML='';
+    document.body.appendChild(popup);
+
+    document.addEventListener('mousedown',function(e){
+      if(e.target.matches('.cdp-input')){
+        e.preventDefault();
+        open(e.target);
+      } else if(!popup.contains(e.target)){
+        close();
+      }
+    },true);
+  }
+
+  function open(inp){
+    activeInput=inp;
+    const val=inp.value;
+    const base=val?new Date(val+'T00:00:00'):new Date();
+    yr=base.getFullYear();
+    mo=base.getMonth();
+    render();
+    const r=inp.getBoundingClientRect();
+    const top=r.bottom+window.scrollY+6;
+    const left=Math.min(r.left+window.scrollX, window.innerWidth-290);
+    popup.style.top=top+'px';
+    popup.style.left=left+'px';
+    popup.classList.add('open');
+  }
+
+  function close(){
+    popup.classList.remove('open');
+    activeInput=null;
+  }
+
+  function render(){
+    const first=new Date(yr,mo,1).getDay();
+    const total=new Date(yr,mo+1,0).getDate();
+    const today=new Date();
+    const selVal=activeInput?.value||'';
+    let h=`<div class="cdp-hdr">
+      <button class="cdp-nav" onclick="CDP.prev()">&#8249;</button>
+      <span class="cdp-month">${MONTHS[mo]} ${yr}</span>
+      <button class="cdp-nav" onclick="CDP.next()">&#8250;</button>
+    </div>
+    <div class="cdp-dow">${DOW.map(d=>`<span>${d}</span>`).join('')}</div>
+    <div class="cdp-days">`;
+    for(let i=0;i<first;i++) h+=`<div class="cdp-d cdp-empty"></div>`;
+    for(let d=1;d<=total;d++){
+      const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const isToday=d===today.getDate()&&mo===today.getMonth()&&yr===today.getFullYear();
+      const isSel=ds===selVal;
+      h+=`<div class="cdp-d${isToday?' cdp-today':''}${isSel?' cdp-sel':''}" onclick="CDP.pick('${ds}')">${d}</div>`;
+    }
+    h+='</div>';
+    popup.innerHTML=h;
+  }
+
+  return{
+    init,
+    prev(){mo--;if(mo<0){mo=11;yr--;}render();},
+    next(){mo++;if(mo>11){mo=0;yr++;}render();},
+    pick(ds){
+      if(!activeInput)return;
+      activeInput.value=ds;
+      const onch=activeInput.dataset.onchange;
+      if(onch)eval(onch);
+      activeInput.dispatchEvent(new Event('change',{bubbles:true}));
+      close();
+    }
+  };
+})();
+document.addEventListener('DOMContentLoaded',()=>CDP.init());
 </script>
 </body>
 </html>
