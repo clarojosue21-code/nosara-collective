@@ -2360,44 +2360,55 @@ function approxTide(date){
 }
 
 async function loadSurfConditions(){
-  try{
-    const now=new Date();
-    const hr=now.getHours();
-    const[marineRes,windRes]=await Promise.all([
-      fetch('https://marine-api.open-meteo.com/v1/marine?latitude=9.976&longitude=-85.653&hourly=wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction&timezone=America/Costa_Rica&forecast_days=1'),
-      fetch('https://api.open-meteo.com/v1/forecast?latitude=9.976&longitude=-85.653&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=America/Costa_Rica&forecast_days=1')
-    ]);
-    const marine=await marineRes.json();
-    const wind=await windRes.json();
-    const m=marine.hourly;const w=wind.hourly;
-    const wh=+(m.wave_height[hr]||0).toFixed(1);
-    const wp=Math.round(m.wave_period[hr]||0);
-    const swh=+(m.swell_wave_height[hr]||0).toFixed(1);
-    const swp=Math.round(m.swell_wave_period[hr]||0);
-    const swd=Math.round(m.swell_wave_direction[hr]||0);
-    const wwd=Math.round(m.wave_direction[hr]||0);
-    const ws=Math.round(w.wind_speed_10m[hr]||0);
-    const wdir=Math.round(w.wind_direction_10m[hr]||0);
-    const wg=Math.round(w.wind_gusts_10m[hr]||0);
-    const tide=approxTide(now);
-    const timeStr=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  const now=new Date();
+  const hr=now.getHours();
+  const timeStr=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  function mToFt(m){return(m*3.281).toFixed(1);}
 
-    setSurf('waveToday',wh+'m');
-    setSurf('waveTodayDesc',waveDesc(wh));
-    setSurf('swellPeriod',swp+'s');
-    setSurf('swellPeriodDesc',`${swh}m swell · wave period ${wp}s`);
-    setSurf('swellDir',degToCompass(swd));
-    setSurf('swellDirDesc',`${swd}° · wave from ${degToCompass(wwd)}`);
-    setSurf('windToday',ws+' km/h');
-    setSurf('windTodayDesc',`${degToCompass(wdir)} · gusts ${wg} km/h · ${windDesc(ws)}`);
-    setSurf('tideNow',tide.label);
-    setSurf('tideDesc',tide.desc);
-    setSurf('surfUpdated','Updated '+timeStr+' · Playa Guiones, Nosara');
+  // Wind — always available
+  try{
+    const wr=await fetch('https://api.open-meteo.com/v1/forecast?latitude=9.976&longitude=-85.653&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=America%2FCosta_Rica&forecast_days=1');
+    const wd=await wr.json();
+    if(wd.hourly){
+      const ws=Math.round(wd.hourly.wind_speed_10m[hr]||0);
+      const wdir=Math.round(wd.hourly.wind_direction_10m[hr]||0);
+      const wg=Math.round(wd.hourly.wind_gusts_10m[hr]||0);
+      setSurf('windToday',ws+' km/h');
+      setSurf('windTodayDesc',`${degToCompass(wdir)} · gusts ${wg} km/h · ${windDesc(ws)}`);
+    }
+  }catch(e){setSurf('windTodayDesc','Check local conditions');}
+
+  // Marine — use offshore Pacific point for better model coverage
+  try{
+    const mr=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=9.0&longitude=-87.0&hourly=wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction&timezone=America%2FCosta_Rica&forecast_days=1');
+    const md=await mr.json();
+    if(md.hourly&&md.hourly.wave_height&&md.hourly.wave_height[hr]!=null){
+      const wh=md.hourly.wave_height[hr]||0;
+      const wp=Math.round(md.hourly.wave_period[hr]||0);
+      const swh=md.hourly.swell_wave_height[hr]||0;
+      const swp=Math.round(md.hourly.swell_wave_period[hr]||0);
+      const swd=Math.round(md.hourly.swell_wave_direction[hr]||0);
+      const wwd=Math.round(md.hourly.wave_direction[hr]||0);
+      setSurf('waveToday',mToFt(wh)+' ft');
+      setSurf('waveTodayDesc',waveDesc(wh));
+      setSurf('swellPeriod',swp+'s');
+      setSurf('swellPeriodDesc',mToFt(swh)+' ft swell · wave period '+wp+'s');
+      setSurf('swellDir',degToCompass(swd));
+      setSurf('swellDirDesc',swd+'° · wave from '+degToCompass(wwd));
+    } else {
+      setSurf('waveToday','—');setSurf('waveTodayDesc','No marine data — check Surfline');
+      setSurf('swellPeriod','—');setSurf('swellDir','—');
+    }
   }catch(e){
-    setSurf('waveTodayDesc','Check local conditions');
-    setSurf('surfUpdated','Could not load — check local conditions');
-    console.warn('surf api',e);
+    setSurf('waveToday','—');setSurf('waveTodayDesc','Check Surfline for conditions');
+    setSurf('swellPeriod','—');setSurf('swellDir','—');
   }
+
+  // Tide (harmonic model)
+  const tide=approxTide(now);
+  setSurf('tideNow',tide.label);
+  setSurf('tideDesc',tide.desc);
+  setSurf('surfUpdated','Updated '+timeStr+' · Playa Guiones, Nosara');
 }
 
 // ─── PAYMENT MODAL ───
