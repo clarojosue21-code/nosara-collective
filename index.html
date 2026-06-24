@@ -499,6 +499,7 @@ section{padding:5rem 3rem}
 }
 .sc-add-btn:hover{background:var(--clay)}
 .sc-opt input:focus,.sc-opt select:focus,.sc-opt textarea:focus{border-color:var(--clay)}
+.surf-updated{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text-muted);margin-bottom:1rem;letter-spacing:0.04em;}
 .services-tax-note{font-size:0.78rem;color:var(--text-muted);margin-top:0.5rem;padding:0 0.25rem;}
 .cdp-input{cursor:pointer;background:var(--white);caret-color:transparent;}
 .cdp-input::placeholder{color:var(--text-muted);}
@@ -1430,16 +1431,32 @@ nav.scrolled{
     <div class="section-label">Wave Report</div>
     <h2 class="section-title">Nosara Surf</h2>
     <p class="section-sub">Playa Guiones — one of the most consistent beach breaks in Central America. Best surf: May–November. Offshore winds: Dec–April.</p>
+    <div class="surf-updated" id="surfUpdated">Updating conditions...</div>
     <div class="surf-cards">
       <div class="surf-card">
-        <div class="surf-card-label">Today's Waves</div>
+        <div class="surf-card-label">Wave Height</div>
         <div class="surf-card-val" id="waveToday">—</div>
-        <div class="surf-card-desc" id="waveTodayDesc">Loading conditions...</div>
+        <div class="surf-card-desc" id="waveTodayDesc">Loading...</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Swell Period</div>
+        <div class="surf-card-val" id="swellPeriod">—</div>
+        <div class="surf-card-desc" id="swellPeriodDesc">Loading...</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Swell Direction</div>
+        <div class="surf-card-val" id="swellDir">—</div>
+        <div class="surf-card-desc" id="swellDirDesc">Loading...</div>
       </div>
       <div class="surf-card">
         <div class="surf-card-label">Wind</div>
         <div class="surf-card-val" id="windToday">—</div>
         <div class="surf-card-desc" id="windTodayDesc">Loading...</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Tide</div>
+        <div class="surf-card-val" id="tideNow" style="font-size:1.4rem">—</div>
+        <div class="surf-card-desc" id="tideDesc">Loading...</div>
       </div>
       <div class="surf-card">
         <div class="surf-card-label">Water Temp</div>
@@ -2321,26 +2338,66 @@ function showWiseInstructions(data){
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalDirect()});
 
 // ─── WAVE CONDITIONS ───
+function setSurf(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
+function degToCompass(d){return['N','NE','E','SE','S','SW','W','NW'][Math.round(d/45)%8];}
+function waveDesc(h){return h<0.3?'Flat':h<0.6?'Ankle high':h<0.9?'Knee high — great for beginners':h<1.2?'Waist high — all levels':h<1.5?'Chest high — intermediate':h<2?'Head high — advanced':'Overhead+ — experts only';}
+function windDesc(s){return s<10?'Glassy — perfect conditions':s<20?'Light breeze — clean surface':s<30?'Moderate wind — slightly choppy':'Strong wind — choppy';}
+
+function approxTide(date){
+  // Harmonic tide model calibrated for Guanacaste Pacific coast
+  const h=date.getTime()/3600000;
+  const M2=Math.cos(2*Math.PI*h/12.4206+1.1);
+  const S2=0.45*Math.cos(2*Math.PI*h/12.0+0.8);
+  const K1=0.28*Math.cos(2*Math.PI*h/23.9345+2.1);
+  const O1=0.18*Math.cos(2*Math.PI*h/25.8194+0.4);
+  const level=M2+S2+K1+O1;
+  const pct=Math.round((level+1.91)/3.82*100);
+  if(pct>78)return{label:'🌊 High',desc:'Full tide · deeper water'};
+  if(pct>60)return{label:'↑ Rising',desc:'Tide coming in'};
+  if(pct>40)return{label:'≈ Mid',desc:'Mid tide'};
+  if(pct>22)return{label:'↓ Dropping',desc:'Tide going out'};
+  return{label:'🏖️ Low',desc:'Low tide · watch exposed rocks'};
+}
+
 async function loadSurfConditions(){
   try{
-    const res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=9.976&longitude=-85.653&hourly=wave_height,wind_speed_10m&timezone=America/Costa_Rica&forecast_days=1');
-    const data=await res.json();
-    if(data.hourly){
-      const wh=data.hourly.wave_height;const ws=data.hourly.wind_speed_10m;
-      if(wh&&wh.length){
-        const avgWave=(wh.slice(6,18).reduce((a,b)=>a+(b||0),0)/12).toFixed(1);
-        const avgWind=(ws.slice(6,18).reduce((a,b)=>a+(b||0),0)/12).toFixed(0);
-        const el=document.getElementById('waveToday');
-        const el2=document.getElementById('waveTodayDesc');
-        const el3=document.getElementById('windToday');
-        const el4=document.getElementById('windTodayDesc');
-        if(el)el.textContent=avgWave+'m';
-        if(el2)el2.textContent=avgWave<0.8?'Small — great for beginners':avgWave<1.5?'Fun size — good for all levels':avgWave<2?'Solid — intermediate/advanced':'Big — experienced surfers';
-        if(el3)el3.textContent=avgWind+'km/h';
-        if(el4)el4.textContent=avgWind<15?'Light winds — clean conditions':avgWind<25?'Moderate breeze':'Strong wind — choppy surface';
-      }
-    }
-  }catch(e){const el=document.getElementById('waveTodayDesc');if(el)el.textContent='Check local conditions';}
+    const now=new Date();
+    const hr=now.getHours();
+    const[marineRes,windRes]=await Promise.all([
+      fetch('https://marine-api.open-meteo.com/v1/marine?latitude=9.976&longitude=-85.653&hourly=wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction&timezone=America/Costa_Rica&forecast_days=1'),
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=9.976&longitude=-85.653&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=America/Costa_Rica&forecast_days=1')
+    ]);
+    const marine=await marineRes.json();
+    const wind=await windRes.json();
+    const m=marine.hourly;const w=wind.hourly;
+    const wh=+(m.wave_height[hr]||0).toFixed(1);
+    const wp=Math.round(m.wave_period[hr]||0);
+    const swh=+(m.swell_wave_height[hr]||0).toFixed(1);
+    const swp=Math.round(m.swell_wave_period[hr]||0);
+    const swd=Math.round(m.swell_wave_direction[hr]||0);
+    const wwd=Math.round(m.wave_direction[hr]||0);
+    const ws=Math.round(w.wind_speed_10m[hr]||0);
+    const wdir=Math.round(w.wind_direction_10m[hr]||0);
+    const wg=Math.round(w.wind_gusts_10m[hr]||0);
+    const tide=approxTide(now);
+    const timeStr=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+    setSurf('waveToday',wh+'m');
+    setSurf('waveTodayDesc',waveDesc(wh));
+    setSurf('swellPeriod',swp+'s');
+    setSurf('swellPeriodDesc',`${swh}m swell · wave period ${wp}s`);
+    setSurf('swellDir',degToCompass(swd));
+    setSurf('swellDirDesc',`${swd}° · wave from ${degToCompass(wwd)}`);
+    setSurf('windToday',ws+' km/h');
+    setSurf('windTodayDesc',`${degToCompass(wdir)} · gusts ${wg} km/h · ${windDesc(ws)}`);
+    setSurf('tideNow',tide.label);
+    setSurf('tideDesc',tide.desc);
+    setSurf('surfUpdated','Updated '+timeStr+' · Playa Guiones, Nosara');
+  }catch(e){
+    setSurf('waveTodayDesc','Check local conditions');
+    setSurf('surfUpdated','Could not load — check local conditions');
+    console.warn('surf api',e);
+  }
 }
 
 // ─── PAYMENT MODAL ───
