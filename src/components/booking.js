@@ -89,7 +89,7 @@
             Done
           </button>
           <div style="text-align:center;margin-top:1rem">
-            <a href="https://wa.me/50612345678" style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--clay);letter-spacing:0.1em;text-transform:uppercase;text-decoration:none">💬 WhatsApp Us</a>
+            <a href="https://wa.me/50672935565" style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--clay);letter-spacing:0.1em;text-transform:uppercase;text-decoration:none">💬 WhatsApp Us</a>
           </div>
         </div>
       </div>`;
