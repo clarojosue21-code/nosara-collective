@@ -1436,14 +1436,22 @@ nav.scrolled{
     <h2 class="section-title">Nosara Surf</h2>
     <p class="section-sub">Playa Guiones — one of the most consistent beach breaks in Central America. Best surf: May–November. Offshore winds: Dec–April.</p>
     <div class="surf-updated" id="surfUpdated">Updating conditions...</div>
-
-    <!-- Live Windy wave forecast -->
-    <div class="windy-wrap">
-      <iframe class="windy-frame" src="https://embed.windy.com/embed2.html?lat=9.976&lon=-85.653&detailLat=9.976&detailLon=-85.653&zoom=10&level=surface&overlay=waves&product=ecmwf&menu=false&message=true&marker=true&calendar=now&pressure=false&type=map&location=coordinates&detail=true&metricWind=km%2Fh&metricTemp=%C2%B0C" frameborder="0" allowfullscreen loading="lazy"></iframe>
-      <div class="windy-caption">🌊 Live wave forecast — click anywhere on the map to see the surf report for that spot. Tap the clock to see the next 10 days.</div>
-    </div>
-
     <div class="surf-cards">
+      <div class="surf-card">
+        <div class="surf-card-label">Wave Height</div>
+        <div class="surf-card-val" id="waveToday">—</div>
+        <div class="surf-card-desc" id="waveTodayDesc">Loading...</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Swell Period</div>
+        <div class="surf-card-val" id="swellPeriod">—</div>
+        <div class="surf-card-desc" id="swellPeriodDesc">Loading...</div>
+      </div>
+      <div class="surf-card">
+        <div class="surf-card-label">Swell Direction</div>
+        <div class="surf-card-val" id="swellDir">—</div>
+        <div class="surf-card-desc" id="swellDirDesc">Loading...</div>
+      </div>
       <div class="surf-card">
         <div class="surf-card-label">Wind</div>
         <div class="surf-card-val" id="windToday">—</div>
@@ -1456,7 +1464,7 @@ nav.scrolled{
       </div>
       <div class="surf-card">
         <div class="surf-card-label">Water Temp</div>
-        <div class="surf-card-val">28°C / 82°F</div>
+        <div class="surf-card-val">82°F / 28°C</div>
         <div class="surf-card-desc">Warm year-round 🌊</div>
       </div>
       <div class="surf-card">
@@ -2357,47 +2365,56 @@ function approxTide(date){
 
 async function loadSurfConditions(){
   const now=new Date();
-  const hr=now.getHours();
   const timeStr=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   function mToFt(m){return(m*3.281).toFixed(1);}
 
-  // Wind — always available
+  // Wind — standard forecast API, always reliable
   try{
-    const wr=await fetch('https://api.open-meteo.com/v1/forecast?latitude=9.976&longitude=-85.653&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=America%2FCosta_Rica&forecast_days=1');
+    const wr=await fetch('https://api.open-meteo.com/v1/forecast?latitude=9.976&longitude=-85.653&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=America%2FCosta_Rica');
     const wd=await wr.json();
-    if(wd.hourly){
-      const ws=Math.round(wd.hourly.wind_speed_10m[hr]||0);
-      const wdir=Math.round(wd.hourly.wind_direction_10m[hr]||0);
-      const wg=Math.round(wd.hourly.wind_gusts_10m[hr]||0);
+    if(wd.current){
+      const ws=Math.round(wd.current.wind_speed_10m||0);
+      const wdir=Math.round(wd.current.wind_direction_10m||0);
+      const wg=Math.round(wd.current.wind_gusts_10m||0);
       setSurf('windToday',ws+' km/h');
-      setSurf('windTodayDesc',`${degToCompass(wdir)} · gusts ${wg} km/h · ${windDesc(ws)}`);
+      setSurf('windTodayDesc',degToCompass(wdir)+' · gusts '+wg+' km/h · '+windDesc(ws));
     }
   }catch(e){setSurf('windTodayDesc','Check local conditions');}
 
-  // Marine — use offshore Pacific point for better model coverage
-  try{
-    const mr=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=9.0&longitude=-87.0&hourly=wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction&timezone=America%2FCosta_Rica&forecast_days=1');
-    const md=await mr.json();
-    if(md.hourly&&md.hourly.wave_height&&md.hourly.wave_height[hr]!=null){
-      const wh=md.hourly.wave_height[hr]||0;
-      const wp=Math.round(md.hourly.wave_period[hr]||0);
-      const swh=md.hourly.swell_wave_height[hr]||0;
-      const swp=Math.round(md.hourly.swell_wave_period[hr]||0);
-      const swd=Math.round(md.hourly.swell_wave_direction[hr]||0);
-      const wwd=Math.round(md.hourly.wave_direction[hr]||0);
-      setSurf('waveToday',mToFt(wh)+' ft');
-      setSurf('waveTodayDesc',waveDesc(wh));
-      setSurf('swellPeriod',swp+'s');
-      setSurf('swellPeriodDesc',mToFt(swh)+' ft swell · wave period '+wp+'s');
-      setSurf('swellDir',degToCompass(swd));
-      setSurf('swellDirDesc',swd+'° · wave from '+degToCompass(wwd));
-    } else {
-      setSurf('waveToday','—');setSurf('waveTodayDesc','No marine data — check Surfline');
-      setSurf('swellPeriod','—');setSurf('swellDir','—');
-    }
-  }catch(e){
-    setSurf('waveToday','—');setSurf('waveTodayDesc','Check Surfline for conditions');
-    setSurf('swellPeriod','—');setSurf('swellDir','—');
+  // Marine — current endpoint, offshore Pacific coordinates
+  // Try multiple coordinate sets until one returns valid data
+  const marineCandidates=[
+    [8.5,-87.5],[9.0,-87.0],[9.5,-86.5],[10.0,-87.0]
+  ];
+  let waveLoaded=false;
+  for(const[lat,lon] of marineCandidates){
+    if(waveLoaded)break;
+    try{
+      const mr=await fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&current=wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction`);
+      const md=await mr.json();
+      const c=md.current;
+      if(c&&c.wave_height!=null&&c.wave_height>0){
+        const wh=c.wave_height;
+        const wp=Math.round(c.wave_period||0);
+        const swh=c.swell_wave_height||0;
+        const swp=Math.round(c.swell_wave_period||0);
+        const swd=Math.round(c.swell_wave_direction||0);
+        const wwd=Math.round(c.wave_direction||0);
+        setSurf('waveToday',mToFt(wh)+' ft');
+        setSurf('waveTodayDesc',waveDesc(wh));
+        setSurf('swellPeriod',swp+'s');
+        setSurf('swellPeriodDesc',mToFt(swh)+' ft swell · '+wp+'s period');
+        setSurf('swellDir',degToCompass(swd));
+        setSurf('swellDirDesc',swd+'° · wave from '+degToCompass(wwd));
+        waveLoaded=true;
+      }
+    }catch(e){}
+  }
+  if(!waveLoaded){
+    setSurf('waveToday','—');
+    setSurf('waveTodayDesc','Check Surfline · surfline.com');
+    setSurf('swellPeriod','—');setSurf('swellPeriodDesc','');
+    setSurf('swellDir','—');setSurf('swellDirDesc','');
   }
 
   // Tide (harmonic model)
