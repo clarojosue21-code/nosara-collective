@@ -38,7 +38,7 @@ function parseIcal(text, propertyId) {
       );
       while (cur < end) {
         const dateStr = cur.toISOString().slice(0, 10);
-        dates.push({ property_id: propertyId, date: dateStr, source: 'airbnb' });
+        dates.push({ property_id: propertyId, date: dateStr, source: 'ical' });
         cur = new Date(cur.getTime() + 86400000);
       }
     }
@@ -72,7 +72,7 @@ async function syncIcal(propertyId, slug) {
   console.log('Total unique blocked dates for', slug, ':', unique.length);
 
   await supabase.from('blocked_dates').delete()
-    .eq('property_id', propertyId).eq('source', 'airbnb');
+    .eq('property_id', propertyId).eq('source', 'ical');
 
   if (unique.length > 0) {
     await supabase.from('blocked_dates').upsert(unique, { onConflict: 'property_id,date' });
