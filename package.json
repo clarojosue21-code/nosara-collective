@@ -4,6 +4,7 @@
   "description": "Nosara Collective Conscience — Luxury vacation rentals with community impact",
   "private": true,
   "dependencies": {
+    "@netlify/functions": "^2.8.1",
     "@supabase/supabase-js": "^2.39.0"
   },
   "engines": {
