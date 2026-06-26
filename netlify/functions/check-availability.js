@@ -107,9 +107,9 @@ exports.handler = async (event) => {
   if (check_in && check_out) {
     query.gte('date', check_in).lt('date', check_out);
   } else {
-    // Return next 6 months
+    // Return next 18 months
     const from = new Date().toISOString().slice(0, 10);
-    const to = new Date(Date.now() + 180 * 86400000).toISOString().slice(0, 10);
+    const to = new Date(Date.now() + 548 * 86400000).toISOString().slice(0, 10);
     query.gte('date', from).lte('date', to);
   }
 
