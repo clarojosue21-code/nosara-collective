@@ -2260,10 +2260,9 @@ async function submitBooking(){
   if(btn){btn.textContent='Processing...';btn.disabled=true;btn.style.background='var(--clay)';}
 
   try{
-    const apiBase='https://nosara-collective.netlify.app';
     const controller=new AbortController();
     const timeout=setTimeout(()=>controller.abort(),15000);
-    const res=await fetch(apiBase+'/.netlify/functions/create-reservation',{
+    const res=await fetch('/api/create-reservation',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       signal:controller.signal,
@@ -2742,7 +2741,7 @@ async function submitCartCheckout(){
   const propItem=cart.find(i=>i.type==='property');
 
   try{
-    const res=await fetch('https://nosara-collective.netlify.app/.netlify/functions/create-reservation',{
+    const res=await fetch('/api/create-reservation',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -2872,8 +2871,7 @@ setTimeout(()=>{
 
   // Capture the payment server-side (update DB + send email)
   try{
-    const apiBase='https://nosara-collective.netlify.app';
-    const res=await fetch(apiBase+'/.netlify/functions/capture-paypal-order',{
+    const res=await fetch('/api/capture-paypal-order',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({order_id:orderId,reference:ref})
