@@ -10,12 +10,12 @@ const ICAL_FEEDS = {
   arcilla1:         ['https://www.airbnb.com/calendar/ical/1364560824324105727.ics?t=36ef19af5ed1411085c3ef4d85c0cac3'],
   arcilla2:         ['https://www.airbnb.com/calendar/ical/1364560764925270828.ics?t=9d789399c92d4524a05e2acf1bb6bb29'],
   ojosazules:       ['https://www.airbnb.com/calendar/ical/754963035673300946.ics?t=22dc8b6d04e34ca0a78c1ee28c729f19',
-                     'https://ical.booking.com/v1/export?t=7d88ee6c-c15e-4e79-966e-dade1c93501b'],
+                     'https://ical.booking.com/v1/export?t=455427e9-64bf-400d-9a1a-5d4a516b6090'],
   sol:              ['https://www.airbnb.com/calendar/ical/1076720749284905534.ics?t=69701c3ff73d47a69f4594ad8e1dd301'],
   mar:              ['https://www.airbnb.com/calendar/ical/1075348569613326856.ics?t=c902dda31cd34a35995f770e94af9958'],
   monkey:           ['https://www.airbnb.com/calendar/ical/32898115.ics?t=a9262281d6374e0f902ef7ff28c45701'],
   h7:               ['https://www.airbnb.com/calendar/ical/1340590425596595717.ics?t=a7ab7730fc8746ebbb8e20aef8ede4c3',
-                     'https://ical.booking.com/v1/export?t=83d193b0-4bc9-4516-bc3a-116a5c325d06'],
+                     'https://ical.booking.com/v1/export?t=18f8b98a-56f9-4dd3-885e-b7926a50f733'],
   'sol-mar-bundle': ['https://www.airbnb.com/calendar/ical/1338591346598949808.ics?t=7c55ce1e08da47c79e2da8e87eb3c704'],
 };
 
