@@ -86,5 +86,5 @@ const handler = async () => {
   return { statusCode: 200, body: JSON.stringify({ synced: results }) };
 };
 
-// Runs every 2 hours
-exports.handler = schedule('0 */2 * * *', handler);
+// Runs every 12 hours (6am and 6pm Costa Rica time)
+exports.handler = schedule('0 12,0 * * *', handler);
