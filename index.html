@@ -1006,6 +1006,7 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
 /* ─── RESPONSIVE ─── */
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:900px){
+  .about-grid{grid-template-columns:1fr!important;gap:2.5rem!important}
   .nav-links{display:none}
   .nav-inner{padding:0 1.25rem}
   section,#surf,#impact{padding:4rem 1.5rem}
@@ -1594,7 +1595,7 @@ nav.scrolled{
 <!-- ABOUT -->
 <section id="about" style="background:var(--black);padding:5rem 3rem">
   <div class="section-inner" style="max-width:1100px;margin:0 auto">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center">
+    <div class="about-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center">
       <div>
         <div style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--clay);margin-bottom:1rem;font-weight:700">About Us</div>
         <h2 style="font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;color:var(--bg);line-height:1.2;margin-bottom:1.5rem;letter-spacing:0.02em">We didn't build a rental platform.<br><em>We built a movement.</em></h2>
