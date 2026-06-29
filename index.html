@@ -2647,14 +2647,55 @@ function proceedToCheckout(){
   showCheckoutModal();
 }
 
+function calcPaymentFee(method, amount){
+  if(method==='paypal') return Math.round(amount*0.0349+0.49);
+  if(method==='wise')   return Math.round(amount*0.01);
+  return 0;
+}
+function paymentFeeLabel(method){
+  if(method==='paypal') return 'PayPal fee (3.49% + $0.49)';
+  if(method==='wise')   return 'Wise transfer fee (~1%)';
+  return '';
+}
+
+function updateCheckoutTotal(){
+  const method=document.querySelector('input[name="co_payment"]:checked')?.value||'paypal';
+  const base=parseFloat(document.getElementById('checkoutModal')?.dataset.base||0);
+  const ncc=parseFloat(document.getElementById('checkoutModal')?.dataset.ncc||0);
+  const subtotal=base+ncc;
+  const taxes=Math.round(subtotal*0.13);
+  const pfee=calcPaymentFee(method,subtotal+taxes);
+  const grand=subtotal+taxes+pfee;
+  const el=document.getElementById('co_pfee_row');
+  const gtEl=document.getElementById('co_grand');
+  const pfeeEl=document.getElementById('co_pfee_amt');
+  const pfeeLblEl=document.getElementById('co_pfee_lbl');
+  if(el) el.style.display=pfee>0?'flex':'none';
+  if(pfeeEl) pfeeEl.textContent='$'+pfee.toLocaleString();
+  if(pfeeLblEl) pfeeLblEl.textContent=paymentFeeLabel(method);
+  if(gtEl) gtEl.textContent='$'+grand.toLocaleString();
+  ['lbl_paypal','lbl_wise'].forEach(id=>{
+    const lbl=document.getElementById(id);
+    if(lbl) lbl.style.borderColor='var(--border-med)';
+  });
+  const active=document.getElementById('lbl_'+method);
+  if(active) active.style.borderColor='var(--clay)';
+}
+
 function showCheckoutModal(){
   const existing=document.getElementById('checkoutModal');
   if(existing)existing.remove();
-  const total=cart.reduce((s,i)=>s+(i.price||0),0);
-  const taxes=Math.round(total*0.13);
-  const grand=total+taxes;
+  const base=cart.reduce((s,i)=>s+(i.price||0),0);
+  const ncc=Math.round(base*0.10);
+  const subtotal=base+ncc;
+  const taxes=Math.round(subtotal*0.13);
+  const pfee=calcPaymentFee('paypal',subtotal+taxes);
+  const grand=subtotal+taxes+pfee;
+  const community=Math.round(base*0.05);
   const modal=document.createElement('div');
   modal.id='checkoutModal';
+  modal.dataset.base=base;
+  modal.dataset.ncc=ncc;
   modal.style.cssText='position:fixed;inset:0;background:rgba(20,18,16,0.88);z-index:700;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto';
   modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
   modal.innerHTML=`
@@ -2677,10 +2718,16 @@ function showCheckoutModal(){
               <div style="font-weight:700;color:var(--text)">${item.price>0?'$'+item.price.toLocaleString():'TBD'}</div>
             </div>`).join('')}
           <div style="display:flex;justify-content:space-between;padding:8px 14px;font-size:0.78rem;color:var(--text-muted)">
+            <span>Local Impact &amp; Flexibility Fee (10%)</span><span>$${ncc.toLocaleString()}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;font-size:0.78rem;color:var(--text-muted)">
             <span>Taxes (13% IVA)</span><span>$${taxes.toLocaleString()}</span>
           </div>
+          <div id="co_pfee_row" style="display:flex;justify-content:space-between;padding:8px 14px;font-size:0.78rem;color:var(--text-muted)">
+            <span id="co_pfee_lbl">${paymentFeeLabel('paypal')}</span><span id="co_pfee_amt">$${pfee.toLocaleString()}</span>
+          </div>
           <div style="display:flex;justify-content:space-between;padding:10px 14px;font-size:1rem;font-weight:700;color:var(--text);border-top:2px solid var(--border)">
-            <span>Total</span><span>$${grand.toLocaleString()}</span>
+            <span>Total</span><span id="co_grand">$${grand.toLocaleString()}</span>
           </div>
         </div>
 
@@ -2703,17 +2750,22 @@ function showCheckoutModal(){
 
         <!-- Payment Method -->
         <div style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay);margin-bottom:0.75rem;font-weight:700">Payment Method</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.5rem">
-          <label style="display:flex;align-items:center;gap:0.5rem;padding:12px;border:2px solid var(--border-med);cursor:pointer;font-size:0.78rem;background:var(--white)" id="lbl_paypal">
-            <input type="radio" name="co_payment" value="paypal" checked style="accent-color:var(--clay)" onchange="document.getElementById('lbl_paypal').style.borderColor='var(--clay)';document.getElementById('lbl_wise').style.borderColor='var(--border-med)'"> 🅿️ PayPal
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem">
+          <label style="display:flex;flex-direction:column;gap:2px;padding:12px;border:2px solid var(--clay);cursor:pointer;font-size:0.78rem;background:var(--white)" id="lbl_paypal">
+            <span style="display:flex;align-items:center;gap:6px"><input type="radio" name="co_payment" value="paypal" checked style="accent-color:var(--clay)" onchange="updateCheckoutTotal()"> 🅿️ PayPal</span>
+            <span style="font-size:0.62rem;color:var(--text-muted);margin-left:18px">Credit/debit card · 3.49%</span>
           </label>
-          <label style="display:flex;align-items:center;gap:0.5rem;padding:12px;border:2px solid var(--border-med);cursor:pointer;font-size:0.78rem;background:var(--white)" id="lbl_wise">
-            <input type="radio" name="co_payment" value="wise" style="accent-color:var(--clay)" onchange="document.getElementById('lbl_wise').style.borderColor='var(--clay)';document.getElementById('lbl_paypal').style.borderColor='var(--border-med)'"> 🌍 Wise Transfer
+          <label style="display:flex;flex-direction:column;gap:2px;padding:12px;border:2px solid var(--border-med);cursor:pointer;font-size:0.78rem;background:var(--white)" id="lbl_wise">
+            <span style="display:flex;align-items:center;gap:6px"><input type="radio" name="co_payment" value="wise" style="accent-color:var(--clay)" onchange="updateCheckoutTotal()"> 🌍 Wise</span>
+            <span style="font-size:0.62rem;color:var(--text-muted);margin-left:18px">Bank transfer · ~1%</span>
           </label>
+        </div>
+        <div style="font-size:0.62rem;color:var(--text-muted);margin-bottom:1.5rem;text-align:center;font-family:'DM Mono',monospace">
+          💡 Save with Wise — lowest fees for international transfers
         </div>
 
         <div style="background:rgba(43,122,142,0.06);border:1px solid rgba(43,122,142,0.15);padding:12px;margin-bottom:1.5rem;font-size:0.75rem;color:var(--ocean);line-height:1.7">
-          ♥ <strong>$${Math.round(total*0.05).toLocaleString()}</strong> of your order goes directly to local Nosara families.
+          🌱 <strong>$${community.toLocaleString()}</strong> of your booking goes directly to local families &amp; conservation projects in Nosara.
         </div>
 
         <button onclick="submitCartCheckout()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:16px;font-size:0.7rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Space Grotesk',sans-serif" id="co_btn">

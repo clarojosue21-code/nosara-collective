@@ -131,10 +131,12 @@ exports.handler = async (event) => {
 
   const nights = Math.round((new Date(check_out) - new Date(check_in)) / 86400000);
   const accommodation_total = property.price_per_night * nights;
-  const taxes = Math.round(accommodation_total * 0.13);
-  const grand_total = accommodation_total + taxes;
+  const ncc_fee = Math.round(accommodation_total * 0.10);
+  const subtotal = accommodation_total + ncc_fee;
+  const taxes = Math.round(subtotal * 0.13);
+  const grand_total = subtotal + taxes;
   const community_impact = Math.round(accommodation_total * 0.05);
-  const owner_payout = Math.round(accommodation_total * 0.90);
+  const owner_payout = accommodation_total;
   const company_allocation = Math.round(accommodation_total * 0.05);
 
   const reference = generateReference();
@@ -177,6 +179,7 @@ exports.handler = async (event) => {
     property_name: property.name,
     nights,
     accommodation_total,
+    ncc_fee,
     taxes,
     grand_total,
     community_impact,

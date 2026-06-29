@@ -56,6 +56,7 @@ async function sendConfirmationEmail(reservation, propertyName) {
         <div style="font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#C4784A;margin-bottom:16px;font-weight:700">Payment Summary</div>
         <table style="width:100%;border-collapse:collapse;font-size:14px">
           <tr><td style="padding:6px 0;color:#5A5548">Accommodation (${reservation.nights} nights)</td><td style="padding:6px 0;color:#141210;text-align:right">$${reservation.accommodation_total.toLocaleString()}</td></tr>
+          <tr><td style="padding:6px 0;color:#5A5548">Local Impact & Flexibility Fee (10%)</td><td style="padding:6px 0;color:#141210;text-align:right">$${Math.round(reservation.accommodation_total*0.10).toLocaleString()}</td></tr>
           <tr><td style="padding:6px 0;color:#5A5548">Taxes (13% IVA)</td><td style="padding:6px 0;color:#141210;text-align:right">$${reservation.taxes.toLocaleString()}</td></tr>
           <tr style="border-top:1px solid rgba(20,18,16,0.15)"><td style="padding:10px 0 6px;font-weight:700;color:#141210">Total Paid</td><td style="padding:10px 0 6px;font-weight:700;color:#141210;text-align:right;font-size:18px">$${reservation.grand_total.toLocaleString()}</td></tr>
         </table>
