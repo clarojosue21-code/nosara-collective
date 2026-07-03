@@ -1364,15 +1364,30 @@ nav.scrolled{
   <div class="nav-inner">
     <div class="nav-logo" onclick="scrollTo(0,0)">NOSARA <span>COLLECTIVE</span><span style="font-size:0.5rem;color:rgba(28,26,22,0.4);font-weight:400;letter-spacing:0.1em;margin-left:4px">CONSCIENCE</span></div>
     <ul class="nav-links">
-      <li><a href="#properties">Stay</a></li>
-      <li><a href="#concierge">Concierge</a></li>
-      <li><a href="#retreats">Retreats</a></li>
-      
-      <li><a href="#lots">Invest</a></li>
-      <li><a href="#guide">Guide</a></li>
-      <li><a href="#impact">Impact</a></li>
+      <li><a href="#properties" data-i18n="nav_stay">Stay</a></li>
+      <li><a href="#concierge" data-i18n="nav_concierge">Concierge</a></li>
+      <li><a href="#retreats" data-i18n="nav_retreats">Retreats</a></li>
+      <li><a href="#lots" data-i18n="nav_invest">Invest</a></li>
+      <li><a href="#guide" data-i18n="nav_guide">Guide</a></li>
+      <li><a href="#impact" data-i18n="nav_impact">Impact</a></li>
     </ul>
-    <button class="nav-cart" onclick="toggleCart()">🛒 Cart <span id="cartCount" style="background:var(--clay);color:#fff;border-radius:50%;padding:1px 6px;font-size:0.65rem;margin-left:4px">0</span></button>
+    <div style="display:flex;align-items:center;gap:0.75rem">
+      <div style="position:relative">
+        <button id="langBtn" onclick="toggleLangMenu()" style="background:none;border:1px solid var(--border);padding:5px 10px;font-size:0.65rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;cursor:pointer;color:var(--text-mid);display:flex;align-items:center;gap:4px">
+          🌐 <span id="langLabel">EN</span> ▾
+        </button>
+        <div id="langMenu" style="display:none;position:absolute;right:0;top:110%;background:var(--white);border:1px solid var(--border);z-index:999;min-width:140px;box-shadow:0 4px 16px rgba(0,0,0,0.12)">
+          <button onclick="setLang('en')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇺🇸 English</button>
+          <button onclick="setLang('es')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇪🇸 Español</button>
+          <button onclick="setLang('fr')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇫🇷 Français</button>
+          <button onclick="setLang('de')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇩🇪 Deutsch</button>
+          <button onclick="setLang('pt')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇧🇷 Português</button>
+          <button onclick="setLang('ru')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇷🇺 Русский</button>
+          <button onclick="setLang('hi')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer">🇮🇳 हिन्दी</button>
+        </div>
+      </div>
+      <button class="nav-cart" onclick="toggleCart()">🛒 Cart <span id="cartCount" style="background:var(--clay);color:#fff;border-radius:50%;padding:1px 6px;font-size:0.65rem;margin-left:4px">0</span></button>
+    </div>
   </div>
 </nav><div style="background:#1A1916;border-bottom:2px solid var(--clay);padding:11px 2rem;text-align:center;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
   <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400"><span style="color:var(--clay);font-weight:700">Conscience Collective</span></span>
@@ -2433,6 +2448,38 @@ async function submitBooking(){
   }
 }
 
+function showBankTransferConfirmation(data){
+  const modal=document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;background:rgba(20,18,16,0.88);z-index:700;display:flex;align-items:center;justify-content:center;padding:1rem';
+  modal.innerHTML=`
+    <div style="background:var(--white);max-width:480px;width:100%;border:2px solid var(--border)">
+      <div style="background:var(--text);padding:1.5rem 2rem">
+        <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--clay)">NOSARA COLLECTIVE CONSCIENCE</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--bg);margin-top:4px">Dates Reserved ✓</div>
+      </div>
+      <div style="padding:2rem">
+        <div style="background:#FFF8E8;border:1px solid #E8C860;border-left:4px solid #E8C860;padding:16px;margin-bottom:1.5rem">
+          <div style="font-size:0.78rem;color:#8A6A10;line-height:1.9">
+            ⏳ <strong>28-Hour Hold Active</strong><br>
+            Your dates at <strong>${data.property_name||''}</strong> are reserved exclusively for you.<br>
+            Reference: <strong>${data.reference}</strong>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--text-mid);line-height:1.9;margin-bottom:1.5rem">
+          Our team will send you the bank transfer details via <strong>WhatsApp and email within the next few minutes</strong>. Once we confirm receipt of funds, your booking will be fully confirmed.
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);padding:14px;margin-bottom:1.5rem;font-size:0.75rem;color:var(--text-muted);line-height:1.8;font-family:'DM Mono',monospace">
+          Total to transfer: <strong style="color:var(--text);font-size:1rem">$${(data.grand_total||0).toLocaleString()} USD</strong><br>
+          Hold expires in: <strong style="color:#C4784A">28 hours</strong>
+        </div>
+        <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Space Grotesk',sans-serif">
+          Got it — I'll wait for bank details →
+        </button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
 function showWiseInstructions(data){
   const ref=data.reference;
   const amount=data.grand_total;
@@ -2787,6 +2834,7 @@ function calcPaymentFee(method, amount){
 function paymentFeeLabel(method){
   if(method==='paypal') return 'PayPal fee (3.49% + $0.49)';
   if(method==='wise')   return 'Wise transfer fee (~1%)';
+  if(method==='bank_transfer') return '';
   return '';
 }
 
@@ -2806,12 +2854,14 @@ function updateCheckoutTotal(){
   if(pfeeEl) pfeeEl.textContent='$'+pfee.toLocaleString();
   if(pfeeLblEl) pfeeLblEl.textContent=paymentFeeLabel(method);
   if(gtEl) gtEl.textContent='$'+grand.toLocaleString();
-  ['lbl_paypal','lbl_wise'].forEach(id=>{
+  ['lbl_paypal','lbl_wise','lbl_bank_transfer'].forEach(id=>{
     const lbl=document.getElementById(id);
     if(lbl) lbl.style.borderColor='var(--border-med)';
   });
   const active=document.getElementById('lbl_'+method);
   if(active) active.style.borderColor='var(--clay)';
+  const bankNote=document.getElementById('bank_transfer_note');
+  if(bankNote) bankNote.style.display=method==='bank_transfer'?'block':'none';
 }
 
 function showCheckoutModal(){
@@ -2882,7 +2932,7 @@ function showCheckoutModal(){
 
         <!-- Payment Method -->
         <div style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay);margin-bottom:0.75rem;font-weight:700">Payment Method</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1rem">
           <label style="display:flex;flex-direction:column;gap:2px;padding:12px;border:2px solid var(--clay);cursor:pointer;font-size:0.78rem;background:var(--white)" id="lbl_paypal">
             <span style="display:flex;align-items:center;gap:6px"><input type="radio" name="co_payment" value="paypal" checked style="accent-color:var(--clay)" onchange="updateCheckoutTotal()"> 🅿️ PayPal</span>
             <span style="font-size:0.62rem;color:var(--text-muted);margin-left:18px">Credit/debit card · 3.49%</span>
@@ -2891,9 +2941,16 @@ function showCheckoutModal(){
             <span style="display:flex;align-items:center;gap:6px"><input type="radio" name="co_payment" value="wise" style="accent-color:var(--clay)" onchange="updateCheckoutTotal()"> 🌍 Wise</span>
             <span style="font-size:0.62rem;color:var(--text-muted);margin-left:18px">Bank transfer · ~1%</span>
           </label>
+          <label style="display:flex;flex-direction:column;gap:2px;padding:12px;border:2px solid var(--border-med);cursor:pointer;font-size:0.78rem;background:var(--white)" id="lbl_bank_transfer">
+            <span style="display:flex;align-items:center;gap:6px"><input type="radio" name="co_payment" value="bank_transfer" style="accent-color:var(--clay)" onchange="updateCheckoutTotal()"> 🏦 Bank Transfer</span>
+            <span style="font-size:0.62rem;color:var(--text-muted);margin-left:18px">Wire / SWIFT · No fee</span>
+          </label>
+        </div>
+        <div id="bank_transfer_note" style="display:none;background:#FFF8E8;border:1px solid #E8C860;border-left:3px solid #E8C860;padding:14px;margin-bottom:1rem;font-size:0.75rem;color:#8A6A10;line-height:1.8">
+          ⏳ <strong>28-Hour Hold</strong> — Your selected dates and property will be reserved exclusively at your name. We will send you our bank transfer details via WhatsApp and email within minutes. Once we confirm receipt of funds, your booking is fully confirmed.
         </div>
         <div style="font-size:0.62rem;color:var(--text-muted);margin-bottom:1.5rem;text-align:center;font-family:'DM Mono',monospace">
-          💡 Save with Wise — lowest fees for international transfers
+          💡 Bank Transfer has no extra fee — ideal for large amounts
         </div>
 
         <div style="background:rgba(43,122,142,0.06);border:1px solid rgba(43,122,142,0.15);padding:12px;margin-bottom:1.5rem;font-size:0.75rem;color:var(--ocean);line-height:1.7">
@@ -2952,6 +3009,13 @@ async function submitCartCheckout(){
       document.getElementById('cartBackdrop')?.classList.remove('open');
       document.body.style.overflow='';
       showWiseInstructions(data);
+      cart.length=0;updateCartCount();
+    } else if(paymentMethod==='bank_transfer'){
+      document.getElementById('checkoutModal')?.remove();
+      document.getElementById('cartPanel')?.classList.remove('open');
+      document.getElementById('cartBackdrop')?.classList.remove('open');
+      document.body.style.overflow='';
+      showBankTransferConfirmation(data);
       cart.length=0;updateCartCount();
     }
   }catch(e){
@@ -3172,6 +3236,163 @@ const CDP=(function(){
   };
 })();
 document.addEventListener('DOMContentLoaded',()=>CDP.init());
+</script>
+<script>
+// ─── LANGUAGE SYSTEM ───
+const TRANSLATIONS = {
+  en: {
+    nav_stay:'Stay', nav_concierge:'Concierge', nav_retreats:'Retreats',
+    nav_invest:'Invest', nav_guide:'Guide', nav_impact:'Impact',
+    hero_tag:'Nosara · Costa Rica', hero_h1:'Luxury Stays.\nLocal Impact.',
+    hero_sub:'Direct booking. No middlemen. 5% to the community.',
+    hero_cta:'Explore Properties', hero_cta2:'Our Story',
+    sect_stay:'Where to Stay', sect_concierge:'Concierge Services',
+    sect_impact:'Community Impact', sect_guide:'Nosara Guide',
+    book_btn:'Book Now', cart_btn:'Cart', checkout_title:'Checkout',
+    book_note:'🔒 Secure checkout · 5% supports Nosara families · Dates sync with Airbnb',
+    footer_tagline:'Travel with purpose. Stay with impact.',
+    payment_paypal:'Credit/debit card · 3.49%', payment_wise:'Bank transfer · ~1%',
+    payment_bank:'Wire / SWIFT · No fee',
+    bank_hold_title:'28-Hour Hold', bank_hold_msg:'Your selected dates and property will be reserved exclusively in your name. We will send you our bank transfer details via WhatsApp and email within minutes.',
+    complete_order:'Complete Order →', processing:'Processing...',
+  },
+  es: {
+    nav_stay:'Hospedaje', nav_concierge:'Concierge', nav_retreats:'Retiros',
+    nav_invest:'Invertir', nav_guide:'Guía', nav_impact:'Impacto',
+    hero_tag:'Nosara · Costa Rica', hero_h1:'Hospedaje de Lujo.\nImpacto Local.',
+    hero_sub:'Reserva directa. Sin intermediarios. 5% para la comunidad.',
+    hero_cta:'Ver Propiedades', hero_cta2:'Nuestra Historia',
+    sect_stay:'Dónde Hospedarse', sect_concierge:'Servicios Concierge',
+    sect_impact:'Impacto Comunitario', sect_guide:'Guía de Nosara',
+    book_btn:'Reservar', cart_btn:'Carrito', checkout_title:'Checkout',
+    book_note:'🔒 Pago seguro · 5% apoya familias de Nosara · Fechas sincronizadas con Airbnb',
+    footer_tagline:'Viaja con propósito. Quédate con impacto.',
+    payment_paypal:'Tarjeta crédito/débito · 3.49%', payment_wise:'Transferencia · ~1%',
+    payment_bank:'Transferencia bancaria · Sin cargo',
+    bank_hold_title:'Reserva por 28 Horas', bank_hold_msg:'Tus fechas y propiedad seleccionadas quedarán reservadas exclusivamente a tu nombre. Te enviaremos los datos bancarios por WhatsApp y email en minutos.',
+    complete_order:'Completar Reserva →', processing:'Procesando...',
+  },
+  fr: {
+    nav_stay:'Séjour', nav_concierge:'Conciergerie', nav_retreats:'Retraites',
+    nav_invest:'Investir', nav_guide:'Guide', nav_impact:'Impact',
+    hero_tag:'Nosara · Costa Rica', hero_h1:'Séjours de Luxe.\nImpact Local.',
+    hero_sub:'Réservation directe. Sans intermédiaires. 5% pour la communauté.',
+    hero_cta:'Voir les Propriétés', hero_cta2:'Notre Histoire',
+    sect_stay:'Où Séjourner', sect_concierge:'Services de Conciergerie',
+    sect_impact:'Impact Communautaire', sect_guide:'Guide de Nosara',
+    book_btn:'Réserver', cart_btn:'Panier', checkout_title:'Paiement',
+    book_note:'🔒 Paiement sécurisé · 5% soutient les familles de Nosara',
+    footer_tagline:'Voyagez avec intention. Séjournez avec impact.',
+    payment_paypal:'Carte crédit/débit · 3.49%', payment_wise:'Virement bancaire · ~1%',
+    payment_bank:'Virement SWIFT · Sans frais',
+    bank_hold_title:'Réservation 28 Heures', bank_hold_msg:'Vos dates et votre propriété seront réservées exclusivement à votre nom. Nous vous enverrons les coordonnées bancaires par WhatsApp et email sous quelques minutes.',
+    complete_order:'Finaliser →', processing:'Traitement...',
+  },
+  de: {
+    nav_stay:'Unterkunft', nav_concierge:'Concierge', nav_retreats:'Retreats',
+    nav_invest:'Investieren', nav_guide:'Reiseführer', nav_impact:'Wirkung',
+    hero_tag:'Nosara · Costa Rica', hero_h1:'Luxusaufenthalte.\nLokale Wirkung.',
+    hero_sub:'Direktbuchung. Keine Vermittler. 5% für die Gemeinschaft.',
+    hero_cta:'Unterkünfte Entdecken', hero_cta2:'Unsere Geschichte',
+    sect_stay:'Unterkünfte', sect_concierge:'Concierge-Services',
+    sect_impact:'Gemeinschaftliche Wirkung', sect_guide:'Nosara Reiseführer',
+    book_btn:'Jetzt Buchen', cart_btn:'Warenkorb', checkout_title:'Kasse',
+    book_note:'🔒 Sichere Zahlung · 5% unterstützt Nosara-Familien',
+    footer_tagline:'Reisen mit Sinn. Bleiben mit Wirkung.',
+    payment_paypal:'Kredit-/Debitkarte · 3.49%', payment_wise:'Banküberweisung · ~1%',
+    payment_bank:'SWIFT-Überweisung · Kostenlos',
+    bank_hold_title:'28-Stunden-Reservierung', bank_hold_msg:'Ihre ausgewählten Daten und die Unterkunft werden exklusiv auf Ihren Namen reserviert. Wir senden Ihnen die Bankdaten innerhalb von Minuten per WhatsApp und E-Mail.',
+    complete_order:'Bestellung Abschließen →', processing:'Verarbeitung...',
+  },
+  pt: {
+    nav_stay:'Hospedagem', nav_concierge:'Concierge', nav_retreats:'Retiros',
+    nav_invest:'Investir', nav_guide:'Guia', nav_impact:'Impacto',
+    hero_tag:'Nosara · Costa Rica', hero_h1:'Estadias de Luxo.\nImpacto Local.',
+    hero_sub:'Reserva direta. Sem intermediários. 5% para a comunidade.',
+    hero_cta:'Ver Propriedades', hero_cta2:'Nossa História',
+    sect_stay:'Onde Ficar', sect_concierge:'Serviços de Concierge',
+    sect_impact:'Impacto Comunitário', sect_guide:'Guia de Nosara',
+    book_btn:'Reservar', cart_btn:'Carrinho', checkout_title:'Pagamento',
+    book_note:'🔒 Pagamento seguro · 5% apoia famílias de Nosara',
+    footer_tagline:'Viaje com propósito. Fique com impacto.',
+    payment_paypal:'Cartão crédito/débito · 3.49%', payment_wise:'Transferência · ~1%',
+    payment_bank:'Transferência bancária · Sem taxa',
+    bank_hold_title:'Reserva por 28 Horas', bank_hold_msg:'As datas e propriedade selecionadas ficarão reservadas exclusivamente em seu nome. Enviaremos os dados bancários por WhatsApp e email em minutos.',
+    complete_order:'Concluir Reserva →', processing:'Processando...',
+  },
+  ru: {
+    nav_stay:'Жильё', nav_concierge:'Консьерж', nav_retreats:'Ретриты',
+    nav_invest:'Инвестиции', nav_guide:'Гид', nav_impact:'Вклад',
+    hero_tag:'Носара · Коста-Рика', hero_h1:'Роскошный Отдых.\nЛокальное Влияние.',
+    hero_sub:'Прямое бронирование. Без посредников. 5% — сообществу.',
+    hero_cta:'Смотреть Виллы', hero_cta2:'О Нас',
+    sect_stay:'Где Остановиться', sect_concierge:'Консьерж-услуги',
+    sect_impact:'Вклад в Сообщество', sect_guide:'Гид по Носаре',
+    book_btn:'Забронировать', cart_btn:'Корзина', checkout_title:'Оформление',
+    book_note:'🔒 Безопасная оплата · 5% поддерживает семьи Носары',
+    footer_tagline:'Путешествуйте осознанно. Отдыхайте с пользой.',
+    payment_paypal:'Карта · 3.49%', payment_wise:'Банковский перевод · ~1%',
+    payment_bank:'SWIFT-перевод · Без комиссии',
+    bank_hold_title:'Бронь на 28 Часов', bank_hold_msg:'Выбранные даты и объект будут зарезервированы исключительно на ваше имя. Мы отправим банковские реквизиты через WhatsApp и email в течение нескольких минут.',
+    complete_order:'Подтвердить →', processing:'Обработка...',
+  },
+  hi: {
+    nav_stay:'ठहरना', nav_concierge:'कंसीयर्ज', nav_retreats:'रिट्रीट',
+    nav_invest:'निवेश', nav_guide:'गाइड', nav_impact:'प्रभाव',
+    hero_tag:'नोसारा · कोस्टा रिका', hero_h1:'लक्जरी प्रवास।\nस्थानीय प्रभाव।',
+    hero_sub:'सीधी बुकिंग। कोई बिचौलिया नहीं। 5% समुदाय के लिए।',
+    hero_cta:'प्रॉपर्टी देखें', hero_cta2:'हमारी कहानी',
+    sect_stay:'कहाँ ठहरें', sect_concierge:'कंसीयर्ज सेवाएं',
+    sect_impact:'सामुदायिक प्रभाव', sect_guide:'नोसारा गाइड',
+    book_btn:'अभी बुक करें', cart_btn:'कार्ट', checkout_title:'चेकआउट',
+    book_note:'🔒 सुरक्षित भुगतान · 5% नोसारा परिवारों की मदद करता है',
+    footer_tagline:'उद्देश्य के साथ यात्रा करें। प्रभाव के साथ रुकें।',
+    payment_paypal:'क्रेडिट/डेबिट कार्ड · 3.49%', payment_wise:'बैंक ट्रांसफर · ~1%',
+    payment_bank:'वायर ट्रांसफर · कोई शुल्क नहीं',
+    bank_hold_title:'28 घंटे की होल्ड', bank_hold_msg:'आपकी चुनी हुई तारीखें और प्रॉपर्टी विशेष रूप से आपके नाम पर आरक्षित कर दी जाएंगी। हम कुछ ही मिनटों में WhatsApp और ईमेल पर बैंक विवरण भेजेंगे।',
+    complete_order:'बुकिंग पूरी करें →', processing:'प्रोसेसिंग...',
+  }
+};
+
+const LANG_LABELS = {en:'EN',es:'ES',fr:'FR',de:'DE',pt:'PT',ru:'RU',hi:'HI'};
+
+function toggleLangMenu(){
+  const m=document.getElementById('langMenu');
+  m.style.display=m.style.display==='none'?'block':'none';
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#langBtn')&&!e.target.closest('#langMenu')){
+    const m=document.getElementById('langMenu');
+    if(m) m.style.display='none';
+  }
+});
+
+function setLang(lang){
+  localStorage.setItem('ncc_lang',lang);
+  document.getElementById('langLabel').textContent=LANG_LABELS[lang]||'EN';
+  document.getElementById('langMenu').style.display='none';
+  applyTranslations(lang);
+}
+
+function applyTranslations(lang){
+  const t=TRANSLATIONS[lang]||TRANSLATIONS['en'];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    if(t[key]!==undefined) el.textContent=t[key];
+  });
+}
+
+function detectAndSetLang(){
+  const saved=localStorage.getItem('ncc_lang');
+  if(saved&&TRANSLATIONS[saved]){setLang(saved);return;}
+  const browser=navigator.language||navigator.userLanguage||'en';
+  const code=browser.split('-')[0].toLowerCase();
+  const supported=['en','es','fr','de','pt','ru','hi'];
+  const lang=supported.includes(code)?code:'en';
+  setLang(lang);
+}
+
+detectAndSetLang();
 </script>
 </body>
 </html>

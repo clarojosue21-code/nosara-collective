@@ -202,7 +202,7 @@ exports.handler = async (event) => {
   } else if (payment_method === 'wise') {
     response.wise_instructions = {
       account_name: process.env.WISE_ACCOUNT_NAME || 'Nosara Collective Conscience',
-      email: process.env.WISE_EMAIL || 'info@nosaracollective.com',
+      email: process.env.WISE_EMAIL || 'info@nosaracollectiveconscience.com',
       amount: grand_total,
       currency: 'USD',
       reference,
@@ -212,6 +212,125 @@ exports.handler = async (event) => {
       .from('reservations')
       .update({ payment_status: 'pending', wise_reference: reference })
       .eq('id', reservation.id);
+  } else if (payment_method === 'bank_transfer') {
+    // Block dates temporarily for 28 hours
+    const holdExpiry = new Date(Date.now() + 28 * 60 * 60 * 1000).toISOString();
+    const dates = [];
+    let cur = new Date(check_in);
+    const end = new Date(check_out);
+    while (cur < end) {
+      dates.push({
+        property_id: property.id,
+        date: cur.toISOString().slice(0, 10),
+        source: 'hold',
+        reservation_id: reservation.id,
+      });
+      cur = new Date(cur.getTime() + 86400000);
+    }
+    await supabase.from('blocked_dates').upsert(dates, { onConflict: 'property_id,date' });
+    await supabase
+      .from('reservations')
+      .update({ payment_status: 'pending_bank_transfer', hold_expires_at: holdExpiry })
+      .eq('id', reservation.id);
+
+    // Notify admin via email
+    const adminHtml = `
+<!DOCTYPE html><html><body style="font-family:monospace;background:#1A1916;padding:20px">
+<div style="max-width:600px;margin:0 auto;background:#252520;border:1px solid #3A3830;padding:32px">
+  <div style="color:#C4784A;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:8px">⏳ BANK TRANSFER HOLD — 28 HOURS</div>
+  <div style="color:#F0EDE6;font-size:20px;margin-bottom:24px">${reference}</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px;color:#A0988E">
+    <tr><td style="padding:5px 0">Guest</td><td style="color:#F0EDE6;text-align:right">${guest_name}</td></tr>
+    <tr><td style="padding:5px 0">Email</td><td style="color:#F0EDE6;text-align:right">${guest_email}</td></tr>
+    <tr><td style="padding:5px 0">Phone / WhatsApp</td><td style="color:#F0EDE6;text-align:right">${guest_phone || '—'}</td></tr>
+    <tr><td style="padding:5px 0">Property</td><td style="color:#F0EDE6;text-align:right">${property.name}</td></tr>
+    <tr><td style="padding:5px 0">Check-in</td><td style="color:#F0EDE6;text-align:right">${check_in}</td></tr>
+    <tr><td style="padding:5px 0">Check-out</td><td style="color:#F0EDE6;text-align:right">${check_out}</td></tr>
+    <tr><td style="padding:5px 0">Nights</td><td style="color:#F0EDE6;text-align:right">${nights}</td></tr>
+    <tr style="border-top:1px solid #3A3830"><td style="padding:8px 0 3px;color:#C4784A">Total to Receive</td><td style="color:#C4784A;text-align:right;font-size:16px">$${grand_total.toLocaleString()}</td></tr>
+  </table>
+  <div style="margin-top:24px;background:#2A3020;border:1px solid #4A6030;padding:16px;color:#8ABA6A;font-size:13px;line-height:1.8">
+    ⚡ ACTION REQUIRED<br>
+    Send your BAC Credomatic bank details to this guest via WhatsApp NOW.<br>
+    Hold expires in 28 hours. If payment not received, dates will be released automatically.
+  </div>
+</div>
+</body></html>`;
+
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Nosara Collective <bookings@nosaracollectiveconscience.com>',
+        to: process.env.ADMIN_EMAIL,
+        subject: `[NCC] ⏳ Bank Transfer Hold ${reference} — ${property.name} — SEND BANK DETAILS NOW`,
+        html: adminHtml,
+      }),
+    });
+
+    // Send guest confirmation email
+    const guestHtml = `
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:'Helvetica Neue',sans-serif;background:#F2EDE4;margin:0;padding:20px">
+  <div style="max-width:600px;margin:0 auto;background:#FDFAF5;border:2px solid #141210">
+    <div style="background:#141210;padding:32px 40px">
+      <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#C4784A;margin-bottom:8px;font-weight:700">NOSARA COLLECTIVE CONSCIENCE</div>
+      <div style="font-size:24px;color:#FDFAF5;font-weight:300;letter-spacing:0.04em">Dates Held — Awaiting Payment</div>
+    </div>
+    <div style="padding:40px">
+      <p style="color:#5A5548;line-height:1.8;margin-bottom:24px">Dear ${guest_name},<br><br>
+        Your selected dates at <strong style="color:#141210">${property.name}</strong> are now <strong>reserved exclusively for you for the next 28 hours</strong> while we process your bank transfer.
+      </p>
+      <div style="background:#FFF8E8;border:1px solid #E8C860;padding:20px;margin-bottom:24px;border-left:4px solid #E8C860">
+        <div style="font-size:13px;color:#8A6A10;line-height:1.8">
+          ⏳ <strong>28-Hour Hold Active</strong><br>
+          Our team will send you the bank transfer details via WhatsApp and email within the next few minutes. Once we confirm receipt of funds, your booking will be fully confirmed.
+        </div>
+      </div>
+      <div style="background:#F2EDE4;border:1px solid rgba(20,18,16,0.1);padding:24px;margin-bottom:24px">
+        <div style="font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#C4784A;margin-bottom:16px;font-weight:700">Reservation Summary</div>
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <tr><td style="padding:6px 0;color:#5A5548">Reference</td><td style="padding:6px 0;font-weight:700;color:#141210;text-align:right">${reference}</td></tr>
+          <tr><td style="padding:6px 0;color:#5A5548">Property</td><td style="padding:6px 0;color:#141210;text-align:right">${property.name}</td></tr>
+          <tr><td style="padding:6px 0;color:#5A5548">Check-in</td><td style="padding:6px 0;color:#141210;text-align:right">${check_in}</td></tr>
+          <tr><td style="padding:6px 0;color:#5A5548">Check-out</td><td style="padding:6px 0;color:#141210;text-align:right">${check_out}</td></tr>
+          <tr><td style="padding:6px 0;color:#5A5548">Nights</td><td style="padding:6px 0;color:#141210;text-align:right">${nights}</td></tr>
+          <tr style="border-top:1px solid rgba(20,18,16,0.15)"><td style="padding:10px 0 6px;font-weight:700;color:#141210">Total Amount</td><td style="padding:10px 0 6px;font-weight:700;color:#141210;text-align:right;font-size:18px">$${grand_total.toLocaleString()}</td></tr>
+        </table>
+      </div>
+      <p style="color:#5A5548;font-size:13px;line-height:1.8">
+        Questions? WhatsApp us: <a href="https://wa.me/${(process.env.ADMIN_WHATSAPP||'').replace('+','')}" style="color:#C4784A">${process.env.ADMIN_WHATSAPP}</a>
+      </p>
+      <div style="border-top:1px solid rgba(20,18,16,0.1);padding-top:20px;font-size:11px;color:#8A8278;line-height:1.8">
+        Nosara Collective Conscience · Nosara, Guanacaste, Costa Rica<br>
+        Travel with purpose. Stay with impact. 🌴
+      </div>
+    </div>
+  </div>
+</body></html>`;
+
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Nosara Collective <bookings@nosaracollectiveconscience.com>',
+        to: guest_email,
+        subject: `Dates Held for You — ${reference} · ${property.name}`,
+        html: guestHtml,
+      }),
+    });
+
+    response.bank_transfer = {
+      hold_hours: 28,
+      hold_expires_at: holdExpiry,
+      message: 'Your dates are held for 28 hours. Bank details will be sent to you via WhatsApp and email shortly.',
+    };
   }
 
   return {
