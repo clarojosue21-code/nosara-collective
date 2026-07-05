@@ -547,12 +547,30 @@ section{padding:5rem 3rem}
 .service-card.has-photo:hover .sc-icon{filter:brightness(2);}
 .sc-header-left,.sc-price-inline,.sc-chevron{position:relative;z-index:1;}
 .sc-name,.sc-price-inline,.sc-chevron,.sc-icon{transition:color 0.25s,filter 0.25s;}
-.sc-body{position:relative;z-index:2;background:var(--white);}
 .sc-body{
-  display:none;padding:0 1rem 1rem;
-  border-top:1px solid var(--border-light);
+  display:none;padding:1rem 1.25rem 1.25rem;
+  position:relative;z-index:2;
+  background:#1A1916;
+  border-top:2px solid var(--clay);
 }
 .service-card.open .sc-body{display:block;}
+.sc-body .sc-desc{color:rgba(245,240,232,0.75)!important;}
+.sc-body .sc-opt label{color:rgba(196,120,74,0.9)!important;}
+.sc-body .sc-opt input,
+.sc-body .sc-opt select,
+.sc-body .sc-opt textarea{
+  background:#2A2824!important;
+  border-color:#3A3630!important;
+  color:#F5F0E8!important;
+}
+.sc-body .sc-opt input::placeholder,
+.sc-body .sc-opt textarea::placeholder{color:rgba(245,240,232,0.3)!important;}
+.sc-body .sc-opt select option{background:#2A2824;color:#F5F0E8;}
+.sc-body .sc-add-btn{
+  background:var(--clay)!important;
+  color:#F5F0E8!important;
+  border:none;
+}
 .sc-desc{font-size:0.75rem;color:var(--text-muted);line-height:1.7;margin-bottom:0.75rem;margin-top:0.75rem}
 .sc-options{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.75rem}
 .sc-opt{display:flex;flex-direction:column;gap:3px}
