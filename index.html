@@ -502,9 +502,9 @@ section{padding:5rem 3rem}
   display:flex;align-items:center;justify-content:space-between;
   padding:1.1rem 1.25rem;cursor:pointer;gap:0.75rem;
   user-select:none;min-height:64px;
-  transition:padding 0.3s ease;
+  transition:min-height 0.35s ease, padding 0.35s ease;
 }
-.service-card:hover .sc-header{padding:1.6rem 1.25rem;}
+.service-card.has-photo:hover .sc-header{min-height:320px;padding:2rem 1.25rem;}
 .sc-header:hover{background:transparent;}
 .sc-header-left{display:flex;align-items:center;gap:0.6rem}
 .sc-icon{font-size:1rem;flex-shrink:0}
