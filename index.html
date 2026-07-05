@@ -184,9 +184,10 @@ nav{
 .hero-slide{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:center 40%;
-  filter:saturate(0.85) contrast(1.05);
+  filter:grayscale(100%) contrast(1.1);
   opacity:0;transition:opacity 1.2s ease;
 }
+.hero-slide.color{filter:saturate(0.95) contrast(1.05)}
 .hero-slide.active{opacity:1}
 .hero-eyebrow{
   font-family:'DM Mono',monospace;
@@ -205,10 +206,10 @@ nav{
   color:#FDFAF5;
 }
 .hero-title em{
-  font-style:italic;color:#8B7FC7;
-  display:block;font-weight:300;
-  font-family:'Cormorant Garamond',serif;
-  font-size:0.48em;letter-spacing:0.08em;
+  font-style:italic;color:var(--clay);
+  display:block;font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:1em;letter-spacing:-0.025em;
   line-height:1.2;margin-top:0.2rem;
 }
 .hero-sub{
@@ -1451,7 +1452,7 @@ nav.scrolled{
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg" id="heroBg">
-    <img class="hero-slide active" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172166/9_h82qdn.jpg" alt="Nosara" loading="eager">
+    <img class="hero-slide active color" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172166/9_h82qdn.jpg" alt="Nosara" loading="eager">
     <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172204/11_haqxsg.jpg" alt="Nosara" loading="lazy">
     <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172221/13_daaskf.jpg" alt="Nosara" loading="lazy">
     <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172223/12_b34jz7.jpg" alt="Nosara" loading="lazy">
