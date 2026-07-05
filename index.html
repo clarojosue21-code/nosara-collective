@@ -527,6 +527,22 @@ section{padding:5rem 3rem}
   background:var(--bg);
 }
 .service-card.open .sc-body{display:block}
+.sc-header{position:relative;overflow:hidden;}
+.sc-bg{
+  position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:0;transition:opacity 0.35s ease;z-index:0;
+}
+.sc-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(20,18,16,0.72) 0%,rgba(20,18,16,0.35) 100%);
+}
+.service-card:hover .sc-bg{opacity:1}
+.service-card:hover .sc-name{color:#F5F0E8}
+.service-card:hover .sc-price-inline{color:#C4784A}
+.service-card:hover .sc-chevron{color:#F5F0E8}
+.service-card:hover .sc-icon{filter:brightness(2)}
+.sc-header-left,.sc-price-inline,.sc-chevron{position:relative;z-index:1;}
+.sc-name,.sc-price-inline,.sc-chevron,.sc-icon{transition:color 0.25s,filter 0.25s;}
 .sc-desc{font-size:0.75rem;color:var(--text-muted);line-height:1.7;margin-bottom:0.75rem;margin-top:0.75rem}
 .sc-options{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.75rem}
 .sc-opt{display:flex;flex-direction:column;gap:3px}
@@ -1999,10 +2015,28 @@ function toggleServiceCard(id){
   if(!isOpen) card.classList.add('open');
 }
 
+const SERVICE_PHOTOS = {
+  atv:              'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783215692/ATV_FINAL_roefnd.jpg',
+  golf:             'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783216390/golf_car_4_ha6iwu.jpg',
+  chef:             'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/403832778_732909078873438_4264179694023831035_n_bvx95m.jpg',
+  airport_arrival:  'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783210418/TRANSFERS_VAN_vgu2rl.jpg',
+  airport_departure:'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783210418/TRANSFERS_VAN_vgu2rl.jpg',
+  yoga:             'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/pexels-thirdman-6957891_rjobdi.jpg',
+  bjj:              'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/breath_bjj_4_hvxjwv.jpg',
+  fishing:          'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206787/tour_pesca_hrppko.jpg',
+  sunset:           'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783217664/7_faeijr.jpg',
+  horseback:        'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/14_errrjd.jpg',
+  turtles:          'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/8d_avu1lh.jpg',
+  tennis:           'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783207612/WhatsApp_Image_2024-02-22_at_10.27.33_AM_bgoaqj.jpg',
+};
+
 function renderServices(){
-  document.getElementById('servicesGrid').innerHTML=SERVICES.map(s=>`
+  document.getElementById('servicesGrid').innerHTML=SERVICES.map(s=>{
+    const photo = SERVICE_PHOTOS[s.id] || '';
+    return `
     <div class="service-card" id="sc_${s.id}">
       <div class="sc-header" onclick="toggleServiceCard('${s.id}')">
+        ${photo ? `<div class="sc-bg" style="background-image:url('${photo}')"></div>` : ''}
         <div class="sc-header-left">
           <span class="sc-icon">${s.icon}</span>
           <span class="sc-name">${s.name}</span>
@@ -2025,7 +2059,8 @@ function renderServices(){
         </div>
         <button class="sc-add-btn" onclick="addServiceToCart('${s.id}')">🛒 Add to Cart</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function calcServiceCost(id){
