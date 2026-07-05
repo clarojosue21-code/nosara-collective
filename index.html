@@ -152,10 +152,11 @@ nav{
 .hero{
   min-height:100vh;
   display:flex;flex-direction:column;
-  align-items:flex-start;justify-content:flex-end;
-  padding:0 3rem 4rem;
+  align-items:flex-start;justify-content:space-between;
+  padding:2.5rem 3rem 4rem;
   position:relative;overflow:hidden;
 }
+.hero-top{display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem}
 .hero-bg{
   position:absolute;inset:0;overflow:hidden;
 }
@@ -1458,22 +1459,25 @@ nav.scrolled{
     <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172223/12_b34jz7.jpg" alt="Nosara" loading="lazy">
     <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172288/15_zis76g.jpg" alt="Nosara" loading="lazy">
   </div>
-  <div class="hero-eyebrow" style="
-      color:#FDFAF5;
-      font-family:'DM Mono',monospace;
-      font-size:0.65rem;
-      font-weight:500;
-      letter-spacing:0.32em;
-      text-transform:uppercase;
-      display:inline-flex;
-      align-items:center;
-      gap:0.75rem;
-      background:rgba(20,18,16,0.55);
-      padding:7px 14px;
-      backdrop-filter:blur(8px);
-      border:1px solid rgba(253,250,245,0.2);
-    ">Nosara · Guanacaste · Costa Rica</div>
-  <h1 class="hero-title">Travel with <span style="color:var(--clay)">intention,</span><br>stay with <span style="color:var(--clay)">purpose.</span></h1>
+  <div class="hero-top">
+    <div class="hero-eyebrow" style="
+        color:#FDFAF5;
+        font-family:'DM Mono',monospace;
+        font-size:0.65rem;
+        font-weight:500;
+        letter-spacing:0.32em;
+        text-transform:uppercase;
+        display:inline-flex;
+        align-items:center;
+        gap:0.75rem;
+        background:rgba(20,18,16,0.55);
+        padding:7px 14px;
+        backdrop-filter:blur(8px);
+        border:1px solid rgba(253,250,245,0.2);
+      ">Nosara · Guanacaste · Costa Rica</div>
+    <div class="hero-title" style="margin:0">Travel with <span style="color:var(--clay)">intention,</span></div>
+  </div>
+  <h1 class="hero-title">stay with <span style="color:var(--clay)">purpose.</span></h1>
   <p class="hero-sub" style="
       color:#FDFAF5;
       font-size:0.85rem;
