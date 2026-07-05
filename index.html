@@ -529,22 +529,30 @@ section{padding:5rem 3rem}
   background:var(--bg);
 }
 .service-card.open .sc-body{display:block}
-.sc-header{position:relative;overflow:hidden;}
+.service-card{position:relative;overflow:hidden;}
 .sc-bg{
-  position:absolute;inset:0;background-size:cover;background-position:center;
-  opacity:0;transition:opacity 0.35s ease;z-index:0;
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  filter:grayscale(100%);
+  opacity:0;transition:opacity 0.4s ease;z-index:0;
 }
 .sc-bg::after{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(to right,rgba(20,18,16,0.72) 0%,rgba(20,18,16,0.35) 100%);
+  background:rgba(20,18,16,0.55);
 }
-.service-card:hover .sc-bg{opacity:1}
-.service-card:hover .sc-name{color:#F5F0E8;font-size:0.9rem;}
-.service-card:hover .sc-price-inline{color:#F5F0E8;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;}
-.service-card:hover .sc-chevron{color:#F5F0E8}
-.service-card:hover .sc-icon{filter:brightness(2);font-size:1.3rem;}
+.service-card.has-photo:hover .sc-bg{opacity:1;}
+.service-card.has-photo:hover .sc-name{color:#F5F0E8;}
+.service-card.has-photo:hover .sc-price-inline{color:#F5F0E8;font-weight:700;}
+.service-card.has-photo:hover .sc-chevron{color:#F5F0E8;}
+.service-card.has-photo:hover .sc-icon{filter:brightness(2);}
 .sc-header-left,.sc-price-inline,.sc-chevron{position:relative;z-index:1;}
 .sc-name,.sc-price-inline,.sc-chevron,.sc-icon{transition:color 0.25s,filter 0.25s;}
+.sc-body{position:relative;z-index:2;background:var(--white);}
+.sc-body{
+  display:none;padding:0 1rem 1rem;
+  border-top:1px solid var(--border-light);
+}
+.service-card.open .sc-body{display:block;}
 .sc-desc{font-size:0.75rem;color:var(--text-muted);line-height:1.7;margin-bottom:0.75rem;margin-top:0.75rem}
 .sc-options{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.75rem}
 .sc-opt{display:flex;flex-direction:column;gap:3px}
@@ -2017,6 +2025,18 @@ function toggleServiceCard(id){
   if(!isOpen) card.classList.add('open');
 }
 
+function initServiceHover(){
+  document.querySelectorAll('.service-card.has-photo').forEach(card=>{
+    card.addEventListener('mouseenter',()=>{
+      document.querySelectorAll('.service-card.open').forEach(c=>c.classList.remove('open'));
+      card.classList.add('open');
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.classList.remove('open');
+    });
+  });
+}
+
 const SERVICE_PHOTOS = {
   atv:              'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783215692/ATV_FINAL_roefnd.jpg',
   golf:             'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783216390/golf_car_4_ha6iwu.jpg',
@@ -2036,7 +2056,7 @@ function renderServices(){
   document.getElementById('servicesGrid').innerHTML=SERVICES.map(s=>{
     const photo = SERVICE_PHOTOS[s.id] || '';
     return `
-    <div class="service-card" id="sc_${s.id}">
+    <div class="service-card${photo?' has-photo':''}" id="sc_${s.id}">
       <div class="sc-header" onclick="toggleServiceCard('${s.id}')">
         ${photo ? `<div class="sc-bg" style="background-image:url('${photo}')"></div>` : ''}
         <div class="sc-header-left">
@@ -2063,6 +2083,7 @@ function renderServices(){
       </div>
     </div>`;
   }).join('');
+  initServiceHover();
 }
 
 function calcServiceCost(id){
