@@ -2050,12 +2050,10 @@ function toggleServiceCard(id){
 
 function initServiceHover(){
   document.querySelectorAll('.service-card.has-photo').forEach(card=>{
-    card.addEventListener('mouseenter',()=>{
+    card.addEventListener('click',()=>{
+      const isOpen = card.classList.contains('open');
       document.querySelectorAll('.service-card.open').forEach(c=>c.classList.remove('open'));
-      card.classList.add('open');
-    });
-    card.addEventListener('mouseleave',()=>{
-      card.classList.remove('open');
+      if(!isOpen) card.classList.add('open');
     });
   });
 }
