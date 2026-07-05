@@ -12,8 +12,10 @@ const BUNDLES = {
 
 // Multiple iCal feeds per property — all sources are merged
 const ICAL_FEEDS = {
-  arcilla1:       ['https://www.airbnb.com/calendar/ical/1364560824324105727.ics?t=36ef19af5ed1411085c3ef4d85c0cac3'],
-  arcilla2:       ['https://www.airbnb.com/calendar/ical/1364560764925270828.ics?t=9d789399c92d4524a05e2acf1bb6bb29'],
+  arcilla1:       ['https://www.airbnb.com/calendar/ical/1364560824324105727.ics?t=36ef19af5ed1411085c3ef4d85c0cac3',
+                   'https://www.lodgify.com/85ad444d-9016-4fc2-a2fc-55bf1c6c6904.ics'],
+  arcilla2:       ['https://www.airbnb.com/calendar/ical/1364560764925270828.ics?t=9d789399c92d4524a05e2acf1bb6bb29',
+                   'https://www.lodgify.com/9fa0aae9-f360-4b4a-a575-3abad70be1ea.ics'],
   ojosazules:     ['https://www.airbnb.com/calendar/ical/754963035673300946.ics?t=22dc8b6d04e34ca0a78c1ee28c729f19',
                    'https://ical.booking.com/v1/export?t=455427e9-64bf-400d-9a1a-5d4a516b6090'],
   sol:            ['https://www.airbnb.com/calendar/ical/1076720749284905534.ics?t=69701c3ff73d47a69f4594ad8e1dd301'],
