@@ -56,6 +56,8 @@ async function syncIcal(propertyId, slug) {
   if (!urls || !urls.length) { console.log('No iCal URLs for', slug); return; }
 
   const allDates = [];
+  let anySuccess = false;
+
   for (const url of urls) {
     try {
       const res = await fetch(url, {
@@ -63,13 +65,19 @@ async function syncIcal(propertyId, slug) {
       });
       if (!res.ok) { console.log('iCal fetch failed for', slug, url, res.status); continue; }
       const text = await res.text();
+      if (!text.includes('BEGIN:VCALENDAR')) { console.log('iCal invalid response for', slug); continue; }
       const dates = parseIcal(text, propertyId);
       console.log('Parsed', dates.length, 'dates from', url);
       allDates.push(...dates);
+      anySuccess = true;
     } catch (e) {
       console.error('iCal fetch error for', slug, e.message);
     }
   }
+
+  // Only update DB if at least one feed responded successfully
+  // This prevents wiping existing dates when Airbnb blocks the request
+  if (!anySuccess) { console.log('No successful iCal fetches for', slug, '— keeping existing blocked dates'); return; }
 
   // Deduplicate by date
   const seen = new Set();
