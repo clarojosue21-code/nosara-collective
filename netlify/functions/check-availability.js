@@ -5,6 +5,11 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// Bundle slugs — availability = union of all component slugs' blocked dates
+const BUNDLES = {
+  'arcilla-bundle': ['arcilla1', 'arcilla2'],
+};
+
 // Multiple iCal feeds per property — all sources are merged
 const ICAL_FEEDS = {
   arcilla1:       ['https://www.airbnb.com/calendar/ical/1364560824324105727.ics?t=36ef19af5ed1411085c3ef4d85c0cac3'],
@@ -86,12 +91,62 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'property_id or slug required' }) };
   }
 
+  const requestedSlug = slug || property_id;
+
+  // ── BUNDLE HANDLING ──────────────────────────────────────────────────────────
+  // For bundles (e.g. arcilla-bundle), sync and query each component property,
+  // then return the UNION of their blocked dates (if either is blocked, bundle is blocked).
+  if (BUNDLES[requestedSlug]) {
+    const componentSlugs = BUNDLES[requestedSlug];
+
+    // Fetch component property rows
+    const { data: componentProps } = await supabase
+      .from('properties')
+      .select('id, slug')
+      .in('slug', componentSlugs);
+
+    if (!componentProps || componentProps.length === 0) {
+      return { statusCode: 404, body: JSON.stringify({ error: 'Bundle component properties not found in DB' }) };
+    }
+
+    // Sync iCal for each component
+    await Promise.all(componentProps.map(p => syncIcal(p.id, p.slug)));
+
+    // Fetch blocked dates for all components and union them
+    const from = new Date().toISOString().slice(0, 10);
+    const to = new Date(Date.now() + 548 * 86400000).toISOString().slice(0, 10);
+    const componentIds = componentProps.map(p => p.id);
+
+    let blockedQuery = supabase
+      .from('blocked_dates')
+      .select('date')
+      .in('property_id', componentIds);
+
+    if (check_in && check_out) {
+      blockedQuery = blockedQuery.gte('date', check_in).lt('date', check_out);
+    } else {
+      blockedQuery = blockedQuery.gte('date', from).lte('date', to);
+    }
+
+    const { data: blocked } = await blockedQuery;
+    const blockedDates = [...new Set((blocked || []).map(b => b.date))].sort();
+
+    const available = check_in && check_out ? blockedDates.length === 0 : true;
+
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ available, blocked_dates: blockedDates }),
+    };
+  }
+  // ────────────────────────────────────────────────────────────────────────────
+
   // Get property by UUID or slug
   const isUUID = property_id && /^[0-9a-f-]{36}$/.test(property_id);
   const { data: property } = await supabase
     .from('properties')
     .select('id, slug')
-    .eq(isUUID ? 'id' : 'slug', isUUID ? property_id : (slug || property_id))
+    .eq(isUUID ? 'id' : 'slug', isUUID ? property_id : requestedSlug)
     .single();
 
   if (property) {
@@ -107,7 +162,6 @@ exports.handler = async (event) => {
   if (check_in && check_out) {
     query.gte('date', check_in).lt('date', check_out);
   } else {
-    // Return next 18 months
     const from = new Date().toISOString().slice(0, 10);
     const to = new Date(Date.now() + 548 * 86400000).toISOString().slice(0, 10);
     query.gte('date', from).lte('date', to);
