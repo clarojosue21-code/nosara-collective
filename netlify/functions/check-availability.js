@@ -7,7 +7,8 @@ const supabase = createClient(
 
 // Bundle slugs — availability = union of all component slugs' blocked dates
 const BUNDLES = {
-  'arcilla-bundle': ['arcilla1', 'arcilla2'],
+  'arcilla-bundle':      ['arcilla1', 'arcilla2'],
+  'arcilla-ojos-bundle': ['arcilla1', 'arcilla2', 'ojosazules'],
 };
 
 // Multiple iCal feeds per property — all sources are merged

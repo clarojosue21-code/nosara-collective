@@ -1967,11 +1967,11 @@ const SERVICES=[
 ];
 
 const RETREATS=[
-  {name:'Arcilla Compound',tag:'Full Compound · Up to 18 Guests',price:750,desc:'Both Arcilla villas together — 7 bedrooms sleeping up to 18 guests. Two private pools, two full kitchens, deep jungle seclusion. The ultimate setting for yoga, wellness, leadership, or creative retreats.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 18 guests','7 bedrooms','Two private pools','Two full kitchens','Buffet catering available','Full concierge','Jungle immersion']},
-  {name:'Casa Ojos Azules',tag:'Intimate Retreat · Up to 10 Guests',price:500,desc:'A luminous 4-bedroom villa sleeping up to 10 guests. Open spaces, natural light, tropical gardens and a private pool. Ideal for yoga, healing, wellness, or creative retreats.',cover:CDN+'v1781050965/Small5_qfmiv4.jpg',features:['Up to 10 guests','4 bedrooms','Private pool','Epic sunset view','Garden spaces','Buffet catering available','Natural light']},
-  {name:'Arcilla + Ojos Azules',tag:'Triple Villa · Up to 28 Guests',price:1250,desc:'The full Arcilla Compound plus Casa Ojos Azules — three villas, three pools, sleeping up to 28 guests. The most exclusive multi-space retreat experience in Nosara. Perfect for large groups who want total seclusion and a complete resort feel.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 28 guests','11 bedrooms','Three private pools','Three full kitchens','Buffet catering available','Full concierge','Maximum privacy']},
-  {name:'Castillo Colonial',tag:'Crown Jewel · Up to 34 Guests',price:2250,desc:'The most prestigious retreat venue in Nosara — 15 bedrooms, two private pools, sunset viewpoint, tennis court, and fitness center. The perfect stage for large wellness retreats, corporate events, destination weddings, and elite multi-group experiences. Nothing in Nosara compares.',cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',features:['Up to 34 guests','15 bedrooms','2 private pools','Sunset view point','Tennis court','Fitness center','Full kitchen','Pet friendly']},
-  {name:'Sol + Mar Bundle',tag:'Twin Villa Retreat · Up to 16 Guests',price:498,desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms, 2 queen beds per room, one shared central pool. Perfect for retreats up to 16 guests.',cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',features:['Up to 16 guests','4 bedrooms','2 queen beds per room','One shared pool','Two kitchens','Buffet catering available']}
+  {name:'Arcilla Compound',slug:'arcilla-bundle',tag:'Full Compound · Up to 18 Guests',price:750,desc:'Both Arcilla villas together — 7 bedrooms sleeping up to 18 guests. Two private pools, two full kitchens, deep jungle seclusion. The ultimate setting for yoga, wellness, leadership, or creative retreats.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 18 guests','7 bedrooms','Two private pools','Two full kitchens','Buffet catering available','Full concierge','Jungle immersion']},
+  {name:'Casa Ojos Azules',slug:'ojosazules',tag:'Intimate Retreat · Up to 10 Guests',price:500,desc:'A luminous 4-bedroom villa sleeping up to 10 guests. Open spaces, natural light, tropical gardens and a private pool. Ideal for yoga, healing, wellness, or creative retreats.',cover:CDN+'v1781050965/Small5_qfmiv4.jpg',features:['Up to 10 guests','4 bedrooms','Private pool','Epic sunset view','Garden spaces','Buffet catering available','Natural light']},
+  {name:'Arcilla + Ojos Azules',slug:'arcilla-ojos-bundle',tag:'Triple Villa · Up to 28 Guests',price:1250,desc:'The full Arcilla Compound plus Casa Ojos Azules — three villas, three pools, sleeping up to 28 guests. The most exclusive multi-space retreat experience in Nosara. Perfect for large groups who want total seclusion and a complete resort feel.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 28 guests','11 bedrooms','Three private pools','Three full kitchens','Buffet catering available','Full concierge','Maximum privacy']},
+  {name:'Castillo Colonial',slug:'castillo',tag:'Crown Jewel · Up to 34 Guests',price:2250,desc:'The most prestigious retreat venue in Nosara — 15 bedrooms, two private pools, sunset viewpoint, tennis court, and fitness center. The perfect stage for large wellness retreats, corporate events, destination weddings, and elite multi-group experiences. Nothing in Nosara compares.',cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',features:['Up to 34 guests','15 bedrooms','2 private pools','Sunset view point','Tennis court','Fitness center','Full kitchen','Pet friendly']},
+  {name:'Sol + Mar Bundle',slug:'sol-mar-bundle',tag:'Twin Villa Retreat · Up to 16 Guests',price:498,desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms, 2 queen beds per room, one shared central pool. Perfect for retreats up to 16 guests.',cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',features:['Up to 16 guests','4 bedrooms','2 queen beds per room','One shared pool','Two kitchens','Buffet catering available']}
 ];
 
 const LOTS=[
@@ -2222,10 +2222,11 @@ function renderRetreats(){
     </div>`).join('');
 }
 
-function openRetreatBooking(name, tag, cover){
+async function openRetreatBooking(name, tag, cover){
   const retreat = RETREATS.find(r=>r.name===name);
+  const slug = retreat?.slug || null;
   curProp = {
-    id: 'retreat_' + name.replace(/\s+/g,'_').toLowerCase(),
+    id: slug || ('retreat_' + name.replace(/\s+/g,'_').toLowerCase()),
     name: name,
     meta: tag,
     price: retreat?.price || 0,
@@ -2253,6 +2254,7 @@ function openRetreatBooking(name, tag, cover){
   cal.dataset.year = today.getFullYear();
   cal.dataset.month = today.getMonth();
   blockedDates[curProp.id] = new Set();
+  if(slug){ await fetchBlockedDates(slug); blockedDates[slug]=blockedDates[slug]||new Set(); }
   renderCalendar(curProp.id);
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
