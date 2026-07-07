@@ -3376,43 +3376,16 @@ const CDP=(function(){
 document.addEventListener('DOMContentLoaded',()=>CDP.init());
 </script>
 <script>
-// ─── GOOGLE TRANSLATE LANGUAGE SYSTEM ───
-function googleTranslateElementInit(){
-  new google.translate.TranslateElement({
-    pageLanguage:'en',
-    autoDisplay:false
-  },'google_translate_element');
-  // Apply saved language once GT widget is ready
-  const saved = localStorage.getItem('ncc_lang');
-  if(saved && saved !== 'en'){
-    setTimeout(()=>_applyGT(saved), 800);
-  }
-}
-
-function _applyGT(langCode){
-  const select = document.querySelector('.goog-te-combo');
-  if(select){
-    select.value = langCode;
-    select.dispatchEvent(new Event('change'));
-  }
-}
-
+// ─── LANGUAGE / TRANSLATE ───
 function translatePage(langCode, label){
   document.getElementById('langLabel').textContent = label;
   document.getElementById('langMenu').style.display = 'none';
-  localStorage.setItem('ncc_lang', langCode);
   if(langCode === 'en'){
-    document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.'+location.hostname;
-    location.reload();
+    window.location.href = 'https://nosaracollectiveconscience.com';
     return;
   }
-  const cookie = `/en/${langCode}`;
-  document.cookie = `googtrans=${cookie}; path=/`;
-  document.cookie = `googtrans=${cookie}; path=/; domain=.${location.hostname}`;
-  _applyGT(langCode);
-  // If GT not ready yet, reload so cookie triggers it
-  if(!document.querySelector('.goog-te-combo')) location.reload();
+  const url = encodeURIComponent('https://nosaracollectiveconscience.com');
+  window.location.href = `https://translate.google.com/translate?sl=en&tl=${langCode}&u=${url}`;
 }
 
 function toggleLangMenu(){
