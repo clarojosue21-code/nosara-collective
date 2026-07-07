@@ -2809,11 +2809,8 @@ async function loadPropsFromSupabase(){
 loadPropsFromSupabase().then(()=>{
   try{renderProps();}catch(e){console.warn('renderProps',e);}
   try{renderRetreats();}catch(e){console.warn('renderRetreats',e);}
-  // Re-apply translation after dynamic content is in the DOM
   const savedLang = localStorage.getItem('ncc_lang');
-  if(savedLang && savedLang !== 'en'){
-    setTimeout(()=>_applyGT(savedLang), 600);
-  }
+  if(savedLang && savedLang !== 'en') _applyGT(savedLang);
 });
 try{renderServices();}catch(e){console.warn('renderServices',e);}
 try{renderLots();}catch(e){console.warn('renderLots',e);}
@@ -3376,16 +3373,42 @@ const CDP=(function(){
 document.addEventListener('DOMContentLoaded',()=>CDP.init());
 </script>
 <script>
-// ─── LANGUAGE / TRANSLATE ───
+// ─── GOOGLE TRANSLATE LANGUAGE SYSTEM ───
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    autoDisplay:false,
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE
+  },'google_translate_element');
+}
+
+function _applyGT(langCode){
+  const tryApply = (attempts) => {
+    const select = document.querySelector('.goog-te-combo');
+    if(select){
+      select.value = langCode;
+      select.dispatchEvent(new Event('change'));
+    } else if(attempts > 0){
+      setTimeout(()=>tryApply(attempts-1), 300);
+    }
+  };
+  tryApply(15);
+}
+
 function translatePage(langCode, label){
   document.getElementById('langLabel').textContent = label;
   document.getElementById('langMenu').style.display = 'none';
+  localStorage.setItem('ncc_lang', langCode);
   if(langCode === 'en'){
-    window.location.href = 'https://nosaracollectiveconscience.com';
+    document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.'+location.hostname;
+    location.reload();
     return;
   }
-  const url = encodeURIComponent('https://nosaracollectiveconscience.com');
-  window.location.href = `https://translate.google.com/translate?sl=en&tl=${langCode}&u=${url}`;
+  const cookie=`/en/${langCode}`;
+  document.cookie=`googtrans=${cookie}; path=/`;
+  document.cookie=`googtrans=${cookie}; path=/; domain=.${location.hostname}`;
+  _applyGT(langCode);
 }
 
 function toggleLangMenu(){
