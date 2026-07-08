@@ -744,6 +744,15 @@ section{padding:5rem 3rem}
   text-transform:uppercase;font-family:'Space Grotesk',sans-serif;
 }
 .lot-btn:hover{background:var(--text);color:var(--bg)}
+.filler-cta-btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  background:var(--clay);color:#FDFAF5;
+  border:2px solid var(--clay-dark);padding:9px 18px;
+  font-family:'DM Mono',monospace;font-size:0.62rem;font-weight:700;
+  letter-spacing:0.16em;text-transform:uppercase;
+  margin-top:0.75rem;transition:background 0.15s,transform 0.15s;
+}
+.prop-filler:hover .filler-cta-btn{background:var(--clay-dark);transform:translateX(2px)}
 
 /* ─── GUIDE ─── */
 #guide{background:var(--bg);border-top:2px solid var(--border)}
@@ -2007,7 +2016,9 @@ function renderProps(){
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:2rem 1.75rem;z-index:2">
           <div style="width:28px;height:1px;background:rgba(20,18,16,0.4);margin-bottom:1.25rem"></div>
           <div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text);line-height:1.15">${labelHtml}</div>
-          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--clay-dark);margin-top:0.6rem;font-weight:700">${fc.sub}${fc.link?' →':''}</div>
+          ${fc.link
+            ? `<div class="filler-cta-btn">${fc.sub} →</div>`
+            : `<div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--clay-dark);margin-top:0.6rem;font-weight:700">${fc.sub}</div>`}
         </div>
       </div>`);
     }
@@ -2021,16 +2032,6 @@ function toggleServiceCard(id){
   const isOpen=card.classList.contains('open');
   document.querySelectorAll('.service-card.open').forEach(c=>c.classList.remove('open'));
   if(!isOpen) card.classList.add('open');
-}
-
-function initServiceHover(){
-  document.querySelectorAll('.service-card.has-photo').forEach(card=>{
-    card.addEventListener('click',()=>{
-      const isOpen = card.classList.contains('open');
-      document.querySelectorAll('.service-card.open').forEach(c=>c.classList.remove('open'));
-      if(!isOpen) card.classList.add('open');
-    });
-  });
 }
 
 const SERVICE_PHOTOS = {
@@ -2079,7 +2080,6 @@ function renderServices(){
       </div>
     </div>`;
   }).join('');
-  initServiceHover();
 }
 
 function calcServiceCost(id){
