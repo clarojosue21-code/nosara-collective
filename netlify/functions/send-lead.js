@@ -18,11 +18,15 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Email or phone required' }) };
   }
 
+  // Map guide CTA types to the leads.type CHECK constraint values
+  // ('booking','retreat','real_estate','concierge','general')
+  const dbType = type === 'property' ? 'real_estate' : type === 'relocation' ? 'general' : (type || 'general');
+
   // Save to Supabase leads table
   const { error: dbError } = await supabase.from('leads').insert([{
     email: email || null,
     phone: phone || null,
-    type: type || 'general',
+    type: dbType,
     source: source || 'guide-cta',
     created_at: new Date().toISOString(),
   }]);
