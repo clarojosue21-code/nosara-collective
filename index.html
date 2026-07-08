@@ -734,8 +734,13 @@ section{padding:5rem 3rem}
   font-size:0.6rem;color:var(--clay);
   font-weight:400;margin-bottom:0.7rem;letter-spacing:0.06em;
 }
-.lot-desc{font-size:0.76rem;color:var(--text-muted);line-height:1.75;font-weight:300;margin-bottom:1.1rem}
+.lot-map{width:100%;height:160px;margin-bottom:1.1rem;border:1px solid var(--border-light);overflow:hidden}
+.lot-map iframe{width:100%;height:100%;border:0;display:block;filter:grayscale(40%) contrast(1.05)}
+.lot-ref{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);letter-spacing:0.04em;margin-bottom:0.9rem}
 .lot-price{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--text-muted);margin-bottom:0.9rem}
+.lot-actions{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.lot-map-link{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;color:var(--clay);text-decoration:none;text-transform:uppercase}
+.lot-map-link:hover{text-decoration:underline}
 .lot-btn{
   background:transparent;color:var(--text);
   border:2px solid var(--border);padding:8px 18px;
@@ -1887,7 +1892,8 @@ const ICONS={
   rain:'<path d="M6 14a4 4 0 010-8 5 5 0 019.6 1.5A4 4 0 0117 15H6z"/><line x1="8" y1="18" x2="7" y2="21"/><line x1="12" y1="18" x2="11" y2="21"/><line x1="16" y1="18" x2="15" y2="21"/>',
   school:'<path d="M12 4L2 9l10 5 10-5-10-5z"/><path d="M6 11v5.5c0 1 2.5 2.5 6 2.5s6-1.5 6-2.5V11"/>',
   heart:'<path d="M12 21s-7-4.35-9.5-8.5C1 9 2 5.5 5.5 5c2-.3 4 .7 5 2.3 1-1.6 3-2.6 5-2.3C19 5.5 20 9 18.5 12.5 16 16.65 12 21 12 21z"/>',
-  house:'<path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/>'
+  house:'<path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/>',
+  pin:'<path d="M12 21s7-7.58 7-12A7 7 0 105 9c0 4.42 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>'
 };
 function iconSvg(key){
   const body=ICONS[key];
@@ -1930,11 +1936,15 @@ const RETREATS=[
 ];
 
 const LOTS=[
-  {icon:'palm',name:'Lot A — Jungle View',size:'600 m²',desc:'Flat buildable lot surrounded by mature tropical trees. Water and electricity access. Close to surf beaches.',price:'Contact for pricing'},
-  {icon:'mountain',name:'Lot B — Highland Panoramic',size:'800 m²',desc:'Elevated lot with 180° jungle-to-ocean views. Located in the Nosara highlands. Exceptional sunsets.',price:'Contact for pricing'},
-  {icon:'wave',name:'Lot C — Beach Adjacent',size:'450 m²',desc:'Rare flat lot just minutes from Playa Guiones. Walkable to surf, restaurants, and the town center.',price:'Contact for pricing'},
-  {icon:'leaf',name:'Lot D — Nature Reserve Edge',size:'1,200 m²',desc:'Large lot bordering Nosara\'s protected nature reserve. Total privacy, incredible biodiversity.',price:'Contact for pricing'},
-  {icon:'sun',name:'Lot E — Development Land',size:'2,500 m²',desc:'Prime larger parcel suitable for a multi-unit development, boutique hotel, or retreat center.',price:'Contact for pricing'}
+  {icon:'pin',name:'Lote #2 — 9 Degrees North',size:'441.38 m²',price:'$155,000',finca:'5-125247-000',plano:'G-740719-2001',lat:9.949771,lng:-85.666682,mapLink:'https://maps.app.goo.gl/spygWjdFd2gbf2ad6'},
+  {icon:'pin',name:'Lot 3 — VE Sam Carver',size:'351.80 m²',price:'$275,000',finca:'5-235411-000',plano:'G-0990635-2005',lat:9.939446,lng:-85.652717,mapLink:'https://maps.app.goo.gl/C1BpEYjE97cgHA3Q9'},
+  {icon:'pin',name:'Lot 9 — VE Sam Carver',size:'1,905.00 m²',price:'$450,000',finca:'5-235412-000',plano:'G-0990559-2005',lat:9.939446,lng:-85.652717,mapLink:'https://maps.app.goo.gl/C1BpEYjE97cgHA3Q9'},
+  {icon:'pin',name:'Lot C1 — William & Scott',size:'532.03 m²',price:'$72,000',finca:'5-147195-000',plano:'G-0968120-2004',lat:9.945109,lng:-85.642530,mapLink:'https://maps.app.goo.gl/mtb2wyss8vxCNeEv6'},
+  {icon:'pin',name:'Lot C2 — William & Scott',size:'704.04 m²',price:'$128,000',finca:'5-147194-000',plano:'G-0968120-2004',lat:9.945109,lng:-85.642530,mapLink:'https://maps.app.goo.gl/mtb2wyss8vxCNeEv6'},
+  {icon:'pin',name:'Lot B1 — Alex Odom',size:'534.98 m²',price:'$65,000',finca:'5-147671-000',plano:'G-1014420-2005',lat:9.945448,lng:-85.642666,mapLink:'https://maps.app.goo.gl/Zoc329Tj6ZuSDrUK8'},
+  {icon:'pin',name:'H17 — GSI Golden Sun',size:'1,298.71 m²',price:'$130,000',finca:'5-172365-007',plano:'G-1333477-2009',lat:9.9424099,lng:-85.6432034,mapLink:'https://maps.app.goo.gl/EmAYQR1j3yQRiqQN9'},
+  {icon:'pin',name:'H7 — Home Site',size:'1,208.48 m²',price:'$1,250,000',finca:'5-172365-009',plano:'G-1333477-2009',lat:9.9424099,lng:-85.6432034,mapLink:'https://maps.app.goo.gl/EmAYQR1j3yQRiqQN9'},
+  {icon:'pin',name:'H24 — Home Site',size:'1,113.49 m²',price:'$350,000',finca:'5-172365-002',plano:'G-1333477-2009',lat:9.943647,lng:-85.644830,mapLink:'https://maps.app.goo.gl/nHQkmAnCb5BhnADNA'}
 ];
 
 const GUIDE=[
@@ -2230,15 +2240,24 @@ async function openRetreatBooking(name, tag, cover){
 
 // ─── RENDER LOTS ───
 function renderLots(){
-  document.getElementById('lotsGrid').innerHTML=LOTS.map(l=>`
+  document.getElementById('lotsGrid').innerHTML=LOTS.map(l=>{
+    const d=0.0035;
+    const bbox=`${l.lng-d},${l.lat-d},${l.lng+d},${l.lat+d}`;
+    const osmSrc=`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${l.lat},${l.lng}`;
+    return `
     <div class="lot-card">
+      <div class="lot-map"><iframe src="${osmSrc}" loading="lazy"></iframe></div>
       <div class="lot-icon">${iconSvg(l.icon)}</div>
       <div class="lot-name">${l.name}</div>
-      <div class="lot-size">📐 ${l.size}</div>
-      <p class="lot-desc">${l.desc}</p>
+      <div class="lot-size">${l.size}</div>
+      <div class="lot-ref">Finca ${l.finca} · Plano ${l.plano}</div>
       <div class="lot-price">${l.price}</div>
-      <button class="lot-btn" onclick="alert('Thank you for your interest in ${l.name}. We\\'ll send you full details within 24 hours.')">Request Info</button>
-    </div>`).join('');
+      <div class="lot-actions">
+        <a class="lot-map-link" href="${l.mapLink}" target="_blank" rel="noopener">View on Google Maps →</a>
+        <button class="lot-btn" onclick="openLeadModal('property','lots-${l.name.replace(/[^a-zA-Z0-9]+/g,'-')}')">Request Info</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ─── RENDER GUIDE ───
