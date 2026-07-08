@@ -25,7 +25,7 @@
 <meta property="og:url" content="https://nosaracollectiveconscience.com/">
 <meta property="og:title" content="Nosara Collective Conscience · Luxury Villas in Nosara, Costa Rica">
 <meta property="og:description" content="Private villas with pools, world-class surf, and a booking platform that gives back. 5% of every stay supports local families in Nosara.">
-<meta property="og:image" content="https://res.cloudinary.com/dzqgajn3l/image/upload/v1780975891/1_-_grounds5_qacxew.jpg">
+<meta property="og:image" content="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1780975891/1_-_grounds5_qacxew.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:site_name" content="Nosara Collective Conscience">
@@ -35,7 +35,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Nosara Collective Conscience · Luxury Villas in Nosara, Costa Rica">
 <meta name="twitter:description" content="Private villas with pools, world-class surf, and a booking platform that gives back. 5% of every stay supports local families in Nosara.">
-<meta name="twitter:image" content="https://res.cloudinary.com/dzqgajn3l/image/upload/v1780975891/1_-_grounds5_qacxew.jpg">
+<meta name="twitter:image" content="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1780975891/1_-_grounds5_qacxew.jpg">
 
 <!-- Schema.org Structured Data -->
 <script type="application/ld+json">
@@ -58,7 +58,7 @@
     "latitude": "9.976",
     "longitude": "-85.653"
   },
-  "image": "https://res.cloudinary.com/dzqgajn3l/image/upload/v1780975891/1_-_grounds5_qacxew.jpg",
+  "image": "https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1780975891/1_-_grounds5_qacxew.jpg",
   "priceRange": "$$$",
   "currenciesAccepted": "USD",
   "paymentAccepted": "PayPal, Bank Transfer",
@@ -67,10 +67,10 @@
   ]
 }
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#F2EDE4;
@@ -94,6 +94,9 @@
   --border-med:rgba(20,18,16,0.18);
 }
 html{scroll-behavior:smooth;scroll-padding-top:60px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--clay);outline-offset:2px;
+}
 body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;padding-top:60px}
 
 /* ─── NAV ─── */
@@ -122,6 +125,15 @@ nav{
   transition:color 0.15s;font-weight:300;
 }
 .nav-links a:hover{color:var(--text)}
+.nav-hamburger{
+  display:none;background:none;border:none;cursor:pointer;
+  padding:8px;flex-direction:column;justify-content:center;gap:5px;
+  width:40px;height:40px;
+}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--text);transition:transform 0.2s,opacity 0.2s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .nav-cart{
   display:flex;align-items:center;gap:0.5rem;
   background:var(--text);color:var(--bg);
@@ -1045,8 +1057,21 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:900px){
   .about-grid{grid-template-columns:1fr!important;gap:2.5rem!important}
-  .nav-links{display:none}
-  .nav-inner{padding:0 1.25rem}
+  .nav-hamburger{display:flex}
+  .nav-links{
+    display:none;position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;background:var(--white);
+    border-bottom:2px solid var(--border);
+    box-shadow:0 12px 24px rgba(0,0,0,0.08);
+  }
+  .nav-links.open{display:flex}
+  .nav-links li{width:100%}
+  .nav-links a{
+    display:block;width:100%;padding:1rem 1.5rem;
+    font-size:0.72rem;border-bottom:1px solid var(--border-light);
+    box-sizing:border-box;
+  }
+  .nav-inner{padding:0 1.25rem;position:relative}
   section,#surf,#impact,#impact-banner{padding:4rem 1.5rem}
   .hero{padding:0 1.5rem 3.5rem}
   .footer-grid{grid-template-columns:1fr 1fr}
@@ -1413,15 +1438,18 @@ body{top:0!important;position:static!important}
 <nav>
   <div class="nav-inner">
     <div class="nav-logo" onclick="scrollTo(0,0)">NOSARA <span>COLLECTIVE</span><span style="font-size:0.5rem;color:rgba(28,26,22,0.7);font-weight:600;letter-spacing:0.1em;margin-left:4px">CONSCIENCE</span></div>
-    <ul class="nav-links">
-      <li><a href="#properties" data-i18n="nav_stay">Stay</a></li>
-      <li><a href="#concierge" data-i18n="nav_concierge">Concierge</a></li>
-      <li><a href="#retreats" data-i18n="nav_retreats">Retreats</a></li>
-      <li><a href="#lots" data-i18n="nav_invest">Invest</a></li>
-      <li><a href="#guide" data-i18n="nav_guide">Guide</a></li>
-      <li><a href="#impact" data-i18n="nav_impact">Impact</a></li>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#properties" data-i18n="nav_stay" onclick="closeMobileNav()">Stay</a></li>
+      <li><a href="#concierge" data-i18n="nav_concierge" onclick="closeMobileNav()">Concierge</a></li>
+      <li><a href="#retreats" data-i18n="nav_retreats" onclick="closeMobileNav()">Retreats</a></li>
+      <li><a href="#lots" data-i18n="nav_invest" onclick="closeMobileNav()">Invest</a></li>
+      <li><a href="#guide" data-i18n="nav_guide" onclick="closeMobileNav()">Guide</a></li>
+      <li><a href="#impact" data-i18n="nav_impact" onclick="closeMobileNav()">Impact</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:0.75rem">
+      <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
       <div style="position:relative">
         <button id="langBtn" onclick="toggleLangMenu()" style="background:none;border:1px solid var(--border);padding:5px 10px;font-size:0.65rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;cursor:pointer;color:var(--text-mid);display:flex;align-items:center;gap:4px">
           🌐 <span id="langLabel">EN</span> ▾
@@ -1450,11 +1478,11 @@ body{top:0!important;position:static!important}
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg" id="heroBg">
-    <img class="hero-slide active color" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172166/9_h82qdn.jpg" alt="Nosara" loading="eager">
-    <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172204/11_haqxsg.jpg" alt="Nosara" loading="lazy">
-    <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172221/13_daaskf.jpg" alt="Nosara" loading="lazy">
-    <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172223/12_b34jz7.jpg" alt="Nosara" loading="lazy">
-    <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/v1782172288/15_zis76g.jpg" alt="Nosara" loading="lazy">
+    <img class="hero-slide active color" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172166/9_h82qdn.jpg" alt="Surfer riding a wave at Playa Guiones, Nosara, Costa Rica" loading="eager">
+    <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172204/11_haqxsg.jpg" alt="Nosara, Costa Rica coastline and jungle landscape" loading="lazy">
+    <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172221/13_daaskf.jpg" alt="Nosara, Costa Rica coastline and jungle landscape" loading="lazy">
+    <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172223/12_b34jz7.jpg" alt="Nosara, Costa Rica coastline and jungle landscape" loading="lazy">
+    <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172288/15_zis76g.jpg" alt="Nosara, Costa Rica coastline and jungle landscape" loading="lazy">
   </div>
   <div class="hero-top">
     <div class="hero-eyebrow" style="
@@ -1739,7 +1767,7 @@ body{top:0!important;position:static!important}
 <!-- Policy Modal -->
 <div id="policyModal" style="display:none;position:fixed;inset:0;background:rgba(20,18,16,0.75);z-index:600;align-items:center;justify-content:center;padding:2rem">
   <div style="background:var(--white);max-width:600px;width:100%;padding:2.5rem;border:2px solid var(--border);max-height:80vh;overflow-y:auto;position:relative">
-    <button onclick="document.getElementById('policyModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text)">✕</button>
+    <button onclick="document.getElementById('policyModal').style.display='none'" aria-label="Close" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text)">✕</button>
     <div id="policyContent"></div>
   </div>
 </div>
@@ -1763,7 +1791,7 @@ function showPolicy(key){
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modal">
     <div class="modal-gal">
-      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      <button class="modal-close" onclick="closeModalDirect()" aria-label="Close">✕</button>
       <button class="modal-arrow prev" onclick="galPrev(event)">‹</button>
       <button class="modal-arrow next" onclick="galNext(event)">›</button>
       <img id="modalImg" src="" alt="">
@@ -1797,7 +1825,7 @@ function showPolicy(key){
 </div>
 
 <script>
-const CDN='https://res.cloudinary.com/dzqgajn3l/image/upload/';
+const CDN='https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/';
 
 // ─── DATA (same as original) ───
 const PROPS=[
@@ -1997,9 +2025,9 @@ const RESTAURANTS=[
 
 // ─── RENDER PROPERTIES ───
 const GRID_FILLER_PHOTOS=[
-  'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783355480/16_jwtrwo.jpg',
-  'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783355469/11_bsdr7r.jpg',
-  'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783355459/10_y3fkvf.jpg',
+  'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783355480/16_jwtrwo.jpg',
+  'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783355469/11_bsdr7r.jpg',
+  'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783355459/10_y3fkvf.jpg',
 ];
 
 function renderProps(){
@@ -2061,18 +2089,18 @@ function toggleServiceCard(id){
 }
 
 const SERVICE_PHOTOS = {
-  atv:              'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783215692/ATV_FINAL_roefnd.jpg',
-  golf:             'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783216390/golf_car_4_ha6iwu.jpg',
-  chef:             'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/403832778_732909078873438_4264179694023831035_n_bvx95m.jpg',
-  airport_arrival:  'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783210418/TRANSFERS_VAN_vgu2rl.jpg',
-  airport_departure:'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783210418/TRANSFERS_VAN_vgu2rl.jpg',
-  yoga:             'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/pexels-thirdman-6957891_rjobdi.jpg',
-  bjj:              'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/breath_bjj_4_hvxjwv.jpg',
-  fishing:          'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206787/tour_pesca_hrppko.jpg',
-  sunset:           'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783217664/7_faeijr.jpg',
-  horseback:        'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/14_errrjd.jpg',
-  turtles:          'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783206786/8d_avu1lh.jpg',
-  tennis:           'https://res.cloudinary.com/dzqgajn3l/image/upload/v1783207612/WhatsApp_Image_2024-02-22_at_10.27.33_AM_bgoaqj.jpg',
+  atv:              'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783215692/ATV_FINAL_roefnd.jpg',
+  golf:             'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783216390/golf_car_4_ha6iwu.jpg',
+  chef:             'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/403832778_732909078873438_4264179694023831035_n_bvx95m.jpg',
+  airport_arrival:  'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783210418/TRANSFERS_VAN_vgu2rl.jpg',
+  airport_departure:'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783210418/TRANSFERS_VAN_vgu2rl.jpg',
+  yoga:             'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/pexels-thirdman-6957891_rjobdi.jpg',
+  bjj:              'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/breath_bjj_4_hvxjwv.jpg',
+  fishing:          'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206787/tour_pesca_hrppko.jpg',
+  sunset:           'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783217664/7_faeijr.jpg',
+  horseback:        'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/14_errrjd.jpg',
+  turtles:          'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/8d_avu1lh.jpg',
+  tennis:           'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783207612/WhatsApp_Image_2024-02-22_at_10.27.33_AM_bgoaqj.jpg',
 };
 
 function renderServices(){
@@ -2599,7 +2627,7 @@ function showWiseInstructions(data){
     <div style="background:var(--white);max-width:480px;width:100%;border:2px solid var(--border);animation:slideUp 0.25s ease;max-height:90vh;overflow-y:auto">
       <div style="background:var(--bg);padding:1.5rem;border-bottom:2px solid var(--border);display:flex;justify-content:space-between;align-items:center">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase">Booking Confirmed ✓</div>
-        <button onclick="document.getElementById('wiseModal').remove()" style="background:none;border:none;cursor:pointer;font-size:1.1rem;width:32px;height:32px">✕</button>
+        <button onclick="document.getElementById('wiseModal').remove()" aria-label="Close" style="background:none;border:none;cursor:pointer;font-size:1.1rem;width:32px;height:32px">✕</button>
       </div>
       <div style="padding:2rem">
         <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem">Your Reference</div>
@@ -2720,7 +2748,7 @@ function showPaymentModal(total,items){
     <div style="background:var(--black2);border:1px solid var(--border);border-radius:2px;max-width:500px;width:100%;padding:2.5rem;animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem">
         <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--white)">Complete Payment</div>
-        <button onclick="document.getElementById('paymentModal').remove()" style="background:rgba(245,242,236,0.08);border:1px solid var(--border);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;color:var(--white)">✕</button>
+        <button onclick="document.getElementById('paymentModal').remove()" aria-label="Close" style="background:rgba(245,242,236,0.08);border:1px solid var(--border);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;color:var(--white)">✕</button>
       </div>
       <div style="background:rgba(245,242,236,0.04);border:1px solid var(--border);border-radius:2px;padding:1.25rem;margin-bottom:1.5rem">
         <div style="font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem">Order Summary</div>
@@ -2799,7 +2827,7 @@ if(document.getElementById('waveToday')){try{loadSurfConditions();}catch(e){cons
 <div class="cart-panel" id="cartPanel">
   <div class="cart-header">
     <div class="cart-header-title">Your Order</div>
-    <button class="cart-close" onclick="toggleCart()">✕</button>
+    <button class="cart-close" onclick="toggleCart()" aria-label="Close cart">✕</button>
   </div>
   <div class="cart-body" id="cartBody">
     <div class="cart-empty" id="cartEmpty">
@@ -2897,7 +2925,7 @@ function renderCart(){
         <div class="cart-item-meta">${item.meta||''}</div>
         <div class="cart-item-price">${item.price > 0 ? '$'+item.price.toLocaleString() : 'TBD'}</div>
       </div>
-      <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">✕</button>
+      <button class="cart-item-remove" onclick="removeFromCart('${item.id}')" aria-label="Remove ${item.name} from cart">✕</button>
     </div>`;
   }).join('');
 
@@ -2994,7 +3022,7 @@ function showCheckoutModal(){
     <div style="background:var(--white);max-width:520px;width:100%;border:2px solid var(--border);max-height:90vh;overflow-y:auto">
       <div style="background:var(--text);padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--bg)">Checkout</div>
-        <button onclick="document.getElementById('checkoutModal').remove()" style="background:none;border:none;cursor:pointer;color:var(--bg);font-size:1.5rem;line-height:1;padding:0 4px">✕</button>
+        <button onclick="document.getElementById('checkoutModal').remove()" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--bg);font-size:1.5rem;line-height:1;padding:0 4px">✕</button>
       </div>
       <div style="padding:2rem">
 
@@ -3198,7 +3226,7 @@ injectMarquee();
     <div style="color:rgba(245,240,232,0.65)">Chat with us directly — we respond fast.</div>
     <div style="position:absolute;bottom:-7px;right:22px;width:14px;height:14px;background:#1A1916;border-right:1px solid rgba(253,250,245,0.12);border-bottom:1px solid rgba(253,250,245,0.12);transform:rotate(45deg)"></div>
   </div>
-  <a href="https://wa.me/50672935565?text=Hi!%20I'm%20interested%20in%20planning%20a%20trip%20to%20Nosara" target="_blank" id="waBtn"
+  <a href="https://wa.me/50672935565?text=Hi!%20I'm%20interested%20in%20planning%20a%20trip%20to%20Nosara" target="_blank" id="waBtn" aria-label="Chat with us on WhatsApp"
     style="width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;border:3px solid #fff"
     onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 8px 32px rgba(37,211,102,0.5)'"
     onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(37,211,102,0.4)'">
@@ -3528,6 +3556,19 @@ const LANG_LABELS = {en:'EN',es:'ES',fr:'FR',de:'DE',pt:'PT',ru:'RU',hi:'HI'};
 function toggleLangMenu(){
   const m=document.getElementById('langMenu');
   m.style.display=m.style.display==='none'?'block':'none';
+}
+function toggleMobileNav(){
+  const links=document.getElementById('navLinks');
+  const btn=document.getElementById('navHamburger');
+  const isOpen=links.classList.toggle('open');
+  btn.classList.toggle('open',isOpen);
+  btn.setAttribute('aria-expanded',isOpen?'true':'false');
+}
+function closeMobileNav(){
+  document.getElementById('navLinks').classList.remove('open');
+  const btn=document.getElementById('navHamburger');
+  btn.classList.remove('open');
+  btn.setAttribute('aria-expanded','false');
 }
 document.addEventListener('click',e=>{
   if(!e.target.closest('#langBtn')&&!e.target.closest('#langMenu')){
