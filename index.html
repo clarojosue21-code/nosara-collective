@@ -805,53 +805,7 @@ section{padding:5rem 3rem}
 .lead-modal-thanks-sub{font-size:0.72rem;color:rgba(253,250,245,0.5)}
 
 /* ─── IMPACT ─── */
-#impact{background:#1E1D18 !important;padding:5rem 3rem}
-.impact-big-banner{
-  background:var(--clay);padding:2.5rem 3rem;
-  margin-bottom:3.5rem;
-  display:flex;align-items:center;
-  justify-content:space-between;flex-wrap:wrap;gap:2rem;
-  border:2px solid var(--clay-dark);
-}
-.impact-big-num{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(4rem,10vw,8rem);
-  font-weight:300;color:#FDFAF5;line-height:0.85;
-}
-.impact-big-num sup{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:0.35em;font-weight:700;vertical-align:super;
-}
-.impact-big-label{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:0.62rem;font-weight:700;
-  letter-spacing:0.22em;text-transform:uppercase;
-  color:rgba(253,250,245,0.8);margin-top:0.5rem;
-}
-.impact-big-desc{
-  font-family:'DM Mono',monospace;
-  font-size:0.68rem;color:rgba(253,250,245,0.75);
-  line-height:1.8;font-weight:300;
-  max-width:380px;border-left:2px solid rgba(253,250,245,0.3);
-  padding-left:1.25rem;
-}
-.impact-grid-row{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:4rem;align-items:start;
-}
-.impact-text-col h2{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:clamp(1.8rem,3.5vw,2.8rem);
-  font-weight:700;line-height:0.95;
-  color:#FDFAF5 !important;
-  text-transform:uppercase;letter-spacing:-0.01em;
-  margin-bottom:1.5rem;
-}
-.impact-text-col p{
-  font-size:0.82rem;
-  color:#E8E2D8 !important;
-  line-height:1.9;font-weight:300;margin-bottom:1rem;
-}
+#impact,#impact-banner{background:#1E1D18 !important;padding:5rem 3rem}
 .impact-label{
   font-family:'DM Mono',monospace;
   font-size:0.52rem;letter-spacing:0.28em;
@@ -1081,9 +1035,8 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   .about-grid{grid-template-columns:1fr!important;gap:2.5rem!important}
   .nav-links{display:none}
   .nav-inner{padding:0 1.25rem}
-  section,#surf,#impact{padding:4rem 1.5rem}
+  section,#surf,#impact,#impact-banner{padding:4rem 1.5rem}
   .hero{padding:0 1.5rem 3.5rem}
-  .impact-grid-row{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr}
   .impact-banner-big{padding:2rem;flex-direction:column;gap:1.25rem}
   .impact-banner-right{border-left:none;border-top:1px solid rgba(253,250,245,0.2);padding-left:0;padding-top:1.25rem;max-width:100%}
@@ -1110,7 +1063,7 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   .guide-tabs{border-bottom:none;flex-wrap:wrap;gap:0}
   .guide-tab{border-bottom:2px solid var(--border-light);width:100%}
   .impact-stats{grid-template-columns:1fr 1fr}
-  section,#surf,#impact{padding:3rem 1rem}
+  section,#surf,#impact,#impact-banner{padding:3rem 1rem}
   .hero{padding:0 1rem 3rem}
   .section-title{font-size:clamp(1.8rem,8vw,3rem)}
   .section-sub{font-size:0.8rem}
@@ -1129,16 +1082,16 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   .footer-bottom{flex-direction:column;align-items:flex-start;gap:0.5rem}
   .nav-cart{padding:7px 12px;font-size:0.55rem}
   .hero-eyebrow{font-size:0.5rem}
-  #impact{padding:3rem 1rem}
+  #impact,#impact-banner{padding:3rem 1rem}
   .impact-pct{font-size:clamp(3rem,15vw,5rem)}
 }
 
 /* ═══ IMPACT SECTION ═══ */
-#impact{
+#impact,#impact-banner{
   background:#1A1916;
   padding:5rem 3rem;
 }
-#impact .section-inner{max-width:1440px;margin:0 auto}
+#impact .section-inner,#impact-banner .section-inner{max-width:1440px;margin:0 auto}
 
 .impact-banner-big{
   background:var(--clay);
@@ -1479,7 +1432,7 @@ body{top:0!important;position:static!important}
   </div>
 </nav><div style="background:#1A1916;border-bottom:2px solid var(--clay);padding:11px 2rem;text-align:center;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
   <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400">Conscience Collective</span>
-  <span style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--clay);color:#FDFAF5;padding:5px 16px;border:2px solid #1A1916;font-family:'Space Grotesk',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase">♥ 5% TO NOSARA FAMILIES</span>
+  <span style="font-family:'Space Grotesk',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay)">// 5% to Nosara Families</span>
   <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400">Every Booking · Every Time</span>
 </div>
 
@@ -1534,7 +1487,7 @@ body{top:0!important;position:static!important}
 </section>
 
 <!-- PROPERTIES -->
-<section id="impact">
+<section id="impact-banner">
   <div class="section-inner">
 
     <!-- BIG 5% BANNER -->
@@ -1564,14 +1517,8 @@ body{top:0!important;position:static!important}
     <p style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;font-style:italic;color:#C8C2B6;line-height:1.75;margin-bottom:1.5rem">
       As tourism continues to grow, much of the revenue generated here leaves the region through large international booking platforms. Nosara <span style="color:var(--clay);font-weight:700">Collective Conscience</span> was created to change that.
     </p>
-    <p style="font-size:0.92rem;color:#6A6460;line-height:1.9;font-weight:300;margin-bottom:1rem">
-      We are building a locally driven network of homes, experiences, and services that keeps more tourism dollars circulating within the community. Together with homeowners, local businesses, and conscious travelers, we are creating a model where tourism directly contributes to the people, culture, and future of Nosara.
-    </p>
-    <p style="font-size:0.92rem;color:#6A6460;line-height:1.9;font-weight:300;margin-bottom:1.5rem">
-      Every reservation becomes an opportunity to support local families, strengthen community initiatives, and preserve the spirit that makes Nosara one of the world's most special coastal destinations.
-    </p>
-    <p style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;color:#C8C2B6;letter-spacing:0.04em">
-      Travel with purpose. Stay with impact. Surf good waves everyday 🌴✨
+    <p style="font-size:0.92rem;color:#6A6460;line-height:1.9;font-weight:300">
+      We're building a locally driven network of homes, experiences, and services — created with homeowners, local businesses, and conscious travelers who believe tourism should strengthen the places it touches, not extract from them.
     </p>
   </div>
 </section>
@@ -1642,7 +1589,7 @@ body{top:0!important;position:static!important}
       <div class="surf-card">
         <div class="surf-card-label">Water Temp</div>
         <div class="surf-card-val">82°F / 28°C</div>
-        <div class="surf-card-desc">Warm year-round 🌊</div>
+        <div class="surf-card-desc">Warm year-round</div>
       </div>
       <div class="surf-card">
         <div class="surf-card-label">Best Sessions</div>
@@ -1670,7 +1617,7 @@ body{top:0!important;position:static!important}
   <div class="section-inner">
     <div class="section-label">Real Estate</div>
     <h2 class="section-title">Available Lots</h2>
-    <p class="section-sub">🌱 5% of every sale goes back to Nosara. Always. <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--clay)">Because Pura Vida should be for everyone.</em></p>
+    <p class="section-sub">5% of every sale goes back to Nosara. Always. <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--clay)">Because Pura Vida should be for everyone.</em></p>
 
     <div class="lots-grid stagger" id="lotsGrid"></div>
   </div>
@@ -1725,7 +1672,7 @@ body{top:0!important;position:static!important}
         <div class="footer-logo">NOSARA <span>COLLECTIVE</span></div>
         <div class="footer-logo-sub">CONSCIENCE</div>
         <p class="footer-desc" style="color:#6A6460">Handpicked homes in Nosara's most beautiful pockets. Every booking supports local families — 5% goes directly to the community.</p>
-        <div class="footer-5pct">♥ 5% to Nosara Families</div>
+        <div class="footer-5pct">// 5% to Nosara Families</div>
         <div style="margin-top:1rem;font-family:'DM Mono',monospace;font-size:0.56rem;color:#3A3830;letter-spacing:0.1em;text-transform:uppercase;font-weight:400">🇨🇷 100% Costa Rican Company</div>
       </div>
       <div>
@@ -3149,10 +3096,10 @@ window.addEventListener('scroll',()=>{
 // ─── MARQUEE INJECTION ───
 function injectMarquee(){
   const items = [
-    '🌊 Nosara · Costa Rica','◈ 5% to Local Families','🏄 Playa Guiones','◈ Luxury Stays',
-    '🌴 Guanacaste','◈ Surf · Skate · Soul','🐢 Ostional Turtles','◈ Build Your Stay',
-    '🌊 Nosara · Costa Rica','◈ 5% to Local Families','🏄 Playa Guiones','◈ Luxury Stays',
-    '🌴 Guanacaste','◈ Surf · Skate · Soul','🐢 Ostional Turtles','◈ Build Your Stay'
+    'Nosara · Costa Rica','5% to Local Families','Playa Guiones','Luxury Stays',
+    'Guanacaste','Surf · Skate · Soul','Ostional Turtles','Build Your Stay',
+    'Nosara · Costa Rica','5% to Local Families','Playa Guiones','Luxury Stays',
+    'Guanacaste','Surf · Skate · Soul','Ostional Turtles','Build Your Stay'
   ];
   const html = `<div class="marquee-wrap"><div class="marquee-track">${items.map(i=>`<div class="marquee-item"><span>◈</span>${i}</div>`).join('')}</div></div>`;
   // Insert after hero
@@ -3179,11 +3126,11 @@ injectMarquee();
 <!-- WhatsApp Floating -->
 <div id="waFloat" style="position:fixed;bottom:2rem;right:2rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:0.75rem">
   <div id="waTooltip" style="display:none;background:#1A1916;color:#F5F0E8;padding:0.9rem 1.25rem;font-size:0.72rem;font-family:'Space Grotesk',sans-serif;font-weight:400;line-height:1.65;max-width:230px;border:1px solid rgba(253,250,245,0.12);box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative">
-    <div style="font-weight:700;font-size:0.75rem;margin-bottom:0.3rem;color:#F5F0E8">Need help planning your<br>Nosara trip? 🌴</div>
+    <div style="font-weight:700;font-size:0.75rem;margin-bottom:0.3rem;color:#F5F0E8">Need help planning your<br>Nosara trip?</div>
     <div style="color:rgba(245,240,232,0.65)">Chat with us directly — we respond fast.</div>
     <div style="position:absolute;bottom:-7px;right:22px;width:14px;height:14px;background:#1A1916;border-right:1px solid rgba(253,250,245,0.12);border-bottom:1px solid rgba(253,250,245,0.12);transform:rotate(45deg)"></div>
   </div>
-  <a href="https://wa.me/50672935565?text=Hi!%20I'm%20interested%20in%20planning%20a%20trip%20to%20Nosara%20🌴" target="_blank" id="waBtn"
+  <a href="https://wa.me/50672935565?text=Hi!%20I'm%20interested%20in%20planning%20a%20trip%20to%20Nosara" target="_blank" id="waBtn"
     style="width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;border:3px solid #fff"
     onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 8px 32px rgba(37,211,102,0.5)'"
     onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(37,211,102,0.4)'">
