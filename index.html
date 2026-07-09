@@ -1416,21 +1416,15 @@ nav.scrolled{
 .surf-card:nth-child(4){animation-delay:0.35s}
 
 </style>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<style>
-  .goog-te-banner-frame,.goog-te-balloon-frame{display:none!important}
-  body{top:0!important}
-  .goog-tooltip,.goog-tooltip:hover{display:none!important}
-  .goog-text-highlight{background:none!important;box-shadow:none!important}
-</style>
 <style>
 /* Hide Google Translate toolbar */
 .goog-te-banner-frame,.goog-te-balloon-frame{display:none!important}
 body{top:0!important;position:static!important}
 .goog-te-gadget{display:none!important}
 .goog-te-menu-value span{display:none}
+.goog-tooltip,.goog-tooltip:hover{display:none!important}
+.goog-text-highlight{background:none!important;box-shadow:none!important}
 </style>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 </head>
 <body>
 
@@ -2809,17 +2803,28 @@ async function loadPropsFromSupabase(){
 }
 
 // ─── INIT ───
-loadPropsFromSupabase().then(()=>{
+// Google Translate's widget only scans the DOM once, when its script
+// finishes loading — content injected by our render*() calls after that
+// point never gets translated. Loading the script only once every
+// render function below has run (including the async Supabase-backed
+// ones) guarantees the full page is in place before Google ever looks.
+function loadGoogleTranslateScript(){
+  if(document.querySelector('script[src*="translate_a/element.js"]')) return;
+  const s=document.createElement('script');
+  s.src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+  document.body.appendChild(s);
+}
+
+const propsReady=loadPropsFromSupabase().then(()=>{
   try{renderProps();}catch(e){console.warn('renderProps',e);}
   try{renderRetreats();}catch(e){console.warn('renderRetreats',e);}
-  const savedLang = localStorage.getItem('ncc_lang');
-  if(savedLang && savedLang !== 'en') _applyGT(savedLang);
 });
 try{renderServices();}catch(e){console.warn('renderServices',e);}
 try{renderLots();}catch(e){console.warn('renderLots',e);}
 try{renderGuide();}catch(e){console.warn('renderGuide',e);}
 if(document.getElementById('restaurantsGrid')){try{renderRestaurants();}catch(e){console.warn('renderRestaurants',e);}}
 if(document.getElementById('waveToday')){try{loadSurfConditions();}catch(e){console.warn('loadSurf',e);}}
+propsReady.then(loadGoogleTranslateScript);
 </script>
 
 <!-- ─── SHOPPING CART PANEL ─── -->
