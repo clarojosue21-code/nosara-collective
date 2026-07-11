@@ -69,31 +69,30 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#F2EDE4;
-  --bg2:#EAE4D8;
-  --bg3:#E0D8C8;
-  --white:#FDFAF5;
-  --black:#141210;
-  --text:#141210;
-  --text-mid:#5A5548;
-  --text-muted:#8A8278;
-  --clay:#C4784A;
-  --clay-light:#D4906A;
-  --clay-dark:#A85E35;
+  /* ─── "The Contour Line" brand system (approved 2026-07-10) ─── */
+  --bg:#F7F5F2;
+  --bg2:#EFEAE2;
+  --bg3:#DCD4C8;
+  --white:#FBF9F6;
+  --black:#2E2C2A;
+  --text:#2E2C2A;
+  --text-mid:#6B6864;
+  --text-muted:#96938E;
+  --clay:#B5553A;
+  --clay-light:#B08D74;
+  --clay-dark:#8F4530;
   --ocean:#1E5A6A;
   --ocean-light:#2A7A8E;
   --wax:#F0C878;       /* surf wax yellow */
   --fin:#7AAAC0;       /* fin blue */
   --rail:#D4906A;      /* rail orange */
-  --border:#141210;
-  --border-light:rgba(20,18,16,0.1);
-  --border-med:rgba(20,18,16,0.18);
-  /* ─── New brand system: "The Contour Line" (approved 2026-07-10) ─── */
-  /* Being rolled out incrementally — nav/header first. See project memory. */
+  --border:#2E2C2A;
+  --border-light:rgba(46,44,42,0.1);
+  --border-med:rgba(46,44,42,0.18);
   --nc-warmwhite:#F7F5F2;
   --nc-concrete:#6B6864;
   --nc-concrete-light:#96938E;
@@ -108,7 +107,7 @@ html{scroll-behavior:smooth;scroll-padding-top:60px}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
   outline:2px solid var(--clay);outline-offset:2px;
 }
-body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;padding-top:60px}
+body{font-family:'Archivo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;padding-top:60px}
 
 /* ─── NAV ─── */
 nav{
@@ -166,7 +165,7 @@ nav{
 .impact-strip{
   background:var(--text);color:var(--bg);
   padding:10px 2rem;text-align:center;
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.6rem;letter-spacing:0.18em;
   text-transform:uppercase;font-weight:400;
 }
@@ -215,7 +214,7 @@ nav{
 .hero-slide.color{filter:saturate(0.95) contrast(1.05)}
 .hero-slide.active{opacity:1}
 .hero-eyebrow{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.58rem;letter-spacing:0.22em;
   text-transform:uppercase;color:var(--clay);
   margin-bottom:1rem;font-weight:400;
@@ -223,7 +222,7 @@ nav{
 }
 .hero-eyebrow::before{content:'◈';font-size:0.5rem}
 .hero-title{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:clamp(2rem,5.5vw,5rem);
   font-weight:700;line-height:1.05;
   margin-bottom:0.4rem;
@@ -233,7 +232,7 @@ nav{
 .hero-title em{
   font-style:normal;color:#FDFAF5;
   display:block;font-weight:700;
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:1em;letter-spacing:-0.025em;
   line-height:1.2;margin-top:0.2rem;
 }
@@ -249,7 +248,7 @@ nav{
   font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;cursor:pointer;
   border:2px solid var(--text);transition:all 0.15s;
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
 }
 .btn-primary:hover{background:var(--clay);border-color:var(--clay)}
 .btn-ghost{
@@ -258,7 +257,7 @@ nav{
   font-weight:600;letter-spacing:0.16em;
   text-transform:uppercase;cursor:pointer;
   border:2px solid var(--text);border-left:none;
-  transition:all 0.15s;font-family:'Space Grotesk',sans-serif;
+  transition:all 0.15s;font-family:'Archivo',sans-serif;
 }
 .btn-ghost:hover{background:var(--bg2)}
 /* Retro sticker badge */
@@ -272,7 +271,7 @@ nav{
   cursor:pointer;
 }
 .hero-badge-text{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.42rem;font-weight:500;
   letter-spacing:0.1em;text-transform:uppercase;
   color:var(--white);text-align:center;
@@ -286,7 +285,7 @@ nav{
 section{padding:5rem 3rem}
 .section-inner{max-width:1440px;margin:0 auto}
 .section-label{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.56rem;letter-spacing:0.28em;
   text-transform:uppercase;color:var(--clay-dark);
   margin-bottom:1rem;font-weight:600;
@@ -294,7 +293,7 @@ section{padding:5rem 3rem}
 }
 .section-label::before{content:'—';opacity:0.6}
 .section-title{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:clamp(2rem,4.5vw,3.8rem);
   font-weight:700;line-height:0.9;
   margin-bottom:1rem;color:var(--text);
@@ -329,7 +328,7 @@ section{padding:5rem 3rem}
   padding:4px 12px;font-size:0.52rem;
   font-weight:700;letter-spacing:0.14em;
   text-transform:uppercase;
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
 }
 .prop-badge.bundle{background:var(--ocean)}
 .prop-badge.eco{background:#3A6E3A}
@@ -348,7 +347,7 @@ section{padding:5rem 3rem}
   padding:11px 28px;font-size:0.6rem;
   font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;border:none;
-  cursor:pointer;font-family:'Space Grotesk',sans-serif;
+  cursor:pointer;font-family:'Archivo',sans-serif;
   transition:background 0.15s;
 }
 .prop-overlay-view{
@@ -357,29 +356,29 @@ section{padding:5rem 3rem}
   font-weight:600;letter-spacing:0.14em;
   text-transform:uppercase;
   border:1px solid rgba(253,250,245,0.5);
-  cursor:pointer;font-family:'Space Grotesk',sans-serif;
+  cursor:pointer;font-family:'Archivo',sans-serif;
   transition:all 0.15s;
 }
 .prop-body{padding:1.5rem}
 .prop-name{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.95rem;font-weight:700;
   margin-bottom:0.25rem;color:var(--text);
   text-transform:uppercase;letter-spacing:0.04em;
 }
 .prop-meta{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.58rem;color:var(--text-muted);
   margin-bottom:0.75rem;letter-spacing:0.04em;font-weight:300;
 }
 .prop-desc{font-size:0.76rem;color:var(--text-muted);line-height:1.75;margin-bottom:1.1rem;font-weight:300}
 .prop-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border-light);padding-top:0.9rem}
 .prop-price{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Instrument Serif',serif;
   font-size:1.75rem;font-weight:300;color:var(--text);
 }
 .prop-price span{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.58rem;color:var(--text-muted);font-weight:300;
 }
 .prop-btn{
@@ -388,11 +387,11 @@ section{padding:5rem 3rem}
   font-size:0.58rem;font-weight:700;
   cursor:pointer;transition:all 0.15s;
   letter-spacing:0.12em;text-transform:uppercase;
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
 }
 .prop-btn:hover{background:var(--clay)}
 .impact-chip{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.56rem;color:var(--clay);font-weight:400;
 }
 
@@ -419,7 +418,7 @@ section{padding:5rem 3rem}
   background:var(--bg);flex-shrink:0;
 }
 .cart-header-title{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.72rem;font-weight:700;
   letter-spacing:0.18em;text-transform:uppercase;
 }
@@ -438,7 +437,7 @@ section{padding:5rem 3rem}
 }
 .cart-empty-icon{font-size:2.5rem;margin-bottom:1rem;opacity:0.4}
 .cart-empty-text{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.65rem;letter-spacing:0.12em;
   text-transform:uppercase;font-weight:300;
 }
@@ -458,12 +457,12 @@ section{padding:5rem 3rem}
   margin-bottom:0.2rem;color:var(--text);
 }
 .cart-item-meta{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.58rem;color:var(--text-muted);
   font-weight:300;margin-bottom:0.4rem;
 }
 .cart-item-price{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Instrument Serif',serif;
   font-size:1.2rem;font-weight:300;color:var(--text);
 }
 .cart-item-remove{
@@ -482,16 +481,16 @@ section{padding:5rem 3rem}
   align-items:baseline;margin-bottom:0.5rem;
 }
 .cart-subtotal-label{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.6rem;letter-spacing:0.12em;
   text-transform:uppercase;color:var(--text-muted);
 }
 .cart-subtotal-price{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Instrument Serif',serif;
   font-size:2rem;font-weight:300;color:var(--text);
 }
 .cart-note{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.55rem;color:var(--clay);
   letter-spacing:0.08em;margin-bottom:1.25rem;
   font-weight:400;
@@ -501,13 +500,13 @@ section{padding:5rem 3rem}
   border:none;padding:16px;font-size:0.65rem;
   font-weight:700;letter-spacing:0.2em;
   text-transform:uppercase;cursor:pointer;
-  transition:all 0.15s;font-family:'Space Grotesk',sans-serif;
+  transition:all 0.15s;font-family:'Archivo',sans-serif;
   margin-bottom:0.75rem;
 }
 .cart-checkout:hover{background:var(--clay)}
 .cart-payment-icons{
   display:flex;gap:0.5rem;justify-content:center;
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.52rem;color:var(--text-muted);
   letter-spacing:0.06em;
 }
@@ -536,12 +535,12 @@ section{padding:5rem 3rem}
 .sc-icon{font-size:1rem;flex-shrink:0;display:inline-flex;color:var(--clay)}
 .sc-icon svg{width:20px;height:20px}
 .sc-name{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.82rem;font-weight:600;
   color:var(--text);letter-spacing:0.01em;
 }
 .sc-price-inline{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.58rem;color:var(--clay);
   letter-spacing:0.04em;margin-left:auto;flex-shrink:0;
 }
@@ -602,21 +601,21 @@ section{padding:5rem 3rem}
 .sc-options{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.75rem}
 .sc-opt{display:flex;flex-direction:column;gap:3px}
 .sc-opt label{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.52rem;color:var(--text-muted);
   font-weight:400;letter-spacing:0.1em;text-transform:uppercase;
 }
 .sc-opt input,.sc-opt select,.sc-opt textarea{
   border:1px solid var(--border-med);padding:8px 10px;
   font-size:0.78rem;background:var(--white);
-  color:var(--text);font-family:'Space Grotesk',sans-serif;
+  color:var(--text);font-family:'Archivo',sans-serif;
   outline:none;transition:border-color 0.15s;width:100%;
 }
 .sc-add-btn{
   width:100%;padding:9px;
   background:var(--text);color:var(--white);
   border:none;cursor:pointer;
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.68rem;font-weight:700;
   letter-spacing:0.1em;text-transform:uppercase;
   transition:background 0.15s;
@@ -626,14 +625,14 @@ section{padding:5rem 3rem}
   margin-top:auto;width:100%;padding:10px;
   background:var(--text);color:var(--white);
   border:none;cursor:pointer;
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.72rem;font-weight:700;
   letter-spacing:0.1em;text-transform:uppercase;
   transition:background 0.15s;
 }
 .sc-add-btn:hover{background:var(--clay)}
 .sc-opt input:focus,.sc-opt select:focus,.sc-opt textarea:focus{border-color:var(--clay)}
-.surf-updated{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text-muted);margin-bottom:1rem;letter-spacing:0.04em;}
+.surf-updated{font-family:'Archivo',monospace;font-size:0.68rem;color:var(--text-muted);margin-bottom:1rem;letter-spacing:0.04em;}
 .windy-wrap{border-radius:10px;overflow:hidden;margin-bottom:1.5rem;border:1px solid var(--border-med);}
 .windy-frame{width:100%;height:420px;display:block;}
 .windy-caption{font-size:0.72rem;color:var(--text-muted);padding:0.6rem 0.85rem;background:var(--bg);border-top:1px solid var(--border-light);}
@@ -646,11 +645,11 @@ section{padding:5rem 3rem}
 .cdp-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;}
 .cdp-nav{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--clay,#C4714A);padding:0 0.4rem;line-height:1;font-weight:300;}
 .cdp-nav:hover{opacity:0.7;}
-.cdp-month{font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;color:var(--text,#3A3632);}
+.cdp-month{font-family:'Archivo',sans-serif;font-size:0.88rem;font-weight:600;color:var(--text,#3A3632);}
 .cdp-dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
-.cdp-dow span{text-align:center;font-size:0.62rem;font-weight:600;color:var(--text-muted,#8A8580);font-family:'DM Mono',monospace;padding:2px 0;}
+.cdp-dow span{text-align:center;font-size:0.62rem;font-weight:600;color:var(--text-muted,#8A8580);font-family:'Archivo',monospace;padding:2px 0;}
 .cdp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
-.cdp-d{text-align:center;padding:6px 2px;font-size:0.8rem;cursor:pointer;border-radius:5px;color:var(--text,#3A3632);font-family:'Space Grotesk',sans-serif;transition:background 0.1s;}
+.cdp-d{text-align:center;padding:6px 2px;font-size:0.8rem;cursor:pointer;border-radius:5px;color:var(--text,#3A3632);font-family:'Archivo',sans-serif;transition:background 0.1s;}
 .cdp-d:hover{background:var(--clay,#C4714A);color:#fff;}
 .cdp-d.cdp-today{font-weight:700;color:var(--clay,#C4714A);}
 .cdp-d.cdp-sel{background:var(--clay,#C4714A)!important;color:#fff!important;font-weight:600;}
@@ -685,7 +684,7 @@ section{padding:5rem 3rem}
 .retreat-ph{width:100%;height:270px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg2)}
 .retreat-body{padding:1.75rem;border-top:1px solid var(--border-light)}
 .retreat-tag{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.55rem;font-weight:400;
   letter-spacing:0.18em;text-transform:uppercase;
   color:var(--clay);margin-bottom:0.75rem;
@@ -693,7 +692,7 @@ section{padding:5rem 3rem}
 }
 .retreat-tag::before{content:'◈';font-size:0.5rem}
 .retreat-name{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:1.3rem;font-weight:700;
   margin-bottom:0.6rem;color:var(--text);
   text-transform:uppercase;letter-spacing:0.02em;
@@ -704,14 +703,14 @@ section{padding:5rem 3rem}
   padding:3px 9px;font-size:0.58rem;
   color:var(--text-muted);background:var(--bg);
   border:1px solid var(--border-light);
-  font-family:'DM Mono',monospace;font-weight:300;
+  font-family:'Archivo',monospace;font-weight:300;
 }
 .retreat-cta{
   background:var(--text);color:var(--bg);border:none;
   padding:11px 22px;font-size:0.6rem;font-weight:700;
   cursor:pointer;transition:all 0.15s;
   letter-spacing:0.14em;text-transform:uppercase;
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
 }
 .retreat-cta:hover{background:var(--clay)}
 
@@ -725,16 +724,16 @@ section{padding:5rem 3rem}
 }
 .surf-card{background:rgba(255,255,255,0.05);padding:2rem}
 .surf-card-label{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.5rem;letter-spacing:0.24em;
   text-transform:uppercase;color:rgba(253,250,245,0.5);
   margin-bottom:0.6rem;font-weight:400;
 }
 .surf-card-val{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Instrument Serif',serif;
   font-size:3.5rem;font-weight:300;color:#FDFAF5;line-height:1;
 }
-.surf-card-desc{font-size:0.68rem;color:rgba(253,250,245,0.55);margin-top:0.4rem;line-height:1.6;font-family:'DM Mono',monospace;font-weight:300}
+.surf-card-desc{font-size:0.68rem;color:rgba(253,250,245,0.55);margin-top:0.4rem;line-height:1.6;font-family:'Archivo',monospace;font-weight:300}
 
 /* ─── LOTS ─── */
 #lots{background:var(--bg2);border-top:2px solid var(--border)}
@@ -748,36 +747,36 @@ section{padding:5rem 3rem}
 .lot-icon{font-size:1.3rem;margin-bottom:1rem;color:var(--clay)}
 .lot-icon svg{width:28px;height:28px}
 .lot-name{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.85rem;font-weight:700;
   margin-bottom:0.35rem;color:var(--text);
   text-transform:uppercase;letter-spacing:0.06em;
 }
 .lot-size{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.6rem;color:var(--clay);
   font-weight:400;margin-bottom:0.7rem;letter-spacing:0.06em;
 }
 .lot-map{width:100%;height:160px;margin-bottom:1.1rem;border:1px solid var(--border-light);overflow:hidden}
 .lot-map iframe{width:100%;height:100%;border:0;display:block;filter:grayscale(40%) contrast(1.05)}
-.lot-ref{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);letter-spacing:0.04em;margin-bottom:0.9rem}
-.lot-price{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--text-muted);margin-bottom:0.9rem}
+.lot-ref{font-family:'Archivo',monospace;font-size:0.58rem;color:var(--text-muted);letter-spacing:0.04em;margin-bottom:0.9rem}
+.lot-price{font-family:'Instrument Serif',serif;font-size:1.1rem;font-weight:300;color:var(--text-muted);margin-bottom:0.9rem}
 .lot-actions{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.lot-map-link{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;color:var(--clay);text-decoration:none;text-transform:uppercase}
+.lot-map-link{font-family:'Archivo',monospace;font-size:0.6rem;letter-spacing:0.06em;color:var(--clay);text-decoration:none;text-transform:uppercase}
 .lot-map-link:hover{text-decoration:underline}
 .lot-btn{
   background:transparent;color:var(--text);
   border:2px solid var(--border);padding:8px 18px;
   font-size:0.58rem;font-weight:700;cursor:pointer;
   transition:all 0.15s;letter-spacing:0.12em;
-  text-transform:uppercase;font-family:'Space Grotesk',sans-serif;
+  text-transform:uppercase;font-family:'Archivo',sans-serif;
 }
 .lot-btn:hover{background:var(--text);color:var(--bg)}
 .filler-cta-btn{
   display:inline-flex;align-items:center;gap:0.4rem;
   background:var(--clay);color:#FDFAF5;
   border:2px solid var(--clay-dark);padding:9px 18px;
-  font-family:'DM Mono',monospace;font-size:0.62rem;font-weight:700;
+  font-family:'Archivo',monospace;font-size:0.62rem;font-weight:700;
   letter-spacing:0.16em;text-transform:uppercase;
   margin-top:0.75rem;transition:background 0.15s,transform 0.15s;
 }
@@ -791,13 +790,13 @@ section{padding:5rem 3rem}
   padding:1.75rem 0;cursor:pointer;
 }
 .guide-cat-title{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:clamp(1.3rem,3vw,2rem);font-weight:700;
   text-transform:uppercase;letter-spacing:0.01em;
   color:var(--text);
 }
 .guide-cat-arrow{
-  font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:400;
+  font-family:'Archivo',sans-serif;font-size:1.5rem;font-weight:400;
   color:var(--clay);flex-shrink:0;width:1.5rem;text-align:center;
 }
 .guide-cat-panel{display:none;padding-bottom:2.5rem}
@@ -811,7 +810,7 @@ section{padding:5rem 3rem}
 .guide-article-icon{color:var(--clay);margin-bottom:0.75rem}
 .guide-article-icon svg{width:24px;height:24px}
 .guide-article-title{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.82rem;font-weight:700;
   margin-bottom:0.6rem;color:var(--text);
   text-transform:uppercase;letter-spacing:0.04em;
@@ -821,9 +820,9 @@ section{padding:5rem 3rem}
 .guide-article-text li{margin-bottom:0.35rem}
 .guide-cta-bar{background:var(--dark);padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
 .guide-cta-bar-text{flex:1}
-.guide-cta-bar-label{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--clay);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem}
-.guide-cta-bar-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#333230;text-transform:uppercase;letter-spacing:0.04em}
-.guide-cta-btn{font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:var(--clay);color:#FDFAF5;border:none;padding:0.9rem 2.2rem;cursor:pointer;white-space:nowrap;transition:opacity 0.2s}
+.guide-cta-bar-label{font-family:'Archivo',monospace;font-size:0.65rem;color:var(--clay);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem}
+.guide-cta-bar-title{font-family:'Archivo',sans-serif;font-size:1rem;font-weight:700;color:#333230;text-transform:uppercase;letter-spacing:0.04em}
+.guide-cta-btn{font-family:'Archivo',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:var(--clay);color:#FDFAF5;border:none;padding:0.9rem 2.2rem;cursor:pointer;white-space:nowrap;transition:opacity 0.2s}
 .guide-cta-btn:hover{opacity:0.85}
 /* Lead modal */
 #leadModal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(14,12,10,0.82);backdrop-filter:blur(6px);align-items:center;justify-content:center}
@@ -831,25 +830,25 @@ section{padding:5rem 3rem}
 .lead-modal-box{background:#1C1A16;border:1px solid rgba(255,255,255,0.08);max-width:420px;width:90%;padding:2.8rem 2.4rem;position:relative}
 .lead-modal-close{position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:rgba(253,250,245,0.4);font-size:1.2rem;cursor:pointer;line-height:1}
 .lead-modal-close:hover{color:#FDFAF5}
-.lead-modal-label{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--clay);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.6rem}
-.lead-modal-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:#FDFAF5;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem}
+.lead-modal-label{font-family:'Archivo',monospace;font-size:0.62rem;color:var(--clay);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.6rem}
+.lead-modal-title{font-family:'Archivo',sans-serif;font-size:1.1rem;font-weight:700;color:#FDFAF5;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem}
 .lead-modal-sub{font-size:0.72rem;color:rgba(253,250,245,0.5);line-height:1.6;margin-bottom:1.8rem}
 .lead-modal-field{margin-bottom:1rem}
-.lead-modal-field label{display:block;font-family:'DM Mono',monospace;font-size:0.62rem;color:rgba(253,250,245,0.45);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem}
-.lead-modal-field input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#FDFAF5;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;padding:0.75rem 1rem;outline:none;box-sizing:border-box;transition:border-color 0.2s}
+.lead-modal-field label{display:block;font-family:'Archivo',monospace;font-size:0.62rem;color:rgba(253,250,245,0.45);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem}
+.lead-modal-field input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#FDFAF5;font-family:'Archivo',sans-serif;font-size:0.82rem;padding:0.75rem 1rem;outline:none;box-sizing:border-box;transition:border-color 0.2s}
 .lead-modal-field input:focus{border-color:var(--clay)}
 .lead-modal-field input::placeholder{color:rgba(253,250,245,0.2)}
-.lead-modal-submit{width:100%;background:var(--clay);color:#FDFAF5;border:none;font-family:'Space Grotesk',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:1rem;cursor:pointer;margin-top:0.5rem;transition:opacity 0.2s}
+.lead-modal-submit{width:100%;background:var(--clay);color:#FDFAF5;border:none;font-family:'Archivo',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:1rem;cursor:pointer;margin-top:0.5rem;transition:opacity 0.2s}
 .lead-modal-submit:hover{opacity:0.85}
 .lead-modal-thanks{display:none;text-align:center;padding:1rem 0}
 .lead-modal-thanks-icon{font-size:2rem;margin-bottom:0.8rem}
-.lead-modal-thanks-msg{font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;color:#FDFAF5;text-transform:uppercase;margin-bottom:0.5rem}
+.lead-modal-thanks-msg{font-family:'Archivo',sans-serif;font-size:0.9rem;font-weight:700;color:#FDFAF5;text-transform:uppercase;margin-bottom:0.5rem}
 .lead-modal-thanks-sub{font-size:0.72rem;color:rgba(253,250,245,0.5)}
 
 /* ─── IMPACT ─── */
 #impact,#impact-banner{background:#1E1D18 !important;padding:5rem 3rem}
 .impact-label{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.52rem;letter-spacing:0.28em;
   text-transform:uppercase;color:#D8906A !important;
   margin-bottom:1.25rem;font-weight:400;
@@ -863,7 +862,7 @@ section{padding:5rem 3rem}
   background:#252520;
 }
 .impact-stat-num{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Instrument Serif',serif;
   font-size:3rem;font-weight:300;
   color:#D8906A;line-height:1;
 }
@@ -917,16 +916,16 @@ section{padding:5rem 3rem}
   padding-bottom:1.25rem;border-bottom:1px solid var(--border-light);
 }
 .modal-title{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:1.3rem;font-weight:700;
   color:var(--text);text-transform:uppercase;letter-spacing:0.04em;
 }
 .modal-price{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Instrument Serif',serif;
   font-size:2.3rem;font-weight:300;color:var(--text);text-align:right;
 }
 .modal-price-note{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.6rem;color:var(--text-muted);text-align:right;
 }
 .modal-desc{font-size:0.8rem;color:var(--text-muted);line-height:1.85;margin-bottom:1.25rem;font-weight:300}
@@ -939,7 +938,7 @@ section{padding:5rem 3rem}
   font-size:0.7rem;display:flex;align-items:center;
   gap:6px;color:var(--text-muted);
   border:1px solid var(--border-light);
-  font-family:'DM Mono',monospace;font-weight:300;
+  font-family:'Archivo',monospace;font-weight:300;
 }
 .modal-impact-bar{
   background:rgba(43,122,142,0.08);
@@ -947,14 +946,14 @@ section{padding:5rem 3rem}
   padding:0.9rem 1.1rem;margin-bottom:1.25rem;
   display:flex;align-items:center;gap:10px;
   font-size:0.75rem;color:var(--ocean);
-  font-family:'DM Mono',monospace;font-weight:300;
+  font-family:'Archivo',monospace;font-weight:300;
 }
 .modal-book{
   background:var(--bg);padding:1.5rem;
   border:1px solid var(--border-light);
 }
 .modal-book-title{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.72rem;font-weight:700;
   margin-bottom:1.1rem;color:var(--text);
   text-transform:uppercase;letter-spacing:0.12em;
@@ -962,14 +961,14 @@ section{padding:5rem 3rem}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.6rem}
 .fg{display:flex;flex-direction:column;gap:3px;margin-bottom:0}
 .fg label{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.54rem;color:var(--text-muted);
   font-weight:400;letter-spacing:0.12em;text-transform:uppercase;
 }
 .fg input,.fg select{
   border:1px solid var(--border-med);padding:9px 10px;
   font-size:0.8rem;background:var(--white);
-  color:var(--text);font-family:'Space Grotesk',sans-serif;
+  color:var(--text);font-family:'Archivo',sans-serif;
   outline:none;transition:border-color 0.15s;width:100%;
 }
 .fg input:focus,.fg select:focus{border-color:var(--clay)}
@@ -978,11 +977,11 @@ section{padding:5rem 3rem}
   border:none;padding:14px;font-size:0.65rem;
   font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
   cursor:pointer;transition:all 0.15s;margin-top:0.9rem;
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
 }
 .book-btn:hover{background:var(--clay)}
 .book-note{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.58rem;color:var(--text-muted);
   text-align:center;margin-top:0.6rem;
 }
@@ -991,7 +990,7 @@ section{padding:5rem 3rem}
   padding:0.9rem;margin-bottom:0.9rem;
 }
 #nightCount{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.65rem;font-weight:400;color:var(--clay);
   margin-bottom:0.6rem;min-height:1.2em;letter-spacing:0.06em;
 }
@@ -1007,14 +1006,14 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   border-bottom:1px solid rgba(253,250,245,0.06);
 }
 .footer-brand-logo{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.75rem;font-weight:700;
   color:#F0EDE6;letter-spacing:0.2em;
   text-transform:uppercase;margin-bottom:0.35rem;
 }
 .footer-brand-logo span{color:var(--clay-light)}
 .footer-brand-sub{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.52rem;letter-spacing:0.18em;
   text-transform:uppercase;color:#4A4840;
   margin-bottom:1rem;font-weight:300;
@@ -1029,13 +1028,13 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   background:var(--clay);padding:7px 14px;
 }
 .footer-badge-text{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.56rem;font-weight:400;
   letter-spacing:0.12em;text-transform:uppercase;
   color:#FDFAF5;
 }
 .footer-col-title{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.52rem;font-weight:400;
   letter-spacing:0.22em;text-transform:uppercase;
   color:#3A3830;margin-bottom:1.25rem;
@@ -1053,12 +1052,12 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   justify-content:space-between;flex-wrap:wrap;gap:1rem;
 }
 .footer-copy{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.56rem;color:#3A3830;letter-spacing:0.08em;
 }
 .footer-bottom-links{display:flex;gap:1.5rem}
 .footer-bottom-links a{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.54rem;color:#3A3830;
   text-decoration:none;letter-spacing:0.1em;
   text-transform:uppercase;transition:color 0.15s;
@@ -1150,22 +1149,22 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   border:2px solid var(--clay-dark);
 }
 .impact-pct{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Instrument Serif',serif;
   font-size:clamp(4rem,10vw,7rem);
   font-weight:300;color:#FDFAF5;line-height:0.85;
 }
 .impact-pct sup{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.38em;font-weight:700;vertical-align:super;
 }
 .impact-pct-label{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.65rem;font-weight:700;
   letter-spacing:0.2em;text-transform:uppercase;
   color:rgba(253,250,245,0.85);margin-top:0.5rem;
 }
 .impact-banner-right{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.75rem;color:rgba(253,250,245,0.8);
   line-height:1.9;font-weight:300;
   max-width:380px;
@@ -1181,7 +1180,7 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
 @media(max-width:900px){.impact-body{grid-template-columns:1fr;gap:3rem}}
 
 .impact-eyebrow{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.55rem;letter-spacing:0.35em;
   text-transform:uppercase;
   color:#FDFAF5;
@@ -1189,7 +1188,7 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   opacity:0.5;
 }
 .impact-title{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Instrument Serif',serif;
   font-size:clamp(2.5rem,4.5vw,4rem);
   font-weight:300;line-height:0.95;
   color:#FDFAF5;
@@ -1213,12 +1212,12 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   text-align:center;padding:2.25rem;background:#222220;
 }
 .impact-stat-num{
-  font-family:'Cormorant Garamond',serif;
+  font-family:'Instrument Serif',serif;
   font-size:3rem;font-weight:300;
   color:#D8906A;line-height:1;
 }
 .impact-stat-label{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.6rem;color:#BCBAB6;
   margin-top:0.4rem;letter-spacing:0.14em;
   text-transform:uppercase;font-weight:700;
@@ -1238,13 +1237,13 @@ footer{
   border-bottom:1px solid rgba(253,250,245,0.05);
 }
 .footer-logo{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:'Archivo',sans-serif;
   font-size:0.8rem;font-weight:700;
   color:#E8E2D8;letter-spacing:0.2em;text-transform:uppercase;
 }
 .footer-logo span{color:var(--clay-light)}
 .footer-logo-sub{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.48rem;letter-spacing:0.28em;
   text-transform:uppercase;color:#3A3830;
   margin-bottom:1rem;font-weight:300;margin-top:2px;
@@ -1257,13 +1256,13 @@ footer{
 .footer-5pct{
   display:inline-flex;align-items:center;gap:0.4rem;
   background:var(--clay);padding:6px 12px;
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.54rem;font-weight:400;
   letter-spacing:0.12em;text-transform:uppercase;
   color:#FDFAF5;
 }
 .footer-col-title{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.5rem;font-weight:400;
   letter-spacing:0.22em;text-transform:uppercase;
   color:#2E2C28;margin-bottom:1.25rem;
@@ -1280,12 +1279,12 @@ footer{
   justify-content:space-between;flex-wrap:wrap;gap:1rem;
 }
 .footer-bottom span{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.54rem;color:#2E2C28;letter-spacing:0.06em;
 }
 .footer-bottom-links{display:flex;gap:1.5rem}
 .footer-bottom-links a{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.52rem;color:#2E2C28;
   text-decoration:none;letter-spacing:0.1em;
   text-transform:uppercase;transition:color 0.15s;
@@ -1338,7 +1337,7 @@ footer{
 }
 .marquee-track:hover{animation-play-state:paused}
 .marquee-item{
-  font-family:'DM Mono',monospace;
+  font-family:'Archivo',monospace;
   font-size:0.6rem;font-weight:400;
   letter-spacing:0.14em;text-transform:uppercase;
   color:rgba(253,250,245,0.45);
@@ -1463,17 +1462,17 @@ body{top:0!important;position:static!important}
         <span></span><span></span><span></span>
       </button>
       <div style="position:relative">
-        <button id="langBtn" onclick="toggleLangMenu()" style="background:none;border:1px solid var(--border);padding:5px 10px;font-size:0.65rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;cursor:pointer;color:var(--text-mid);display:flex;align-items:center;gap:4px">
+        <button id="langBtn" onclick="toggleLangMenu()" style="background:none;border:1px solid var(--border);padding:5px 10px;font-size:0.65rem;font-family:'Archivo',monospace;letter-spacing:0.1em;cursor:pointer;color:var(--text-mid);display:flex;align-items:center;gap:4px">
           🌐 <span id="langLabel">EN</span> ▾
         </button>
         <div id="langMenu" style="display:none;position:absolute;right:0;top:110%;background:var(--white);border:1px solid var(--border);z-index:999;min-width:140px;box-shadow:0 4px 16px rgba(0,0,0,0.12)">
-          <button onclick="translatePage('en','EN')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇺🇸 English</button>
-          <button onclick="translatePage('es','ES')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇪🇸 Español</button>
-          <button onclick="translatePage('fr','FR')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇫🇷 Français</button>
-          <button onclick="translatePage('de','DE')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇩🇪 Deutsch</button>
-          <button onclick="translatePage('pt','PT')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇧🇷 Português</button>
-          <button onclick="translatePage('ru','RU')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇷🇺 Русский</button>
-          <button onclick="translatePage('hi','HI')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;border:none;background:none;cursor:pointer">🇮🇳 हिन्दी</button>
+          <button onclick="translatePage('en','EN')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Archivo',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇺🇸 English</button>
+          <button onclick="translatePage('es','ES')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Archivo',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇪🇸 Español</button>
+          <button onclick="translatePage('fr','FR')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Archivo',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇫🇷 Français</button>
+          <button onclick="translatePage('de','DE')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Archivo',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇩🇪 Deutsch</button>
+          <button onclick="translatePage('pt','PT')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Archivo',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇧🇷 Português</button>
+          <button onclick="translatePage('ru','RU')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Archivo',sans-serif;border:none;background:none;cursor:pointer;border-bottom:1px solid var(--border)">🇷🇺 Русский</button>
+          <button onclick="translatePage('hi','HI')" style="display:block;width:100%;text-align:left;padding:8px 14px;font-size:0.75rem;font-family:'Archivo',sans-serif;border:none;background:none;cursor:pointer">🇮🇳 हिन्दी</button>
         </div>
       </div>
       <div id="google_translate_element" style="display:none"></div>
@@ -1481,9 +1480,9 @@ body{top:0!important;position:static!important}
     </div>
   </div>
 </nav><div style="background:#1A1916;border-bottom:2px solid var(--clay);padding:11px 2rem;text-align:center;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
-  <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400">Conscience Collective</span>
-  <span style="font-family:'Space Grotesk',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay)">// 5% to Nosara Families</span>
-  <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400">Every Booking · Every Time</span>
+  <span style="font-family:'Archivo',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400">Conscience Collective</span>
+  <span style="font-family:'Archivo',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay)">// 5% to Nosara Families</span>
+  <span style="font-family:'Archivo',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400">Every Booking · Every Time</span>
 </div>
 
 
@@ -1499,7 +1498,7 @@ body{top:0!important;position:static!important}
   <div class="hero-top">
     <div class="hero-eyebrow" style="
         color:#FDFAF5;
-        font-family:'DM Mono',monospace;
+        font-family:'Archivo',monospace;
         font-size:0.65rem;
         font-weight:500;
         letter-spacing:0.32em;
@@ -1563,8 +1562,8 @@ body{top:0!important;position:static!important}
 <!-- OUR MISSION -->
 <section style="background:var(--text);padding:5rem 0">
   <div class="section-inner" style="max-width:820px">
-    <div style="font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--clay-light);margin-bottom:1.5rem;font-weight:400">◈ Our Mission</div>
-    <p style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;font-style:italic;color:#C8C2B6;line-height:1.75;margin-bottom:1.5rem">
+    <div style="font-family:'Archivo',monospace;font-size:0.52rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--clay-light);margin-bottom:1.5rem;font-weight:400">◈ Our Mission</div>
+    <p style="font-family:'Instrument Serif',serif;font-size:1.35rem;font-weight:300;font-style:italic;color:#C8C2B6;line-height:1.75;margin-bottom:1.5rem">
       As tourism continues to grow, much of the revenue generated here leaves the region through large international booking platforms. Nosara <span style="color:var(--clay);font-weight:700">Collective Conscience</span> was created to change that.
     </p>
     <p style="font-size:0.92rem;color:#6A6460;line-height:1.9;font-weight:300">
@@ -1667,7 +1666,7 @@ body{top:0!important;position:static!important}
   <div class="section-inner">
     <div class="section-label">Real Estate</div>
     <h2 class="section-title">Available Lots</h2>
-    <p class="section-sub">5% of every sale goes back to Nosara. Always. <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--clay)">Because Pura Vida should be for everyone.</em></p>
+    <p class="section-sub">5% of every sale goes back to Nosara. Always. <em style="font-family:'Instrument Serif',serif;font-style:italic;color:var(--clay)">Because Pura Vida should be for everyone.</em></p>
 
     <div class="lots-grid stagger" id="lotsGrid"></div>
   </div>
@@ -1710,7 +1709,7 @@ body{top:0!important;position:static!important}
 
     <!-- 5% Transparency Block -->
     <div style="background:#1E1D18;border:1px solid rgba(253,250,245,0.06);padding:2rem;margin-bottom:3rem">
-      <div style="font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--clay-light);margin-bottom:1rem;font-weight:400">◈ Community Impact</div>
+      <div style="font-family:'Archivo',monospace;font-size:0.52rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--clay-light);margin-bottom:1rem;font-weight:400">◈ Community Impact</div>
       <p style="font-size:0.78rem;color:#8A8478;line-height:1.85;font-weight:300;margin-bottom:0.75rem">Every reservation contributes directly to local Nosara families. We donate 5% of our profits to community initiatives, educational programs, and families in need.</p>
       <p style="font-size:0.78rem;color:#8A8478;line-height:1.85;font-weight:300">At the end of each year, we publish a transparency report showing exactly where the funds were allocated.</p>
     </div>
@@ -1722,7 +1721,7 @@ body{top:0!important;position:static!important}
         <div class="footer-logo-sub">CONSCIENCE</div>
         <p class="footer-desc" style="color:#6A6460">Handpicked homes in Nosara's most beautiful pockets. Every booking supports local families — 5% goes directly to the community.</p>
         <div class="footer-5pct">// 5% to Nosara Families</div>
-        <div style="margin-top:1rem;font-family:'DM Mono',monospace;font-size:0.56rem;color:#3A3830;letter-spacing:0.1em;text-transform:uppercase;font-weight:400">🇨🇷 100% Costa Rican Company</div>
+        <div style="margin-top:1rem;font-family:'Archivo',monospace;font-size:0.56rem;color:#3A3830;letter-spacing:0.1em;text-transform:uppercase;font-weight:400">🇨🇷 100% Costa Rican Company</div>
       </div>
       <div>
         <div class="footer-col-title">Stay</div>
@@ -1793,7 +1792,7 @@ const POLICIES = {
 function showPolicy(key){
   const p = POLICIES[key];
   if(!p) return;
-  document.getElementById('policyContent').innerHTML = `<h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1.25rem">${p.title}</h2><p style="font-size:0.82rem;color:var(--text-muted);line-height:1.85;font-weight:300">${p.text}</p>`;
+  document.getElementById('policyContent').innerHTML = `<h2 style="font-family:'Archivo',sans-serif;font-size:1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1.25rem">${p.title}</h2><p style="font-size:0.82rem;color:var(--text-muted);line-height:1.85;font-weight:300">${p.text}</p>`;
   const m = document.getElementById('policyModal');
   m.style.display='flex';
 }
@@ -2081,10 +2080,10 @@ function renderProps(){
         <img src="${photo}" alt="Nosara" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(100%) contrast(1.05);opacity:0.55">
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:2rem 1.75rem;z-index:2">
           <div style="width:28px;height:1px;background:rgba(20,18,16,0.4);margin-bottom:1.25rem"></div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text);line-height:1.15">${labelHtml}</div>
+          <div style="font-family:'Archivo',sans-serif;font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text);line-height:1.15">${labelHtml}</div>
           ${fc.link
             ? `<div class="filler-cta-btn">${fc.sub} →</div>`
-            : `<div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--clay-dark);margin-top:0.6rem;font-weight:700">${fc.sub}</div>`}
+            : `<div style="font-family:'Archivo',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--clay-dark);margin-top:0.6rem;font-weight:700">${fc.sub}</div>`}
         </div>
       </div>`);
     }
@@ -2233,7 +2232,7 @@ function renderRetreats(){
         <div class="retreat-name">${r.name}</div>
         <p class="retreat-desc">${r.desc}</p>
         <div class="retreat-feats">${r.features.map(f=>`<span class="retreat-feat">${f}</span>`).join('')}</div>
-        ${r.price?`<div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--text);margin:0.75rem 0 0.25rem">$${r.price.toLocaleString()}<span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);margin-left:6px;font-weight:400">/night</span></div>`:''}
+        ${r.price?`<div style="font-family:'Instrument Serif',serif;font-size:1.6rem;font-weight:300;color:var(--text);margin:0.75rem 0 0.25rem">$${r.price.toLocaleString()}<span style="font-family:'Archivo',monospace;font-size:0.58rem;color:var(--text-muted);margin-left:6px;font-weight:400">/night</span></div>`:''}
         <button class="retreat-cta" onclick="openRetreatBooking('${r.name.replace(/'/g,"\\'")}','${r.tag.replace(/'/g,"\\'")}','${r.cover}')">Book Now</button>
       </div>
     </div>`).join('');
@@ -2421,7 +2420,7 @@ function renderCalendar(propId){
   const daysInMonth=new Date(year,month+1,0).getDate();
   let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
     <button onclick="calNav(-1)" style="background:rgba(20,18,16,0.08);border:1px solid rgba(20,18,16,0.2);border-radius:2px;padding:4px 12px;cursor:pointer;font-size:1.1rem;color:var(--text)">‹</button>
-    <strong style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text)">${monthName}</strong>
+    <strong style="font-family:'Instrument Serif',serif;font-size:1.1rem;color:var(--text)">${monthName}</strong>
     <button onclick="calNav(1)" style="background:rgba(20,18,16,0.08);border:1px solid rgba(20,18,16,0.2);border-radius:2px;padding:4px 12px;cursor:pointer;font-size:1.1rem;color:var(--text)">›</button>
   </div>
   <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center">
@@ -2603,7 +2602,7 @@ function showBankTransferConfirmation(data){
     <div style="background:var(--white);max-width:480px;width:100%;border:2px solid var(--border)">
       <div style="background:var(--text);padding:1.5rem 2rem">
         <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--clay)">NOSARA COLLECTIVE CONSCIENCE</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--bg);margin-top:4px">Dates Reserved ✓</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:1.8rem;font-weight:300;color:var(--bg);margin-top:4px">Dates Reserved ✓</div>
       </div>
       <div style="padding:2rem">
         <div style="background:#FFF8E8;border:1px solid #E8C860;border-left:4px solid #E8C860;padding:16px;margin-bottom:1.5rem">
@@ -2616,11 +2615,11 @@ function showBankTransferConfirmation(data){
         <div style="font-size:0.82rem;color:var(--text-mid);line-height:1.9;margin-bottom:1.5rem">
           Our team will send you the bank transfer details via <strong>WhatsApp and email within the next few minutes</strong>. Once we confirm receipt of funds, your booking will be fully confirmed.
         </div>
-        <div style="background:var(--surface);border:1px solid var(--border);padding:14px;margin-bottom:1.5rem;font-size:0.75rem;color:var(--text-muted);line-height:1.8;font-family:'DM Mono',monospace">
+        <div style="background:var(--surface);border:1px solid var(--border);padding:14px;margin-bottom:1.5rem;font-size:0.75rem;color:var(--text-muted);line-height:1.8;font-family:'Archivo',monospace">
           Total to transfer: <strong style="color:var(--text);font-size:1rem">$${(data.grand_total||0).toLocaleString()} USD</strong><br>
           Hold expires in: <strong style="color:#C4784A">28 hours</strong>
         </div>
-        <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Space Grotesk',sans-serif">
+        <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Archivo',sans-serif">
           Got it — I'll wait for bank details →
         </button>
       </div>
@@ -2638,29 +2637,29 @@ function showWiseInstructions(data){
   modal.innerHTML=`
     <div style="background:var(--white);max-width:480px;width:100%;border:2px solid var(--border);animation:slideUp 0.25s ease;max-height:90vh;overflow-y:auto">
       <div style="background:var(--bg);padding:1.5rem;border-bottom:2px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase">Booking Confirmed ✓</div>
+        <div style="font-family:'Archivo',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase">Booking Confirmed ✓</div>
         <button onclick="document.getElementById('wiseModal').remove()" aria-label="Close" style="background:none;border:none;cursor:pointer;font-size:1.1rem;width:32px;height:32px">✕</button>
       </div>
       <div style="padding:2rem">
-        <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem">Your Reference</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--clay);margin-bottom:1.5rem">${ref}</div>
+        <div style="font-family:'Archivo',monospace;font-size:0.58rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem">Your Reference</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem;font-weight:300;color:var(--clay);margin-bottom:1.5rem">${ref}</div>
         <div style="background:rgba(43,122,142,0.08);border:1px solid rgba(43,122,142,0.2);padding:1.25rem;margin-bottom:1.5rem">
-          <div style="font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ocean);margin-bottom:0.75rem;font-weight:600">Wise Transfer Details</div>
+          <div style="font-family:'Archivo',monospace;font-size:0.56rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ocean);margin-bottom:0.75rem;font-weight:600">Wise Transfer Details</div>
           <table style="width:100%;font-size:0.8rem;border-collapse:collapse">
             <tr><td style="padding:5px 0;color:var(--text-muted);font-size:0.72rem">Account Name</td><td style="text-align:right;font-weight:600;color:var(--text)">Nosara Collective Conscience</td></tr>
             <tr><td style="padding:5px 0;color:var(--text-muted);font-size:0.72rem">Email</td><td style="text-align:right;color:var(--text)">info@nosaracollective.com</td></tr>
             <tr><td style="padding:5px 0;color:var(--text-muted);font-size:0.72rem">Amount</td><td style="text-align:right;font-weight:700;color:var(--text);font-size:1rem">$${amount.toLocaleString()} USD</td></tr>
-            <tr><td style="padding:5px 0;color:var(--text-muted);font-size:0.72rem">Reference</td><td style="text-align:right;font-family:'DM Mono',monospace;color:var(--clay);font-weight:700">${ref}</td></tr>
+            <tr><td style="padding:5px 0;color:var(--text-muted);font-size:0.72rem">Reference</td><td style="text-align:right;font-family:'Archivo',monospace;color:var(--clay);font-weight:700">${ref}</td></tr>
           </table>
         </div>
-        <div style="background:rgba(196,120,74,0.08);border:1px solid rgba(196,120,74,0.2);padding:1rem;margin-bottom:1.5rem;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--clay-dark);line-height:1.7">
+        <div style="background:rgba(196,120,74,0.08);border:1px solid rgba(196,120,74,0.2);padding:1rem;margin-bottom:1.5rem;font-family:'Archivo',monospace;font-size:0.65rem;color:var(--clay-dark);line-height:1.7">
           ⚠️ Include <strong>${ref}</strong> in your payment description. We confirm within 24 hours.
         </div>
         <div style="background:rgba(43,122,142,0.06);border:1px solid rgba(43,122,142,0.15);padding:1rem;margin-bottom:1.5rem;font-size:0.78rem;color:var(--ocean);line-height:1.7">
           🌱 <strong>$${impact.toLocaleString()} goes to local Nosara families</strong> from your stay.
         </div>
-        <button onclick="document.getElementById('wiseModal').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.65rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Space Grotesk',sans-serif">Done</button>
-        <div style="text-align:center;margin-top:1rem;font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--text-muted)">Questions? <a href="https://wa.me/50672935565" style="color:var(--clay)">WhatsApp us</a></div>
+        <button onclick="document.getElementById('wiseModal').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.65rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Archivo',sans-serif">Done</button>
+        <div style="text-align:center;margin-top:1rem;font-family:'Archivo',monospace;font-size:0.6rem;color:var(--text-muted)">Questions? <a href="https://wa.me/50672935565" style="color:var(--clay)">WhatsApp us</a></div>
       </div>
     </div>`;
   document.body.appendChild(modal);
@@ -2759,14 +2758,14 @@ function showPaymentModal(total,items){
   modal.innerHTML=`
     <div style="background:var(--black2);border:1px solid var(--border);border-radius:2px;max-width:500px;width:100%;padding:2.5rem;animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--white)">Complete Payment</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem;font-weight:300;color:var(--white)">Complete Payment</div>
         <button onclick="document.getElementById('paymentModal').remove()" aria-label="Close" style="background:rgba(245,242,236,0.08);border:1px solid var(--border);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;color:var(--white)">✕</button>
       </div>
       <div style="background:rgba(245,242,236,0.04);border:1px solid var(--border);border-radius:2px;padding:1.25rem;margin-bottom:1.5rem">
         <div style="font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem">Order Summary</div>
         ${items.map(i=>`<div style="display:flex;justify-content:space-between;font-size:0.83rem;padding:5px 0;border-bottom:1px solid var(--border);color:var(--text-muted)">${i}</div>`).join('')}
         <div style="display:flex;justify-content:space-between;font-weight:400;margin-top:1rem;font-size:1rem;color:var(--white)">
-          <span>Total</span><span style="color:var(--clay);font-family:'Cormorant Garamond',serif;font-size:1.5rem">$${total.toLocaleString()}</span>
+          <span>Total</span><span style="color:var(--clay);font-family:'Instrument Serif',serif;font-size:1.5rem">$${total.toLocaleString()}</span>
         </div>
         <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.4rem">+ taxes · 5% goes to Nosara families ♥</div>
       </div>
@@ -3044,13 +3043,13 @@ function showCheckoutModal(){
   modal.innerHTML=`
     <div style="background:var(--white);max-width:520px;width:100%;border:2px solid var(--border);max-height:90vh;overflow-y:auto">
       <div style="background:var(--text);padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--bg)">Checkout</div>
+        <div style="font-family:'Archivo',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--bg)">Checkout</div>
         <button onclick="document.getElementById('checkoutModal').remove()" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--bg);font-size:1.5rem;line-height:1;padding:0 4px">✕</button>
       </div>
       <div style="padding:2rem">
 
         <!-- Order Summary -->
-        <div style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay);margin-bottom:0.75rem;font-weight:700">Order Summary</div>
+        <div style="font-family:'Archivo',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay);margin-bottom:0.75rem;font-weight:700">Order Summary</div>
         <div style="border:1px solid var(--border);margin-bottom:1.5rem">
           ${cart.map(item=>`
             <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.8rem">
@@ -3075,24 +3074,24 @@ function showCheckoutModal(){
         </div>
 
         <!-- Guest Info -->
-        <div style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay);margin-bottom:0.75rem;font-weight:700">Your Information</div>
+        <div style="font-family:'Archivo',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay);margin-bottom:0.75rem;font-weight:700">Your Information</div>
         <div style="display:grid;gap:0.75rem;margin-bottom:1.5rem">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
             <div><label style="font-size:0.65rem;color:var(--text-muted);display:block;margin-bottom:4px">Full Name *</label>
-            <input id="co_name" type="text" placeholder="Your full name" style="width:100%;border:1px solid var(--border-med);padding:10px;font-size:0.82rem;font-family:'Space Grotesk',sans-serif;box-sizing:border-box"></div>
+            <input id="co_name" type="text" placeholder="Your full name" style="width:100%;border:1px solid var(--border-med);padding:10px;font-size:0.82rem;font-family:'Archivo',sans-serif;box-sizing:border-box"></div>
             <div><label style="font-size:0.65rem;color:var(--text-muted);display:block;margin-bottom:4px">Email *</label>
-            <input id="co_email" type="email" placeholder="your@email.com" style="width:100%;border:1px solid var(--border-med);padding:10px;font-size:0.82rem;font-family:'Space Grotesk',sans-serif;box-sizing:border-box"></div>
+            <input id="co_email" type="email" placeholder="your@email.com" style="width:100%;border:1px solid var(--border-med);padding:10px;font-size:0.82rem;font-family:'Archivo',sans-serif;box-sizing:border-box"></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
             <div><label style="font-size:0.65rem;color:var(--text-muted);display:block;margin-bottom:4px">Phone (WhatsApp)</label>
-            <input id="co_phone" type="tel" placeholder="+1 555 000 0000" style="width:100%;border:1px solid var(--border-med);padding:10px;font-size:0.82rem;font-family:'Space Grotesk',sans-serif;box-sizing:border-box"></div>
+            <input id="co_phone" type="tel" placeholder="+1 555 000 0000" style="width:100%;border:1px solid var(--border-med);padding:10px;font-size:0.82rem;font-family:'Archivo',sans-serif;box-sizing:border-box"></div>
             <div><label style="font-size:0.65rem;color:var(--text-muted);display:block;margin-bottom:4px">Country</label>
-            <input id="co_country" type="text" placeholder="USA" style="width:100%;border:1px solid var(--border-med);padding:10px;font-size:0.82rem;font-family:'Space Grotesk',sans-serif;box-sizing:border-box"></div>
+            <input id="co_country" type="text" placeholder="USA" style="width:100%;border:1px solid var(--border-med);padding:10px;font-size:0.82rem;font-family:'Archivo',sans-serif;box-sizing:border-box"></div>
           </div>
         </div>
 
         <!-- Payment Method -->
-        <div style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay);margin-bottom:0.75rem;font-weight:700">Payment Method</div>
+        <div style="font-family:'Archivo',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay);margin-bottom:0.75rem;font-weight:700">Payment Method</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1rem">
           <label style="display:flex;flex-direction:column;gap:2px;padding:12px;border:2px solid var(--clay);cursor:pointer;font-size:0.78rem;background:var(--white)" id="lbl_paypal">
             <span style="display:flex;align-items:center;gap:6px"><input type="radio" name="co_payment" value="paypal" checked style="accent-color:var(--clay)" onchange="updateCheckoutTotal()"> 🅿️ PayPal</span>
@@ -3110,7 +3109,7 @@ function showCheckoutModal(){
         <div id="bank_transfer_note" style="display:none;background:#FFF8E8;border:1px solid #E8C860;border-left:3px solid #E8C860;padding:14px;margin-bottom:1rem;font-size:0.75rem;color:#8A6A10;line-height:1.8">
           ⏳ <strong>28-Hour Hold</strong> — Your selected dates and property will be reserved exclusively at your name. We will send you our bank transfer details via WhatsApp and email within minutes. Once we confirm receipt of funds, your booking is fully confirmed.
         </div>
-        <div style="font-size:0.62rem;color:var(--text-muted);margin-bottom:1.5rem;text-align:center;font-family:'DM Mono',monospace">
+        <div style="font-size:0.62rem;color:var(--text-muted);margin-bottom:1.5rem;text-align:center;font-family:'Archivo',monospace">
           💡 Bank Transfer has no extra fee — ideal for large amounts
         </div>
 
@@ -3118,10 +3117,10 @@ function showCheckoutModal(){
           🌱 <strong>$${community.toLocaleString()}</strong> of your booking goes directly to local families &amp; conservation projects in Nosara.
         </div>
 
-        <button onclick="submitCartCheckout()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:16px;font-size:0.7rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Space Grotesk',sans-serif" id="co_btn">
+        <button onclick="submitCartCheckout()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:16px;font-size:0.7rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Archivo',sans-serif" id="co_btn">
           Complete Order →
         </button>
-        <p style="text-align:center;font-size:0.65rem;color:var(--text-muted);margin-top:0.75rem;font-family:'DM Mono',monospace">🔒 Secure · SSL encrypted · Dates held for 15 min</p>
+        <p style="text-align:center;font-size:0.65rem;color:var(--text-muted);margin-top:0.75rem;font-family:'Archivo',monospace">🔒 Secure · SSL encrypted · Dates held for 15 min</p>
       </div>
     </div>`;
   document.body.appendChild(modal);
@@ -3244,7 +3243,7 @@ injectMarquee();
 
 <!-- WhatsApp Floating -->
 <div id="waFloat" style="position:fixed;bottom:2rem;right:2rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:0.75rem">
-  <div id="waTooltip" style="display:none;background:#1A1916;color:#F5F0E8;padding:0.9rem 1.25rem;font-size:0.72rem;font-family:'Space Grotesk',sans-serif;font-weight:400;line-height:1.65;max-width:230px;border:1px solid rgba(253,250,245,0.12);box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative">
+  <div id="waTooltip" style="display:none;background:#1A1916;color:#F5F0E8;padding:0.9rem 1.25rem;font-size:0.72rem;font-family:'Archivo',sans-serif;font-weight:400;line-height:1.65;max-width:230px;border:1px solid rgba(253,250,245,0.12);box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative">
     <div style="font-weight:700;font-size:0.75rem;margin-bottom:0.3rem;color:#F5F0E8">Need help planning your<br>Nosara trip?</div>
     <div style="color:rgba(245,240,232,0.65)">Chat with us directly — we respond fast.</div>
     <div style="position:absolute;bottom:-7px;right:22px;width:14px;height:14px;background:#1A1916;border-right:1px solid rgba(253,250,245,0.12);border-bottom:1px solid rgba(253,250,245,0.12);transform:rotate(45deg)"></div>
@@ -3301,16 +3300,16 @@ function showPayPalSuccess(ref){
     <div style="background:var(--white);max-width:440px;width:100%;border:2px solid var(--border);animation:slideUp 0.25s ease">
       <div style="background:var(--text);padding:2rem;text-align:center">
         <div style="font-size:2rem;margin-bottom:0.5rem;color:var(--bg)">✓</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:var(--bg);letter-spacing:0.04em;text-transform:uppercase">Payment Confirmed</div>
+        <div style="font-family:'Archivo',sans-serif;font-size:1rem;font-weight:700;color:var(--bg);letter-spacing:0.04em;text-transform:uppercase">Payment Confirmed</div>
       </div>
       <div style="padding:2rem">
-        <div style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem">Your Reference</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--clay);margin-bottom:1.5rem">${ref}</div>
+        <div style="font-family:'Archivo',monospace;font-size:0.6rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem">Your Reference</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem;font-weight:300;color:var(--clay);margin-bottom:1.5rem">${ref}</div>
         <div style="background:rgba(43,122,142,0.06);border:1px solid rgba(43,122,142,0.15);padding:1rem;margin-bottom:1.5rem;font-size:0.78rem;color:var(--ocean);line-height:1.7">
           🌱 <strong>5% of your stay goes directly to local Nosara families.</strong><br>Thank you for traveling with purpose.
         </div>
         <p style="font-size:0.78rem;color:var(--text-muted);line-height:1.8;margin-bottom:1.5rem">A confirmation email has been sent to your inbox.</p>
-        <button onclick="this.closest('div[style]').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.65rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Space Grotesk',sans-serif">Done</button>
+        <button onclick="this.closest('div[style]').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.65rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Archivo',sans-serif">Done</button>
       </div>
     </div>`;
   document.body.appendChild(modal);
