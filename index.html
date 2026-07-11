@@ -69,7 +69,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -92,6 +92,17 @@
   --border:#141210;
   --border-light:rgba(20,18,16,0.1);
   --border-med:rgba(20,18,16,0.18);
+  /* ─── New brand system: "The Contour Line" (approved 2026-07-10) ─── */
+  /* Being rolled out incrementally — nav/header first. See project memory. */
+  --nc-warmwhite:#F7F5F2;
+  --nc-concrete:#6B6864;
+  --nc-concrete-light:#96938E;
+  --nc-charcoal:#2E2C2A;
+  --nc-terracotta:#B5553A;
+  --nc-clay:#B08D74;
+  --nc-sand:#DCD4C8;
+  --nc-forest:#354238;
+  --nc-border:#D8D4CE;
 }
 html{scroll-behavior:smooth;scroll-padding-top:60px}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
@@ -102,29 +113,30 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
 /* ─── NAV ─── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
-  background:rgba(242,237,228,0.96);
+  background:rgba(247,245,242,0.96);
   backdrop-filter:blur(20px);
-  border-bottom:2px solid var(--border);
+  border-bottom:1px solid var(--nc-border);
 }
 .nav-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 2rem}
 .nav-logo{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:0.72rem;font-weight:700;
-  color:var(--text);letter-spacing:0.2em;
-  text-transform:uppercase;cursor:pointer;
-  line-height:1.2;
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer;line-height:1;
 }
-.nav-logo span{color:var(--clay);font-weight:700}.nav-logo small{display:none}
-.nav-logo small{display:block;font-size:0.48rem;letter-spacing:0.28em;color:var(--text-muted);font-weight:400;margin-top:1px}
+.nav-logo svg{display:block;flex-shrink:0}
+.nav-logo-word{
+  font-family:'Instrument Serif',serif;
+  font-size:1.15rem;letter-spacing:0.04em;
+  color:var(--nc-charcoal);
+}
 .nav-links{display:flex;list-style:none}
 .nav-links a{
-  font-family:'DM Mono',monospace;
-  font-size:0.58rem;color:var(--text-muted);
+  font-family:'Archivo',sans-serif;
+  font-size:0.68rem;color:var(--nc-concrete);
   text-decoration:none;letter-spacing:0.08em;
   text-transform:uppercase;padding:0 0.9rem;
-  transition:color 0.15s;font-weight:300;
+  transition:color 0.15s;font-weight:500;
 }
-.nav-links a:hover{color:var(--text)}
+.nav-links a:hover{color:var(--nc-charcoal)}
 .nav-hamburger{
   display:none;background:none;border:none;cursor:pointer;
   padding:8px;flex-direction:column;justify-content:center;gap:5px;
@@ -1060,15 +1072,15 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   .nav-hamburger{display:flex}
   .nav-links{
     display:none;position:absolute;top:100%;left:0;right:0;
-    flex-direction:column;background:var(--white);
-    border-bottom:2px solid var(--border);
+    flex-direction:column;background:var(--nc-warmwhite);
+    border-bottom:1px solid var(--nc-border);
     box-shadow:0 12px 24px rgba(0,0,0,0.08);
   }
   .nav-links.open{display:flex}
   .nav-links li{width:100%}
   .nav-links a{
     display:block;width:100%;padding:1rem 1.5rem;
-    font-size:0.72rem;border-bottom:1px solid var(--border-light);
+    font-size:0.72rem;border-bottom:1px solid var(--nc-border);
     box-sizing:border-box;
   }
   .nav-inner{padding:0 1.25rem;position:relative}
@@ -1431,7 +1443,13 @@ body{top:0!important;position:static!important}
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <div class="nav-logo" onclick="scrollTo(0,0)">NOSARA <span>COLLECTIVE</span><span style="font-size:0.5rem;color:rgba(28,26,22,0.7);font-weight:600;letter-spacing:0.1em;margin-left:4px">CONSCIENCE</span></div>
+    <div class="nav-logo" onclick="scrollTo(0,0)">
+      <svg width="26" height="14" viewBox="0 0 140 60" aria-hidden="true">
+        <path d="M4,42 Q35,16 70,36 T136,16" fill="none" stroke="#2E2C2A" stroke-width="3"/>
+        <path d="M4,52 Q35,30 70,48 T136,30" fill="none" stroke="#B5553A" stroke-width="3"/>
+      </svg>
+      <span class="nav-logo-word">NOSARA</span>
+    </div>
     <ul class="nav-links" id="navLinks">
       <li><a href="#properties" data-i18n="nav_stay" onclick="closeMobileNav()">Stay</a></li>
       <li><a href="#concierge" data-i18n="nav_concierge" onclick="closeMobileNav()">Concierge</a></li>
