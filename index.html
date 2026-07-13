@@ -122,10 +122,16 @@ nav{
   cursor:pointer;line-height:1;
 }
 .nav-logo svg{display:block;flex-shrink:0}
+.nav-logo-text{display:flex;flex-direction:column;gap:2px}
 .nav-logo-word{
   font-family:'Instrument Serif',serif;
   font-size:1.15rem;letter-spacing:0.04em;
-  color:var(--nc-charcoal);
+  color:var(--nc-charcoal);line-height:1;
+}
+.nav-logo-sub{
+  font-family:'Archivo',sans-serif;font-weight:500;
+  font-size:0.5rem;letter-spacing:0.18em;
+  color:var(--nc-concrete);line-height:1;
 }
 .nav-links{display:flex;list-style:none}
 .nav-links a{
@@ -1446,7 +1452,10 @@ body{top:0!important;position:static!important}
         <path d="M4,42 Q35,16 70,36 T136,16" fill="none" stroke="#2E2C2A" stroke-width="3"/>
         <path d="M4,52 Q35,30 70,48 T136,30" fill="none" stroke="#B5553A" stroke-width="3"/>
       </svg>
-      <span class="nav-logo-word">NOSARA</span>
+      <div class="nav-logo-text">
+        <span class="nav-logo-word">NOSARA</span>
+        <span class="nav-logo-sub">COLLECTIVE CONSCIENCE</span>
+      </div>
     </div>
     <ul class="nav-links" id="navLinks">
       <li><a href="#properties" data-i18n="nav_stay" onclick="closeMobileNav()">Stay</a></li>
@@ -1889,6 +1898,7 @@ const PROPS=[
 const ICON_SVG_ATTRS='width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"';
 const ICONS={
   plane:'<path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9 22 2z"/>',
+  'plane-arrival':'<path d="M22 22 11 11"/><path d="M22 22 15 2 11 11 2 15 22 22z"/>',
   atv:'<rect x="3" y="10" width="18" height="6" rx="2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><line x1="12" y1="10" x2="12" y2="5"/><line x1="9" y1="5" x2="15" y2="5"/>',
   'golf-cart':'<rect x="4" y="12" width="14" height="5" rx="1"/><circle cx="8" cy="19" r="1.5"/><circle cx="16" cy="19" r="1.5"/><path d="M6 12V6h10"/>',
   chef:'<circle cx="12" cy="9" r="5"/><rect x="7" y="14" width="10" height="6" rx="1"/>',
@@ -1939,8 +1949,8 @@ function iconSvg(key){
 }
 
 const SERVICES=[
-  {id:'airport_arrival',icon:'plane',name:'Airport Arrival Transfer',desc:'Private pickup from Liberia (LIR) or San José (SJO) — we arrive on time, every time.',price:190,priceLabel:'$190 per transfer',fields:[{type:'select',id:'airport_arrival_name',label:'Airport',options:['Liberia (LIR)','San José (SJO)']},{type:'input',inputType:'date',id:'airport_arrival_date',label:'Arrival Date'},{type:'input',inputType:'time',id:'airport_arrival_time',label:'Arrival Time'},{type:'input',inputType:'text',id:'airport_arrival_flight',label:'Flight Number'}]},
-  {id:'airport_departure',icon:'plane',name:'Airport Departure Transfer',desc:'We pick you up from your villa and get you to Liberia (LIR) or San José (SJO) on time, every time.',price:190,priceLabel:'$190 per transfer',fields:[{type:'select',id:'airport_departure_name',label:'Airport',options:['Liberia (LIR)','San José (SJO)']},{type:'input',inputType:'date',id:'airport_departure_date',label:'Departure Date'},{type:'input',inputType:'time',id:'airport_departure_time',label:'Pickup Time'},{type:'input',inputType:'text',id:'airport_departure_flight',label:'Flight Number'}]},
+  {id:'airport_arrival',icon:'plane-arrival',name:'Airport Arrival Transfer',desc:'Private pickup from Liberia (LIR) or San José (SJO) — we arrive on time, every time.',price:190,priceLabel:'$190 from Liberia · $300 from San José',fields:[{type:'select',id:'airport_arrival_name',label:'Airport',options:['Liberia (LIR)','San José (SJO)']},{type:'input',inputType:'date',id:'airport_arrival_date',label:'Arrival Date'},{type:'input',inputType:'time',id:'airport_arrival_time',label:'Arrival Time'},{type:'input',inputType:'text',id:'airport_arrival_flight',label:'Flight Number'}]},
+  {id:'airport_departure',icon:'plane',name:'Airport Departure Transfer',desc:'We pick you up from your villa and get you to Liberia (LIR) or San José (SJO) on time, every time.',price:190,priceLabel:'$190 to Liberia · $300 to San José',fields:[{type:'select',id:'airport_departure_name',label:'Airport',options:['Liberia (LIR)','San José (SJO)']},{type:'input',inputType:'date',id:'airport_departure_date',label:'Departure Date'},{type:'input',inputType:'time',id:'airport_departure_time',label:'Pickup Time'},{type:'input',inputType:'text',id:'airport_departure_flight',label:'Flight Number'}]},
   {id:'atv',icon:'atv',name:'ATV Rental',desc:'Honda ATVs for 2 people — explore Nosara\'s jungle trails and hidden beaches.',price:120,priceLabel:'$120 per ATV/day',fields:[{type:'input',inputType:'date',id:'atv_start',label:'Start Date'},{type:'input',inputType:'date',id:'atv_end',label:'End Date'},{type:'input',inputType:'number',id:'atv_qty',label:'Number of ATVs',placeholder:'e.g. 2'}]},
   {id:'golf',icon:'golf-cart',name:'Golf Cart',desc:'Perfect for groups of 4 or 6. Cruise Nosara in style.',price:130,priceLabel:'4 pax $130 · 6 pax $140 per cart/day',fields:[{type:'input',inputType:'date',id:'golf_start',label:'Start Date'},{type:'input',inputType:'date',id:'golf_end',label:'End Date'},{type:'select',id:'golf_size',label:'Cart Size',options:['4 passengers — $130/day','6 passengers — $140/day']},{type:'input',inputType:'number',id:'golf_qty',label:'Number of Carts',placeholder:'e.g. 1'}]},
   {id:'chef',icon:'chef',name:'Private Chef',desc:'Chef comes to your home. Shopping, cooking, serving &amp; cleanup included. $85 per plate per person — add as many days &amp; meals as you like.',price:85,priceLabel:'$85 per plate / per person',fields:[{type:'input',inputType:'date',id:'chef_date',label:'Date'},{type:'select',id:'chef_meal',label:'Meal',options:['Breakfast','Lunch','Dinner']},{type:'input',inputType:'number',id:'chef_pax',label:'Number of People',placeholder:'e.g. 4'}]},
@@ -2150,8 +2160,8 @@ function calcServiceCost(id){
   if(!s)return{cost:0,label:''};
   let label=s.name,cost=s.price;
   function days(startId,endId){const a=document.getElementById(startId)?.value,b=document.getElementById(endId)?.value;return(a&&b)?Math.max(1,Math.round((new Date(b)-new Date(a))/86400000)):1;}
-  if(id==='airport_arrival'){const airport=document.getElementById('airport_arrival_name')?.value||'';const date=document.getElementById('airport_arrival_date')?.value||'';const flight=document.getElementById('airport_arrival_flight')?.value||'';if(airport)label+=` — ${airport}`;if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=190;}
-  else if(id==='airport_departure'){const airport=document.getElementById('airport_departure_name')?.value||'';const date=document.getElementById('airport_departure_date')?.value||'';const flight=document.getElementById('airport_departure_flight')?.value||'';if(airport)label+=` — ${airport}`;if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=190;}
+  if(id==='airport_arrival'){const airport=document.getElementById('airport_arrival_name')?.value||'';const date=document.getElementById('airport_arrival_date')?.value||'';const flight=document.getElementById('airport_arrival_flight')?.value||'';if(airport)label+=` — ${airport}`;if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=airport.includes('San José')?300:190;}
+  else if(id==='airport_departure'){const airport=document.getElementById('airport_departure_name')?.value||'';const date=document.getElementById('airport_departure_date')?.value||'';const flight=document.getElementById('airport_departure_flight')?.value||'';if(airport)label+=` — ${airport}`;if(date)label+=` on ${date}`;if(flight)label+=` (${flight})`;cost=airport.includes('San José')?300:190;}
   else if(id==='atv'){const d=days('atv_start','atv_end');const q=parseInt(document.getElementById('atv_qty')?.value)||1;cost=120*d*q;label+=` (${q} ATV × ${d} days)`;}
   else if(id==='golf'){const d=days('golf_start','golf_end');const sz=document.getElementById('golf_size')?.value||'';const price=sz.includes('6')?140:130;const qty=parseInt(document.getElementById('golf_qty')?.value)||1;cost=price*d*qty;label+=` (${qty} cart${qty>1?'s':''} × ${d} days)`;}
   else if(id==='chef'){const pax=parseInt(document.getElementById('chef_pax')?.value)||1;const meal=document.getElementById('chef_meal')?.value||'Meal';const date=document.getElementById('chef_date')?.value||'';cost=85*pax;label=`Private Chef — ${meal}${date?' · '+date:''}`;label+=` (${pax} person${pax!==1?'s':''})`;}
