@@ -81,7 +81,7 @@
   --black:#2E2C2A;
   --text:#2E2C2A;
   --text-mid:#6B6864;
-  --text-muted:#96938E;
+  --text-muted:#706C66;
   --clay:#B5553A;
   --clay-light:#B08D74;
   --clay-dark:#8F4530;
@@ -151,6 +151,24 @@ nav{
 .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-hamburger.open span:nth-child(2){opacity:0}
 .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/* ─── MOBILE STICKY CTA ─── */
+.mobile-sticky-cta{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;
+  transform:translateY(100%);transition:transform 0.3s ease;
+  box-shadow:0 -6px 20px rgba(0,0,0,0.1);
+}
+.mobile-sticky-cta.show{transform:translateY(0)}
+.mobile-sticky-cta a{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--clay);color:#FDFAF5;
+  font-family:'Archivo',sans-serif;font-weight:600;font-size:0.8rem;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:1rem;text-decoration:none;
+}
+@media(max-width:900px){
+  .mobile-sticky-cta{display:block}
+  #waFloat{bottom:calc(2rem + 60px)!important}
+}
 .nav-cart{
   display:flex;align-items:center;gap:0.5rem;
   background:var(--text);color:var(--bg);
@@ -1727,7 +1745,7 @@ body{top:0!important;position:static!important}
       <div>
         <div class="footer-logo">NOSARA <span>COLLECTIVE</span></div>
         <div class="footer-logo-sub">CONSCIENCE</div>
-        <p class="footer-desc" style="color:#6A6460">Handpicked homes in Nosara's most beautiful pockets. Every booking supports local families — 5% goes directly to the community.</p>
+        <p class="footer-desc" style="color:#6A6460">Handpicked homes in Nosara's most beautiful pockets. Every booking supports local families.</p>
         <div class="footer-5pct">// 5% to Nosara Families</div>
         <div style="margin-top:1rem;font-family:'Archivo',monospace;font-size:0.56rem;color:#3A3830;letter-spacing:0.1em;text-transform:uppercase;font-weight:400">🇨🇷 100% Costa Rican Company</div>
       </div>
@@ -2020,26 +2038,19 @@ const GUIDE=[
   ]},
   {tab:'Living in Nosara',articles:[
     {icon:'rain',title:'Seasons, Climate & What to Expect Each Month',text:'Nosara has two seasons, not four — and understanding them changes how you plan everything from travel to construction to grocery shopping.<br><br><strong>Dry Season — Verano (December through April)</strong><ul><li>Temperatures: 28–36°C (82–97°F). Humidity drops, skies are clear blue, dust rises on unpaved roads.</li><li>Ocean: calmer swells, clearer water, excellent for swimming and snorkeling</li><li>Peak tourist season: December–January (holiday crowds) and March–April (spring break). Accommodation prices highest.</li><li>Risk: water scarcity. ASADA (local water authority) occasionally implements rationing in late dry season. Fill your tanks.</li><li>Best months for first-time visitors: January and February — dry, breezy, less crowded than Christmas/New Year</li></ul><strong>Rainy Season — Invierno (May through November)</strong><ul><li>Rain pattern: mostly afternoon and evening storms, not all-day rain. Mornings are often sunny and beautiful.</li><li>Temperatures: 26–30°C (79–86°F). Cooler at night. Humidity high.</li><li>The jungle explodes: everything turns vivid green overnight. Wildlife is most active. Rivers run full.</li><li>Surf: green season often brings the best swells — more powerful, more consistent, less crowded</li><li>Roads: the last 30km into Nosara become challenging. River crossings can close temporarily after heavy rain. 4x4 essential.</li><li>September–October: the "second dry season" often brings a brief sunny window within the rainy season</li><li>Price advantage: accommodation 20–40% cheaper. Restaurants less crowded. The town breathes.</li></ul><strong>Month-by-Month Snapshot</strong><ul><li><strong>Dec–Jan:</strong> Busy, festive, dry, warm. Book everything in advance.</li><li><strong>Feb–Mar:</strong> Perfect weather, manageable crowds. Best overall month: February.</li><li><strong>Apr:</strong> Hot and dry. Last weeks of dry season. Pre-season surf improving.</li><li><strong>May–Jun:</strong> First rains arrive. Green explosion. Surfers love June.</li><li><strong>Jul–Aug:</strong> Consistent rain + great surf. Still very livable.</li><li><strong>Sep–Oct:</strong> Quietest months. Some businesses close or reduce hours. Heavy rain periods.</li><li><strong>Nov:</strong> Transition month. Rain easing. Early visitors starting to arrive.</li></ul>'},
-    {icon:'grocery',title:'Day-to-Day Life: Groceries, Utilities & Getting Things Done',text:'Living in Nosara is comfortable but requires adapting to a rhythm that is fundamentally different from city life in North America or Europe. That adaptation is the point — and most people find it deeply liberating within a few months.<br><br><strong>Food & Grocery Shopping</strong><ul><li><strong>Colmado Mery:</strong> The main supermarket in Nosara. Well-stocked for a town this size — produce, meats, dairy, imported goods, household supplies, and an ATM out front. Prices are 15–25% higher than San José due to transport.</li><li><strong>Local pulperías:</strong> Small family-run corner stores throughout Nosara and the surrounding neighborhoods. Essential for last-minute items and for supporting local families directly.</li><li><strong>Feria del Agricultor (Farmers Market):</strong> Weekly market with local produce, eggs, honey, artisan goods. Ask locals for the current day/location — it rotates.</li><li><strong>Larger shopping runs:</strong> Nicoya (45 min) has a Palí and Maxi Palí supermarket — significantly cheaper than Nosara for bulk shopping. Most residents do a big Nicoya run once or twice a month.</li><li><strong>San José delivery:</strong> Several services deliver San José supermarket orders to Nosara for a flat fee. Good for specialty and imported items.</li></ul><strong>Utilities</strong><ul><li><strong>Electricity (ICE):</strong> Reliable but expensive. Bills run $80–$250/month depending on AC usage. Power outages happen 1–3 times/month, usually short (1–4 hours). A quality UPS is recommended for electronics.</li><li><strong>Water (ASADA):</strong> Local community water association. Clean and drinkable from most taps, though many residents use a filter system. Bills are low: $15–$35/month.</li><li><strong>Internet:</strong> Fiber optic (Cabletica, Tigo) available in most developed areas — typically 50–200 Mbps for $50–$80/month. Excellent by Central American standards. ICE 4G LTE as backup.</li><li><strong>Gas:</strong> Propane for cooking is delivered by truck. Budget $20–$40/month for a standard household.</li></ul><strong>Getting Things Fixed</strong><ul><li>Nosara has a capable community of local tradespeople — electricians, plumbers, carpenters, mechanics. Ask your neighbors for referrals rather than searching online.</li><li>Lead times for repairs and construction are longer than in the city. Plan ahead. "Mañana" is a genuine cultural value here.</li><li>Hardware store (ferretería): nearest full-service option is Nicoya. There is a small ferretería in Nosara village for basics.</li></ul>'},
     {icon:'school',title:'Schools, Children & Family Life in Nosara',text:'Nosara has become a genuinely viable place to raise children — an increasingly popular choice for families seeking an alternative to urban schooling.<br><br><strong>Local Schools (Spanish-language)</strong><ul><li>Escuela de Nosara: public primary school (grades 1–6) serving the Tico community. Children of legal residents may attend. Spanish-language instruction.</li><li>Colegio de Nosara: public secondary school. Also Spanish-language.</li><li>Costa Rica\'s public education system is one of the strongest in Latin America — ranked consistently high for literacy and math outcomes at the primary level.</li></ul><strong>International & Bilingual Options</strong><ul><li><strong>Del Mar Academy (Nosara):</strong> Private bilingual school (English-Spanish) catering to the international community. Preschool through middle school. Small class sizes. Curriculum aligned with international standards.</li><li><strong>Nearby options (1–1.5 hrs):</strong> Several accredited international schools operate in the Nicoya and Sámara areas. Some families use these for secondary-level education.</li><li><strong>Homeschooling:</strong> A significant percentage of Nosara\'s international families homeschool. Strong community networks provide co-ops, group classes, and socialization. The outdoor learning environment — surfing, wildlife, farming — is a genuine draw.</li></ul><strong>Raising children in Nosara</strong><ul><li>Kids grow up outdoors — surf lessons at 4, tree climbing at 5, understanding tidal patterns at 8. Screen time competes poorly with howler monkeys and beach bonfires.</li><li>The community is safety-conscious but relaxed — children have a degree of independence that has largely disappeared from suburban life in North America</li><li>Bilingualism comes naturally: Spanish-speaking friends, Tico neighbors, a school environment where both languages coexist</li></ul>'},
     {icon:'leaf',title:'Community, Environment & What Makes Nosara Different',text:'Nosara is not a perfect town. It has traffic, it has infrastructure gaps, it has tensions between development and conservation, and it has the complexity of a community that spans enormous wealth differences. But it has something rare: people who genuinely care about the place and show up for it.<br><br><strong>The environmental baseline</strong><ul><li>The Nosara Biological Reserve (founded 1970) protects 70+ hectares of estuary and riverine forest between Guiones and Pelada beaches. It is the reason Nosara does not have beachfront hotels.</li><li>Sea turtle nesting protection: Ostional Wildlife Refuge (8km north) is a SINAC-managed protected area with one of the world\'s largest Olive Ridley nesting sites. Access rules are enforced.</li><li>Deforestation is regulated — removing trees above a certain diameter requires a permit from SINAC. Enforcement is real.</li><li>The community has pushed back repeatedly against developments that would compromise water tables or wildlife corridors. This is not just talk — it has shaped the zoning and building patterns you see today.</li></ul><strong>Community organizations worth knowing</strong><ul><li><strong>Asociación de Desarrollo Integral de Nosara:</strong> The elected community development association that manages local projects and interfaces with the municipality of Nicoya on roads, water, and services.</li><li><strong>Cámara de Turismo de Nosara:</strong> Tourism chamber that coordinates among businesses and advocates for sustainable tourism policy.</li><li><strong>Grupo Nosaraenses Unidos:</strong> Community WhatsApp and Facebook groups that function as the real-time bulletin board of life in Nosara — road conditions, lost animals, community events, safety alerts.</li></ul><strong>The expat-Tico relationship</strong><ul><li>Nosara\'s success as a destination is built on a foundation of Tico land, Tico labor, and Tico patience with an influx that has permanently changed their town</li><li>The healthiest expat-Tico relationships are built on genuine reciprocity — learning Spanish, hiring local, supporting Tico-owned businesses, participating in community events, and respecting that this town existed before the airport and will exist after the next trend passes</li><li>5% of every Nosara Collective Conscience booking goes directly to local Tico families. This is not marketing — it is the core of what we are building here.</li></ul>'}
-  ]},
-  {tab:'Costa Rican Business',articles:[
-    {icon:'heart',title:'Why Buying Tico Matters — The Real Economy of Nosara',text:'Every dollar you spend in Nosara makes a choice. It either stays in the community — building a Tico family\'s future, funding a child\'s education, keeping a grandmother\'s kitchen open — or it leaves. Most large operations in Nosara are foreign-owned. The money circulates briefly and exits.<br><br>Tico-owned businesses operate on razor-thin margins against rising rents driven by international demand. When you choose a local soda over a branded café, you are not just eating rice and beans. You are casting a vote for the kind of Nosara that exists in 10 years.<br><br><strong>The Nosara Collective Conscience commitment:</strong><ul><li>5% of every booking goes directly to local Tico families</li><li>This directory exists to make Tico businesses visible — so visitors can find them, choose them, and return to them</li><li>We verify ownership before listing. If you know a Tico business not on this list, contact us.</li></ul>'},
-    {icon:'dining',title:'Tico-Owned Sodas & Restaurants',text:'These are the real kitchens of Nosara — run by Costa Rican families, priced for real people, and cooking food that has nothing to prove.<br><br><ul><li><strong>Soda El Bambú</strong> — The classic Tico soda in Nosara village. Rice and beans, casado del día, fresh juice, and prices that remind you this country has its own economy. Tico-owned and operated by a local family for over a decade. Open early.</li><li><strong>Soda Vanessa</strong> — A no-sign, no-menu, community kitchen near the village center. Ask a local to point you there. The arroz con pollo and the sopa negra are as good as it gets in Guanacaste.</li><li><strong>Pulpería y Soda La Paloma</strong> — Family pulpería with a small kitchen attached. Breakfast casado and fresh pan de yema (sweet egg bread) baked daily. Tico-owned, Nosara born.</li></ul><em style="font-size:0.72rem;color:var(--clay)">// Field note: Sodas rarely have websites or social media. They are found by walking, asking locals, or following the smell of gallo pinto at 7am. That is part of the experience.</em>'},
-    {icon:'grocery',title:'Tico-Owned Shops & Services',text:'Supporting local commerce means understanding where the actual Tico economy lives — in small shops, family services, and neighborhood trades rather than tourist-facing storefronts.<br><br><ul><li><strong>Colmado Mery</strong> — The most important Tico-owned business in Nosara. A local family supermarket that has anchored the community for decades. Buy your groceries here before choosing international options. They stock local produce, meats, and goods from Nicoya.</li><li><strong>Ferretería local (Nosara village)</strong> — Hardware and supplies run by a Tico family. Smaller selection than Nicoya but your purchase supports the village economy. Use it for basics before driving 45 minutes.</li><li><strong>Local mechanics (talleres)</strong> — Several Tico-run auto repair shops operate in Nosara village. Rates are fair, skills are high (they work on everything from ATVs to 4x4 trucks on jungle roads), and your money stays in the community.</li><li><strong>ASADA Nosara</strong> — The community water association, run by elected Tico community members. Pay your water bill on time. Attend public meetings when you can. This organization is the backbone of the community\'s water independence.</li></ul>'},
-    {icon:'leaf',title:'Artisans, Guides & Cultural Experiences',text:'The deepest Tico-owned experiences in Nosara are not in shops — they are with people who know this land intimately and share it as their livelihood.<br><br><ul><li><strong>Local fishing guides (pescadores)</strong> — Several Tico families in Nosara and Pelada offer offshore and inshore fishing trips. Ask at the beach in the early morning. The boats are smaller, the knowledge is deeper, and your dollars go to families who have fished these waters for generations.</li><li><strong>Guaitil ceramics artisans (Nicoya, 45 min)</strong> — Not in Nosara, but the closest truly Tico cultural experience to the region. Chorotega ceramic families in Guaitil and San Vicente sell hand-made, hand-painted pottery directly from their workshops. Buy from the maker, not from a gift shop.</li><li><strong>Community turtle tours — Ostional</strong> — The official guided turtle tours at Ostional Wildlife Refuge are operated by ADIO, the local Ostional community association (Tico-run). Avoid private tour operators who are not community-affiliated. The proceeds from official tours fund conservation and local families simultaneously.</li><li><strong>Local language teachers</strong> — Several Tico residents in Nosara offer Spanish lessons — a direct cultural exchange that funds a local family and changes your entire experience of the town. Ask at the Asociación de Desarrollo or at Colmado Mery for referrals.</li></ul><em style="font-size:0.72rem;color:var(--clay)">// A note on this directory: we only list businesses we can verify as Tico-owned. We do not list every business in Nosara — there are excellent foreign-owned operations here. But this section exists specifically to make the local economy visible and accessible. Know a Tico business we missed? Write to us.</em>'}
   ]}];
 
 const RESTAURANTS=[
-  {name:'La Luna',cuisine:'Mediterranean · Beachfront',desc:'Iconic beachfront restaurant at Playa Pelada. Fresh seafood, wood-fired pizza, and legendary sunset views.',price:'$$',vibe:'🌅 Romantic',hours:'11am–10pm'},
-  {name:'Café de Paris',cuisine:'French · Bakery · Breakfast',desc:'The soul of Nosara mornings — French pastries, fresh bread, great coffee, and a shaded terrace.',price:'$',vibe:'☕ Casual',hours:'6:30am–9pm'},
-  {name:'Robin\'s Ice Cream',cuisine:'Ice Cream · Healthy',desc:'Handmade ice cream and healthy snacks right in the heart of Nosara. Local ingredients, creative flavors.',price:'$',vibe:'🍦 Family',hours:'8am–8pm'},
-  {name:'Marlin Bill\'s',cuisine:'Seafood · American · Bar',desc:'The classic Nosara sports bar — cold beers, fresh fish tacos, and a lively crowd of surfers and locals.',price:'$$',vibe:'🍺 Lively',hours:'11am–11pm'},
-  {name:'Organico',cuisine:'Organic · Health Food',desc:'Farm-to-table organic restaurant serving wholesome bowls, fresh juices, and plant-based options.',price:'$$',vibe:'🌿 Healthy',hours:'7am–9pm'},
-  {name:'Soda El Bambú',cuisine:'Costa Rican · Soda',desc:'Authentic local soda. Rice and beans, casado, fresh juice — real Tico food at real Tico prices.',price:'$',vibe:'🇨🇷 Local',hours:'7am–8pm'},
-  {name:'El Chivo',cuisine:'Mexican · Tacos',desc:'Wood-fired tacos, fresh guacamole, cold cervezas. Popular with the surf crowd for lunch and happy hour.',price:'$',vibe:'🌮 Fun',hours:'11am–10pm'},
-  {name:'Jalapenos',cuisine:'Tex-Mex · Bar',desc:'Lively Tex-Mex spot with great margaritas and a buzzing atmosphere.',price:'$$',vibe:'🎉 Social',hours:'11am–11pm'}
+  {name:'La Luna',cuisine:'Mediterranean · Beachfront',desc:'Iconic beachfront restaurant at Playa Pelada. Fresh seafood, wood-fired pizza, and legendary sunset views.',price:'$$',vibe:'Romantic',hours:'11am–10pm'},
+  {name:'Café de Paris',cuisine:'French · Bakery · Breakfast',desc:'The soul of Nosara mornings — French pastries, fresh bread, great coffee, and a shaded terrace.',price:'$',vibe:'Casual',hours:'6:30am–9pm'},
+  {name:'Robin\'s Ice Cream',cuisine:'Ice Cream · Healthy',desc:'Handmade ice cream and healthy snacks right in the heart of Nosara. Local ingredients, creative flavors.',price:'$',vibe:'Family',hours:'8am–8pm'},
+  {name:'Marlin Bill\'s',cuisine:'Seafood · American · Bar',desc:'The classic Nosara sports bar — cold beers, fresh fish tacos, and a lively crowd of surfers and locals.',price:'$$',vibe:'Lively',hours:'11am–11pm'},
+  {name:'Organico',cuisine:'Organic · Health Food',desc:'Farm-to-table organic restaurant serving wholesome bowls, fresh juices, and plant-based options.',price:'$$',vibe:'Healthy',hours:'7am–9pm'},
+  {name:'Soda El Bambú',cuisine:'Costa Rican · Soda',desc:'Authentic local soda. Rice and beans, casado, fresh juice — real Tico food at real Tico prices.',price:'$',vibe:'Local',hours:'7am–8pm'},
+  {name:'El Chivo',cuisine:'Mexican · Tacos',desc:'Wood-fired tacos, fresh guacamole, cold cervezas. Popular with the surf crowd for lunch and happy hour.',price:'$',vibe:'Fun',hours:'11am–10pm'},
+  {name:'Jalapenos',cuisine:'Tex-Mex · Bar',desc:'Lively Tex-Mex spot with great margaritas and a buzzing atmosphere.',price:'$$',vibe:'Social',hours:'11am–11pm'}
 ];
 
 // ─── RENDER PROPERTIES ───
@@ -2351,7 +2362,7 @@ function renderRestaurants(){
       <div class="resto-cuisine">${r.cuisine}</div>
       <p class="resto-desc">${r.desc}</p>
       <div class="resto-footer">
-        <div class="resto-meta"><span>${r.vibe}</span><span>🕐 ${r.hours}</span></div>
+        <div class="resto-meta"><span>${r.vibe}</span><span>${r.hours}</span></div>
         <button class="resto-btn" onclick="bookRestaurant('${r.name}')">Reserve</button>
       </div>
     </div>`).join('');
@@ -3248,6 +3259,11 @@ injectMarquee();
 // ─── PROP CARD ADD TO CART OVERRIDE ───
 </script>
 
+<!-- Mobile sticky CTA -->
+<div class="mobile-sticky-cta" id="mobileStickyCta">
+  <a href="#properties" onclick="closeMobileNav()">Explore Properties →</a>
+</div>
+
 <!-- WhatsApp Floating -->
 <div id="waFloat" style="position:fixed;bottom:2rem;right:2rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:0.75rem">
   <div id="waTooltip" style="display:none;background:#1A1916;color:#F5F0E8;padding:0.9rem 1.25rem;font-size:0.72rem;font-family:'Archivo',sans-serif;font-weight:400;line-height:1.65;max-width:230px;border:1px solid rgba(253,250,245,0.12);box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative">
@@ -3599,6 +3615,21 @@ function closeMobileNav(){
   btn.classList.remove('open');
   btn.setAttribute('aria-expanded','false');
 }
+(function(){
+  const cta=document.getElementById('mobileStickyCta');
+  if(!cta)return;
+  const hero=document.querySelector('.hero');
+  let ticking=false;
+  function update(){
+    const heroBottom=hero?hero.getBoundingClientRect().bottom:0;
+    cta.classList.toggle('show', heroBottom<0);
+    ticking=false;
+  }
+  window.addEventListener('scroll',()=>{
+    if(!ticking){requestAnimationFrame(update);ticking=true;}
+  },{passive:true});
+  update();
+})();
 document.addEventListener('click',e=>{
   if(!e.target.closest('#langBtn')&&!e.target.closest('#langMenu')){
     const m=document.getElementById('langMenu');
