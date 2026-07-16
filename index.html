@@ -210,80 +210,80 @@ nav{
 .hero-bg img{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:center 40%;
-  filter:saturate(0.85) contrast(1.05);
 }
 .hero-bg::after{
   content:'';position:absolute;inset:0;
   background:linear-gradient(to bottom,
-    rgba(20,18,16,0.2) 0%,
-    rgba(20,18,16,0.05) 25%,
-    rgba(20,18,16,0.5) 65%,
-    rgba(20,18,16,0.8) 100%
+    rgba(20,18,16,0.45) 0%,
+    rgba(20,18,16,0.28) 30%,
+    rgba(20,18,16,0.45) 60%,
+    rgba(20,18,16,0.78) 100%
   );
-}
-/* Retro grain overlay */
-.hero::after{
-  content:'';position:absolute;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;z-index:1;
 }
 .hero>*{position:relative;z-index:2}
 .hero-bg{position:absolute!important;z-index:0!important}
 .hero-slide{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:center 40%;
-  filter:grayscale(100%) contrast(1.1);
+  filter:grayscale(100%) contrast(0.9) brightness(1.06) sepia(0.1);
   opacity:0;transition:opacity 1.2s ease;
 }
-.hero-slide.color{filter:saturate(0.95) contrast(1.05)}
 .hero-slide.active{opacity:1}
 .hero-eyebrow{
-  font-family:'Archivo',monospace;
-  font-size:0.58rem;letter-spacing:0.22em;
-  text-transform:uppercase;color:var(--clay);
-  margin-bottom:1rem;font-weight:400;
-  display:flex;align-items:center;gap:0.75rem;
-}
-.hero-eyebrow::before{content:'◈';font-size:0.5rem}
-.hero-title{
   font-family:'Archivo',sans-serif;
-  font-size:clamp(2rem,5.5vw,5rem);
-  font-weight:700;line-height:1.05;
-  margin-bottom:0.4rem;
-  text-transform:uppercase;letter-spacing:-0.025em;
+  font-size:0.68rem;letter-spacing:0.28em;
+  text-transform:uppercase;color:#FDFAF5;
+  margin-bottom:1.5rem;font-weight:500;
+  text-shadow:0 1px 12px rgba(20,18,16,0.5);
+}
+.hero-title{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(2.6rem,6.5vw,5.6rem);
+  font-weight:400;line-height:1.15;
+  margin-bottom:0.2rem;
+  letter-spacing:0;
   color:#FDFAF5;
+  text-shadow:0 2px 20px rgba(20,18,16,0.35);
 }
 .hero-title em{
-  font-style:normal;color:#FDFAF5;
-  display:block;font-weight:700;
-  font-family:'Archivo',sans-serif;
-  font-size:1em;letter-spacing:-0.025em;
-  line-height:1.2;margin-top:0.2rem;
+  font-style:italic;color:#E0A588;
+  font-weight:400;
+  font-family:'Instrument Serif',serif;
+  font-size:1em;letter-spacing:0;
 }
 .hero-sub{
-  font-size:0.78rem;color:var(--text-mid);
-  max-width:340px;line-height:1.9;
-  margin-bottom:2rem;font-weight:300;
+  font-size:0.85rem;color:#FDFAF5;
+  max-width:400px;line-height:1.9;
+  margin-bottom:2.25rem;font-weight:300;
+  text-shadow:0 1px 12px rgba(20,18,16,0.5);
 }
 .hero-actions{display:flex;gap:0;align-items:stretch}
 .btn-primary{
   background:var(--text);color:var(--bg);
-  padding:14px 28px;font-size:0.62rem;
-  font-weight:700;letter-spacing:0.16em;
+  padding:15px 30px;font-size:0.62rem;
+  font-weight:500;letter-spacing:0.16em;
   text-transform:uppercase;cursor:pointer;
-  border:2px solid var(--text);transition:all 0.15s;
+  border:1px solid var(--text);transition:all 0.2s;
   font-family:'Archivo',sans-serif;
 }
 .btn-primary:hover{background:var(--clay);border-color:var(--clay)}
 .btn-ghost{
   background:transparent;color:var(--text);
-  padding:14px 28px;font-size:0.62rem;
-  font-weight:600;letter-spacing:0.16em;
+  padding:15px 30px;font-size:0.62rem;
+  font-weight:500;letter-spacing:0.16em;
   text-transform:uppercase;cursor:pointer;
-  border:2px solid var(--text);border-left:none;
-  transition:all 0.15s;font-family:'Archivo',sans-serif;
+  border:1px solid var(--text);border-left:none;
+  transition:all 0.2s;font-family:'Archivo',sans-serif;
 }
 .btn-ghost:hover{background:var(--bg2)}
+.hero-scroll{
+  font-family:'Archivo',sans-serif;font-size:0.62rem;
+  letter-spacing:0.24em;text-transform:uppercase;
+  color:#FDFAF5;opacity:0.7;font-weight:400;
+  display:flex;align-items:center;gap:0.6rem;
+  margin-bottom:1.5rem;text-shadow:0 1px 12px rgba(20,18,16,0.5);
+}
+.hero-scroll::after{content:'';width:1px;height:28px;background:currentColor;opacity:0.6}
 /* Retro sticker badge */
 .hero-badge{
   position:absolute;bottom:4rem;right:3rem;
@@ -1505,55 +1505,26 @@ body{top:0!important;position:static!important}
       <button class="nav-cart" onclick="toggleCart()">🛒 Cart <span id="cartCount" style="background:var(--clay);color:#fff;border-radius:50%;padding:1px 6px;font-size:0.65rem;margin-left:4px">0</span></button>
     </div>
   </div>
-</nav><div style="background:#1A1916;border-bottom:2px solid var(--clay);padding:11px 2rem;text-align:center;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
-  <span style="font-family:'Archivo',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400">Conscience Collective</span>
-  <span style="font-family:'Archivo',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay)">// 5% to Nosara Families</span>
-  <span style="font-family:'Archivo',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,250,245,0.5);font-weight:400">Every Booking · Every Time</span>
+</nav><div style="background:var(--bg2);border-top:1px solid var(--nc-border);border-bottom:1px solid var(--nc-border);padding:9px 2rem;text-align:center">
+  <span style="font-family:'Archivo',sans-serif;font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-mid);font-weight:500">5% of every booking supports local Nosara families</span>
 </div>
 
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg" id="heroBg">
-    <img class="hero-slide active color" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172166/9_h82qdn.jpg" alt="Surfer riding a wave at Playa Guiones, Nosara, Costa Rica" loading="eager">
+    <img class="hero-slide active" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172166/9_h82qdn.jpg" alt="Surfer riding a wave at Playa Guiones, Nosara, Costa Rica" loading="eager">
     <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172204/11_haqxsg.jpg" alt="Nosara, Costa Rica coastline and jungle landscape" loading="lazy">
     <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172221/13_daaskf.jpg" alt="Nosara, Costa Rica coastline and jungle landscape" loading="lazy">
     <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172223/12_b34jz7.jpg" alt="Nosara, Costa Rica coastline and jungle landscape" loading="lazy">
     <img class="hero-slide" src="https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172288/15_zis76g.jpg" alt="Nosara, Costa Rica coastline and jungle landscape" loading="lazy">
   </div>
   <div class="hero-top">
-    <div class="hero-eyebrow" style="
-        color:#FDFAF5;
-        font-family:'Archivo',monospace;
-        font-size:0.65rem;
-        font-weight:500;
-        letter-spacing:0.32em;
-        text-transform:uppercase;
-        display:inline-flex;
-        align-items:center;
-        gap:0.75rem;
-        background:rgba(20,18,16,0.55);
-        padding:7px 14px;
-        backdrop-filter:blur(8px);
-        border:1px solid rgba(253,250,245,0.2);
-      ">Nosara · Guanacaste · Costa Rica</div>
-    <div class="hero-title" style="margin:0">Travel with <span style="color:var(--clay)">intention,</span></div>
+    <div class="hero-eyebrow">Nosara · Guanacaste · Costa Rica</div>
   </div>
   <div style="display:flex;flex-direction:column;gap:0.75rem">
-    <h1 class="hero-title" style="margin:0">stay with <span style="color:var(--clay)">purpose.</span></h1>
-    <p class="hero-sub" style="
-        color:#FDFAF5;
-        font-size:0.85rem;
-        line-height:1.85;
-        font-weight:400;
-        max-width:400px;
-        background:rgba(20,18,16,0.45);
-        padding:1rem 1.25rem;
-        backdrop-filter:blur(6px);
-        border-left:3px solid var(--clay);
-        letter-spacing:0.01em;
-        margin:0;
-      ">Handpicked homes, full concierge service, and a commitment to community. Every booking supports local Nosara families.</p>
+    <h1 class="hero-title" style="margin:0">A <em style="color:#E0A588">collective</em> of <em style="color:#E0A588">conscious</em> travellers.</h1>
+    <p class="hero-sub" style="margin:0">Handpicked homes, full concierge service, and a commitment to community. Every booking supports local Nosara families.</p>
     <div class="hero-btns" style="margin:0">
       <button class="btn-primary" onclick="document.getElementById('properties').scrollIntoView({behavior:'smooth'})">Explore Properties</button>
     </div>
