@@ -69,7 +69,7 @@ function guestEmail(r, property) {
       <div style="background:rgba(43,122,142,0.08);border:1px solid rgba(43,122,142,0.2);padding:20px;margin-bottom:24px">
         <div style="font-size:13px;color:#1E5A6A;line-height:1.7">
           🌱 <strong>Community Impact: $${r.community_impact.toLocaleString()}</strong><br>
-          5% of your accommodation total goes directly to local families in Nosara, Costa Rica. Thank you for traveling with purpose.
+          Part of every direct booking goes straight to local families in Nosara, Costa Rica. Thank you for traveling with purpose.
         </div>
       </div>
 
@@ -114,9 +114,9 @@ function adminEmail(r, property) {
       <tr style="border-top:1px solid #3A3830"><td style="padding:8px 0;color:#F0EDE6">Accommodation</td><td style="color:#F0EDE6;text-align:right">$${r.accommodation_total.toLocaleString()}</td></tr>
       <tr><td style="padding:3px 0">Taxes</td><td style="color:#F0EDE6;text-align:right">$${r.taxes.toLocaleString()}</td></tr>
       <tr><td style="padding:3px 0;color:#C4784A">Grand Total</td><td style="color:#C4784A;text-align:right;font-size:16px">$${r.grand_total.toLocaleString()}</td></tr>
-      <tr style="border-top:1px solid #3A3830"><td style="padding:8px 0 3px;color:#6A9E6A">Owner Payout (90%)</td><td style="color:#6A9E6A;text-align:right">$${r.owner_payout.toLocaleString()}</td></tr>
-      <tr><td style="padding:3px 0;color:#7AAAC0">Community Impact (5%)</td><td style="color:#7AAAC0;text-align:right">$${r.community_impact.toLocaleString()}</td></tr>
-      <tr><td style="padding:3px 0;color:#D4906A">Company Allocation (5%)</td><td style="color:#D4906A;text-align:right">$${r.company_allocation.toLocaleString()}</td></tr>
+      <tr style="border-top:1px solid #3A3830"><td style="padding:8px 0 3px;color:#6A9E6A">Owner Payout</td><td style="color:#6A9E6A;text-align:right">$${r.owner_payout.toLocaleString()}</td></tr>
+      <tr><td style="padding:3px 0;color:#D4906A">NCC Margin</td><td style="color:#D4906A;text-align:right">$${r.company_allocation.toLocaleString()}</td></tr>
+      <tr><td style="padding:3px 0;color:#7AAAC0">— Community Impact (5% of margin)</td><td style="color:#7AAAC0;text-align:right">$${r.community_impact.toLocaleString()}</td></tr>
     </table>
   </div>
 </body>

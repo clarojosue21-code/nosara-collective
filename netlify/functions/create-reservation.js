@@ -12,6 +12,40 @@ function generateReference() {
   return `NCC-${date}-${rand}`;
 }
 
+// Peak season: Christmas/New Year (Dec 21 - Jan 6) and Holy Week (Mar 21-28) — same window every year
+function isPeakDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00Z');
+  const month = d.getUTCMonth() + 1;
+  const day = d.getUTCDate();
+  if (month === 12 && day >= 21) return true;
+  if (month === 1 && day <= 6) return true;
+  if (month === 3 && day >= 21 && day <= 28) return true;
+  return false;
+}
+
+// Sums nightly guest-facing price and owner payout across a stay, night by night,
+// applying the peak-season rate where applicable. For per-person properties
+// (Castillo Colonial) each night's rate is multiplied by guest count.
+function calcStayTotals(property, check_in, check_out, numGuests) {
+  const mult = property.pricing_unit === 'per_person' ? numGuests : 1;
+  let accommodation_total = 0;
+  let owner_payout = 0;
+  let nights = 0;
+  let cur = new Date(check_in + 'T00:00:00Z');
+  const end = new Date(check_out + 'T00:00:00Z');
+  while (cur < end) {
+    const dateStr = cur.toISOString().slice(0, 10);
+    const peak = isPeakDate(dateStr);
+    const rate = peak && property.peak_price_per_night != null ? property.peak_price_per_night : property.price_per_night;
+    const ownerRate = peak && property.peak_owner_payout_per_night != null ? property.peak_owner_payout_per_night : property.owner_payout_per_night;
+    accommodation_total += rate * mult;
+    owner_payout += (ownerRate != null ? ownerRate : rate) * mult;
+    nights++;
+    cur = new Date(cur.getTime() + 86400000);
+  }
+  return { nights, accommodation_total, owner_payout };
+}
+
 async function createPayPalOrder(amount, reference) {
   const auth = Buffer.from(
     `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
@@ -106,12 +140,20 @@ exports.handler = async (event) => {
   const isUUID = /^[0-9a-f-]{36}$/.test(property_id);
   const { data: property, error: propErr } = await supabase
     .from('properties')
-    .select('id, name, price_per_night')
+    .select('id, name, price_per_night, owner_payout_per_night, peak_price_per_night, peak_owner_payout_per_night, pricing_unit, min_guests, min_nights')
     .eq(isUUID ? 'id' : 'slug', property_id)
     .single();
 
   if (propErr || !property) {
     return { statusCode: 404, body: JSON.stringify({ error: 'Property not found' }) };
+  }
+
+  const nightsRequested = Math.round((new Date(check_out) - new Date(check_in)) / 86400000);
+  if (property.min_nights && nightsRequested < property.min_nights) {
+    return { statusCode: 400, body: JSON.stringify({ error: `Minimum stay is ${property.min_nights} nights` }) };
+  }
+  if (property.min_guests && num_guests < property.min_guests) {
+    return { statusCode: 400, body: JSON.stringify({ error: `Minimum ${property.min_guests} guests required` }) };
   }
 
   // Check availability using the real UUID
@@ -129,15 +171,14 @@ exports.handler = async (event) => {
     };
   }
 
-  const nights = Math.round((new Date(check_out) - new Date(check_in)) / 86400000);
-  const accommodation_total = property.price_per_night * nights;
-  const ncc_fee = Math.round(accommodation_total * 0.10);
-  const subtotal = accommodation_total + ncc_fee;
-  const taxes = Math.round(subtotal * 0.13);
-  const grand_total = subtotal + taxes;
-  const community_impact = Math.round(accommodation_total * 0.05);
-  const owner_payout = accommodation_total;
-  const company_allocation = Math.round(accommodation_total * 0.05);
+  // accommodation_total is already the final, all-inclusive guest-facing price
+  // (season + guest-count aware) — nothing gets added on top at checkout.
+  const { nights, accommodation_total, owner_payout } = calcStayTotals(property, check_in, check_out, num_guests);
+  const grand_total = accommodation_total;
+  const taxes = Math.round(accommodation_total * 0.13);
+  const company_allocation = accommodation_total - owner_payout - taxes;
+  const ncc_fee = company_allocation;
+  const community_impact = Math.round(company_allocation * 0.05);
 
   const reference = generateReference();
 
