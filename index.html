@@ -1845,7 +1845,7 @@ const PROPS=[
   cover:CDN+'v1780975902/19_-_grounds4_1_gm24ir.jpg',
   images:[CDN+'v1780975902/19_-_grounds4_1_gm24ir.jpg',CDN+'v1780975905/14_-_master_5_fz39fi.jpg',CDN+'v1780975899/15_-_master3_rhnqgg.jpg',CDN+'v1780975898/12_-_master4_yy0vim.jpg',CDN+'v1780975897/11_-_master_cdplzv.jpg',CDN+'v1780975900/16_-_queen_xbq55n.jpg',CDN+'v1780975890/17_-_queen2_szlikg.jpg',CDN+'v1780975894/6_-_lower4_amzrj4.jpg',CDN+'v1780975904/5_-_lower3_mdwcrr.jpg',CDN+'v1780975891/3_-_lower_asprff.jpg'],
   features:['Private pool','3 bedrooms','Full kitchen','A/C','Jungle views','Free parking'],retreat:true},
-  {id:'arcilla-bundle',name:'Bundle: Clay House 1 + 2',badge:'Bundle',badgeClass:'bundle',price:900,meta:'7 bed · 6.5 bath · Two pools · Up to 18 guests',desc:'Rent both Clay Houses together — two private pools, shared garden, ideal for large families, retreats, or multi-family groups. Sleeps up to 18.',
+  {id:'arcilla-bundle',name:'Bundle: Clay House 1 + 2',badge:'Bundle',badgeClass:'bundle',price:745,composedOf:['arcilla1','arcilla2'],meta:'7 bed · 6.5 bath · Two pools · Up to 18 guests',desc:'Rent both Clay Houses together — two private pools, shared garden, ideal for large families, retreats, or multi-family groups. Sleeps up to 18.',
   cover:CDN+'v1780975416/20_-_grounds_hgojyr.jpg',
   images:[CDN+'v1780975416/20_-_grounds_hgojyr.jpg',CDN+'v1780975905/14_-_master_5_fz39fi.jpg'],
   features:['Two private pools','7 bedrooms','Two kitchens','Shared garden','Sleeps up to 18','Best value'],retreat:true},
@@ -1861,7 +1861,7 @@ const PROPS=[
   cover:CDN+'v1781041035/Casa_Sol_y_Mar_025_gr1v2w.jpg',
   images:[CDN+'v1781041035/Casa_Sol_y_Mar_025_gr1v2w.jpg',CDN+'v1781041036/Casa_Sol_y_Mar_027_ubstlr.jpg',CDN+'v1781041039/Casa_Sol_y_Mar_028_r8ya28.jpg',CDN+'v1781041041/Casa_Sol_y_Mar_029_v404gh.jpg',CDN+'v1781041042/Casa_Sol_y_Mar_030_u0144h.jpg',CDN+'v1781041026/Casa_Sol_y_Mar_023_mb4pkw.jpg'],
   features:['Shared pool','2 bedrooms','2 beds per room','Ocean-themed','Open group terrace','Full kitchen'],retreat:false},
-  {id:'sol-mar-bundle',name:'Bundle: Sol + Mar',badge:'Bundle',badgeClass:'bundle',price:498,meta:'4 bed · 4 bath · Shared pool · Tennis courts',desc:'Take over both Sol and Mar — 4 bedrooms, one shared central pool, 2 queen beds per room. Perfect for two families or group retreats up to 16 guests.',
+  {id:'sol-mar-bundle',name:'Bundle: Sol + Mar',badge:'Bundle',badgeClass:'bundle',price:470,composedOf:['sol','mar'],meta:'4 bed · 4 bath · Shared pool · Tennis courts',desc:'Take over both Sol and Mar — 4 bedrooms, one shared central pool, 2 queen beds per room. Perfect for two families or group retreats up to 16 guests.',
   cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',
   images:[CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',CDN+'v1781041056/Casa_Sol_y_Mar_039_ps2rfd.jpg',CDN+'v1781041035/Casa_Sol_y_Mar_025_gr1v2w.jpg',CDN+'v1781041063/Casa_Sol_y_Mar_041_yp3nwl.jpg'],
   features:['One shared central pool','4 bedrooms','2 queen beds per room','Two kitchens','Sleeps up to 16','Best value'],retreat:true},
@@ -1965,11 +1965,11 @@ const SERVICES=[
 ];
 
 const RETREATS=[
-  {name:'Clay House Compound',slug:'arcilla-bundle',tag:'Full Compound · Up to 18 Guests',price:750,desc:'Both Clay House villas together — 7 bedrooms sleeping up to 18 guests. Two private pools, two full kitchens, deep jungle seclusion. The ultimate setting for yoga, wellness, leadership, or creative retreats.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 18 guests','7 bedrooms','Two private pools','Two full kitchens','Buffet catering available','Full concierge','Jungle immersion']},
-  {name:'Casa Ojos Azules',slug:'ojosazules',tag:'Intimate Retreat · Up to 10 Guests',price:500,desc:'A luminous 4-bedroom villa sleeping up to 10 guests. Open spaces, natural light, tropical gardens and a private pool. Ideal for yoga, healing, wellness, or creative retreats.',cover:CDN+'v1781050965/Small5_qfmiv4.jpg',features:['Up to 10 guests','4 bedrooms','Private pool','Epic sunset view','Garden spaces','Buffet catering available','Natural light']},
-  {name:'Clay House + Ojos Azules',slug:'arcilla-ojos-bundle',tag:'Triple Villa · Up to 28 Guests',price:1250,desc:'The full Clay House Compound plus Casa Ojos Azules — three villas, three pools, sleeping up to 28 guests. The most exclusive multi-space retreat experience in Nosara. Perfect for large groups who want total seclusion and a complete resort feel.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 28 guests','11 bedrooms','Three private pools','Three full kitchens','Buffet catering available','Full concierge','Maximum privacy']},
-  {name:'Castillo Colonial',slug:'castillo',tag:'Crown Jewel · Up to 34 Guests',price:2250,desc:'The most prestigious retreat venue in Nosara — 15 bedrooms, two private pools, sunset viewpoint, tennis court, and fitness center. The perfect stage for large wellness retreats, corporate events, destination weddings, and elite multi-group experiences. Nothing in Nosara compares.',cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',features:['Up to 34 guests','15 bedrooms','2 private pools','Sunset view point','Tennis court','Fitness center','Full kitchen','Pet friendly']},
-  {name:'Sol + Mar Bundle',slug:'sol-mar-bundle',tag:'Twin Villa Retreat · Up to 16 Guests',price:498,desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms, 2 queen beds per room, one shared central pool. Perfect for retreats up to 16 guests.',cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',features:['Up to 16 guests','4 bedrooms','2 queen beds per room','One shared pool','Two kitchens','Buffet catering available']}
+  {name:'Clay House Compound',slug:'arcilla-bundle',composedOf:['arcilla1','arcilla2'],tag:'Full Compound · Up to 18 Guests',desc:'Both Clay House villas together — 7 bedrooms sleeping up to 18 guests. Two private pools, two full kitchens, deep jungle seclusion. The ultimate setting for yoga, wellness, leadership, or creative retreats.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 18 guests','7 bedrooms','Two private pools','Two full kitchens','Buffet catering available','Full concierge','Jungle immersion']},
+  {name:'Casa Ojos Azules',slug:'ojosazules',composedOf:['ojosazules'],tag:'Intimate Retreat · Up to 10 Guests',desc:'A luminous 4-bedroom villa sleeping up to 10 guests. Open spaces, natural light, tropical gardens and a private pool. Ideal for yoga, healing, wellness, or creative retreats.',cover:CDN+'v1781050965/Small5_qfmiv4.jpg',features:['Up to 10 guests','4 bedrooms','Private pool','Epic sunset view','Garden spaces','Buffet catering available','Natural light']},
+  {name:'Clay House + Ojos Azules',slug:'arcilla-ojos-bundle',composedOf:['arcilla1','arcilla2','ojosazules'],tag:'Triple Villa · Up to 28 Guests',desc:'The full Clay House Compound plus Casa Ojos Azules — three villas, three pools, sleeping up to 28 guests. The most exclusive multi-space retreat experience in Nosara. Perfect for large groups who want total seclusion and a complete resort feel.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 28 guests','11 bedrooms','Three private pools','Three full kitchens','Buffet catering available','Full concierge','Maximum privacy']},
+  {name:'Castillo Colonial',slug:'castillo',tag:'Crown Jewel · Up to 34 Guests',priceLabel:'$125/person/night · min. 5 guests, 2 nights',desc:'The most prestigious retreat venue in Nosara — 15 bedrooms, two private pools, sunset viewpoint, tennis court, and fitness center. The perfect stage for large wellness retreats, corporate events, destination weddings, and elite multi-group experiences. Nothing in Nosara compares.',cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',features:['Up to 34 guests','15 bedrooms','2 private pools','Sunset view point','Tennis court','Fitness center','Full kitchen','Pet friendly']},
+  {name:'Sol + Mar Bundle',slug:'sol-mar-bundle',composedOf:['sol','mar'],tag:'Twin Villa Retreat · Up to 16 Guests',desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms, 2 queen beds per room, one shared central pool. Perfect for retreats up to 16 guests.',cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',features:['Up to 16 guests','4 bedrooms','2 queen beds per room','One shared pool','Two kitchens','Buffet catering available']}
 ];
 
 const LOTS=[
@@ -2222,7 +2222,23 @@ function ncFillerCard(wrapClass,minHeight,lines,leadType,leadTag){
   </div>`;
 }
 function renderRetreats(){
-  const cards=RETREATS.map(r=>`
+  // Bundle retreats derive their price from the live price of each component
+  // property — never edited by hand, so it can never drift out of sync with
+  // "Our Properties".
+  RETREATS.forEach(r=>{
+    if(r.composedOf) r.price=r.composedOf.reduce((sum,id)=>sum+(PROPS.find(p=>p.id===id)?.price||0),0);
+  });
+  const cards=RETREATS.map(r=>{
+    const priceHtml=r.priceLabel
+      ?`<div style="font-family:'Archivo',monospace;font-size:0.72rem;color:var(--text-muted);margin:0.75rem 0 0.25rem">${r.priceLabel}</div>`
+      :(r.price?`<div style="font-family:'Instrument Serif',serif;font-size:1.6rem;font-weight:300;color:var(--text);margin:0.75rem 0 0.25rem">$${r.price.toLocaleString()}<span style="font-family:'Archivo',monospace;font-size:0.58rem;color:var(--text-muted);margin-left:6px;font-weight:400">/night</span></div>`:'');
+    // If the retreat's slug is also a bookable property, reuse the real
+    // property modal (season pricing, per-person logic, live calendar)
+    // instead of the simplified retreat flow — only the Clay House + Ojos
+    // Azules triple combo isn't a standalone property.
+    const bookable=PROPS.some(p=>p.id===r.slug);
+    const onclick=bookable?`openModal('${r.slug}')`:`openRetreatBooking('${r.name.replace(/'/g,"\\'")}','${r.tag.replace(/'/g,"\\'")}','${r.cover}')`;
+    return `
     <div class="retreat-card">
       <div class="retreat-img-wrap">
         <img src="${r.cover}" alt="${r.name}" onerror="this.style.display='none'" loading="lazy">
@@ -2232,10 +2248,11 @@ function renderRetreats(){
         <div class="retreat-name">${r.name}</div>
         <p class="retreat-desc">${r.desc}</p>
         <div class="retreat-feats">${r.features.map(f=>`<span class="retreat-feat">${f}</span>`).join('')}</div>
-        ${r.price?`<div style="font-family:'Instrument Serif',serif;font-size:1.6rem;font-weight:300;color:var(--text);margin:0.75rem 0 0.25rem">$${r.price.toLocaleString()}<span style="font-family:'Archivo',monospace;font-size:0.58rem;color:var(--text-muted);margin-left:6px;font-weight:400">/night</span></div>`:''}
-        <button class="retreat-cta" onclick="openRetreatBooking('${r.name.replace(/'/g,"\\'")}','${r.tag.replace(/'/g,"\\'")}','${r.cover}')">Book Now</button>
+        ${priceHtml}
+        <button class="retreat-cta" onclick="${onclick}">Book Now</button>
       </div>
-    </div>`);
+    </div>`;
+  });
   cards.push(ncFillerCard('retreat-card',270,'Host retreats at your<br>property? List with us.','general','retreats-list-with-us'));
   document.getElementById('retreatsGrid').innerHTML=cards.join('');
 }
@@ -2877,7 +2894,17 @@ function loadGoogleTranslateScript(){
   document.body.appendChild(s);
 }
 
+// Bundle prices are always derived from the live per-property prices,
+// never edited by hand — keeps "Our Properties" and "Retreats" bundle
+// cards (and what actually gets charged) in sync with each individual
+// property's current rate.
+function syncBundlePrices(){
+  PROPS.filter(p=>p.composedOf).forEach(p=>{
+    p.price=p.composedOf.reduce((sum,id)=>sum+(PROPS.find(x=>x.id===id)?.price||0),0);
+  });
+}
 const propsReady=loadPropsFromSupabase().then(()=>{
+  syncBundlePrices();
   try{renderProps();}catch(e){console.warn('renderProps',e);}
   try{renderRetreats();}catch(e){console.warn('renderRetreats',e);}
 });
