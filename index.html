@@ -2226,7 +2226,13 @@ function renderRetreats(){
   // property — never edited by hand, so it can never drift out of sync with
   // "Our Properties".
   RETREATS.forEach(r=>{
-    if(r.composedOf) r.price=r.composedOf.reduce((sum,id)=>sum+(PROPS.find(p=>p.id===id)?.price||0),0);
+    if(r.composedOf){
+      r.price=r.composedOf.reduce((sum,id)=>sum+(PROPS.find(p=>p.id===id)?.price||0),0);
+      r.peakPrice=r.composedOf.reduce((sum,id)=>{
+        const c=PROPS.find(p=>p.id===id);
+        return sum+(c?.peakPrice||c?.price||0);
+      },0);
+    }
   });
   const cards=RETREATS.map(r=>{
     const priceHtml=r.priceLabel
@@ -2265,6 +2271,7 @@ async function openRetreatBooking(name, tag, cover){
     name: name,
     meta: tag,
     price: retreat?.price || 0,
+    peakPrice: retreat?.peakPrice || retreat?.price || 0,
     priceLabel: retreat?.price ? '$'+retreat.price+'/night' : 'Contact for pricing',
     desc: retreat?.desc || '',
     features: retreat?.features || [],
@@ -2901,6 +2908,10 @@ function loadGoogleTranslateScript(){
 function syncBundlePrices(){
   PROPS.filter(p=>p.composedOf).forEach(p=>{
     p.price=p.composedOf.reduce((sum,id)=>sum+(PROPS.find(x=>x.id===id)?.price||0),0);
+    p.peakPrice=p.composedOf.reduce((sum,id)=>{
+      const c=PROPS.find(x=>x.id===id);
+      return sum+(c?.peakPrice||c?.price||0);
+    },0);
   });
 }
 const propsReady=loadPropsFromSupabase().then(()=>{

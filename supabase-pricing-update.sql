@@ -80,3 +80,42 @@ UPDATE properties SET
   min_guests = 5,
   min_nights = 2
 WHERE slug = 'castillo';
+
+-- ═══════════════════════════════════════════════════
+-- Bundles: always the sum of their component properties'
+-- regular/peak prices above. Recompute these any time an
+-- individual property price changes.
+-- ═══════════════════════════════════════════════════
+
+-- Clay House 1 + 2 (405+340 / 600+550)
+UPDATE properties SET
+  price_per_night = 745,
+  owner_payout_per_night = 559,
+  peak_price_per_night = 1150,
+  peak_owner_payout_per_night = 863
+WHERE slug = 'arcilla-bundle';
+
+-- Sol + Mar (235+235 / 560+560)
+UPDATE properties SET
+  price_per_night = 470,
+  owner_payout_per_night = 362,
+  peak_price_per_night = 1120,
+  peak_owner_payout_per_night = 862
+WHERE slug = 'sol-mar-bundle';
+
+-- Clay House 1 + 2 + Ojos Azules (405+340+625 / 600+550+1050) — retreats-only,
+-- no standalone card in "Our Properties". Insert if missing.
+INSERT INTO properties (slug, name, price_per_night, owner_payout_per_night, peak_price_per_night, peak_owner_payout_per_night, max_guests, bedrooms, bathrooms, description, cover_image, images, features, pricing_unit, is_active)
+VALUES (
+  'arcilla-ojos-bundle', 'Clay House + Ojos Azules', 1370, 1028, 2200, 1651, 28, 11, 11,
+  'The full Clay House Compound plus Casa Ojos Azules — three villas, three pools, sleeping up to 28 guests. The most exclusive multi-space retreat experience in Nosara.',
+  'https://res.cloudinary.com/dzqgajn3l/image/upload/v1780975891/1_-_grounds5_qacxew.jpg',
+  '["https://res.cloudinary.com/dzqgajn3l/image/upload/v1780975891/1_-_grounds5_qacxew.jpg"]',
+  '["Up to 28 guests","11 bedrooms","Three private pools","Three full kitchens","Buffet catering available","Full concierge","Maximum privacy"]',
+  'per_night', true
+)
+ON CONFLICT (slug) DO UPDATE SET
+  price_per_night = EXCLUDED.price_per_night,
+  owner_payout_per_night = EXCLUDED.owner_payout_per_night,
+  peak_price_per_night = EXCLUDED.peak_price_per_night,
+  peak_owner_payout_per_night = EXCLUDED.peak_owner_payout_per_night;
