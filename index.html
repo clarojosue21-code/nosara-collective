@@ -1107,6 +1107,17 @@ footer{background:#1A1916;border-top:2px solid rgba(253,250,245,0.06);padding:4r
   }
   .nav-inner{padding:0 1.25rem;position:relative}
   section,#surf,#impact,#impact-banner{padding:4rem 1.5rem}
+  /* ─── Mobile accordion for main sections (Stay/Concierge/Retreats/Invest/Guide/Impact) ─── */
+  .mobile-section-header{cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+  .mobile-accordion-chevron{
+    display:inline-flex;flex-shrink:0;align-items:center;justify-content:center;
+    width:32px;height:32px;margin-top:0.15rem;
+    font-family:'Archivo',sans-serif;font-size:1.4rem;font-weight:300;line-height:1;
+    color:var(--clay);border:1px solid var(--border-med);border-radius:50%;
+    transition:transform 0.2s;
+  }
+  .mobile-accordion-body{display:none;margin-top:1.5rem}
+  .mobile-accordion-body.open{display:block}
   .hero{padding:0 1.5rem 3.5rem}
   .footer-grid{grid-template-columns:1fr 1fr}
   .impact-banner-big{padding:2rem;flex-direction:column;gap:1.25rem}
@@ -1571,31 +1582,52 @@ body{top:0!important;position:static!important}
 
 <section id="properties">
   <div class="section-inner">
-    <div class="section-label">Where to Stay</div>
-    <h2 class="section-title">Our Properties</h2>
-    <p class="section-sub">From earthen casas to highland retreats — each home carries the soul of Nosara and the warmth of its people.</p>
-    <div class="props-grid stagger" id="propsGrid"></div>
+    <div class="mobile-section-header" onclick="toggleMobileSection('properties')">
+      <div>
+        <div class="section-label">Where to Stay</div>
+        <h2 class="section-title">Our Properties</h2>
+        <p class="section-sub">From earthen casas to highland retreats — each home carries the soul of Nosara and the warmth of its people.</p>
+      </div>
+      <span class="mobile-accordion-chevron" id="properties-secchevron">+</span>
+    </div>
+    <div class="mobile-accordion-body" id="properties-secbody">
+      <div class="props-grid stagger" id="propsGrid"></div>
+    </div>
   </div>
 </section>
 
 <!-- CONCIERGE BUILDER -->
 <section id="concierge">
   <div class="section-inner">
-    <div class="section-label">Full Service</div>
-    <h2 class="section-title">Build Your Perfect Stay</h2>
-    <p class="section-sub">Select everything you need — from airport pickup to private chef — and we'll have it all ready when you arrive.</p>
-    <div class="builder-grid" id="servicesGrid"></div>
-    <p class="services-tax-note">* Prices shown do not include 13% IVA tax. Taxes are calculated and added at checkout.</p>
+    <div class="mobile-section-header" onclick="toggleMobileSection('concierge')">
+      <div>
+        <div class="section-label">Full Service</div>
+        <h2 class="section-title">Build Your Perfect Stay</h2>
+        <p class="section-sub">Select everything you need — from airport pickup to private chef — and we'll have it all ready when you arrive.</p>
+      </div>
+      <span class="mobile-accordion-chevron" id="concierge-secchevron">+</span>
+    </div>
+    <div class="mobile-accordion-body" id="concierge-secbody">
+      <div class="builder-grid" id="servicesGrid"></div>
+      <p class="services-tax-note">* Prices shown do not include 13% IVA tax. Taxes are calculated and added at checkout.</p>
+    </div>
   </div>
 </section>
 
 <!-- RETREATS -->
 <section id="retreats">
   <div class="section-inner">
-    <div class="section-label">Group Experiences</div>
-    <h2 class="section-title">Host Your Retreat in Nosara</h2>
-    <p class="section-sub">Yoga, wellness, surf, business, creative — Nosara's energy is unlike anywhere else. We offer the perfect spaces and full support for retreat hosts from around the world.</p>
-    <div class="retreats-grid stagger" id="retreatsGrid"></div>
+    <div class="mobile-section-header" onclick="toggleMobileSection('retreats')">
+      <div>
+        <div class="section-label">Group Experiences</div>
+        <h2 class="section-title">Host Your Retreat in Nosara</h2>
+        <p class="section-sub">Yoga, wellness, surf, business, creative — Nosara's energy is unlike anywhere else. We offer the perfect spaces and full support for retreat hosts from around the world.</p>
+      </div>
+      <span class="mobile-accordion-chevron" id="retreats-secchevron">+</span>
+    </div>
+    <div class="mobile-accordion-body" id="retreats-secbody">
+      <div class="retreats-grid stagger" id="retreatsGrid"></div>
+    </div>
   </div>
 </section>
 
@@ -1661,21 +1693,34 @@ body{top:0!important;position:static!important}
 <!-- LOTS -->
 <section id="lots">
   <div class="section-inner">
-    <div class="section-label">Real Estate</div>
-    <h2 class="section-title">Available Lots</h2>
-    <p class="section-sub">5% of our profits go back to Nosara. Always. <em style="font-family:'Instrument Serif',serif;font-style:italic;color:var(--clay)">Because Pura Vida should be for everyone.</em></p>
-
-    <div class="lots-grid stagger" id="lotsGrid"></div>
+    <div class="mobile-section-header" onclick="toggleMobileSection('lots')">
+      <div>
+        <div class="section-label">Real Estate</div>
+        <h2 class="section-title">Available Lots</h2>
+        <p class="section-sub">5% of our profits go back to Nosara. Always. <em style="font-family:'Instrument Serif',serif;font-style:italic;color:var(--clay)">Because Pura Vida should be for everyone.</em></p>
+      </div>
+      <span class="mobile-accordion-chevron" id="lots-secchevron">+</span>
+    </div>
+    <div class="mobile-accordion-body" id="lots-secbody">
+      <div class="lots-grid stagger" id="lotsGrid"></div>
+    </div>
   </div>
 </section>
 
 <!-- GUIDE -->
 <section id="guide">
   <div class="section-inner">
-    <div class="section-label">Your Nosara Resource</div>
-    <h2 class="section-title">The Collective Guide</h2>
-    <p class="section-sub">Everything a foreigner needs to know — buying property, moving to Costa Rica, understanding Guanacaste culture, and making the most of Nosara.</p>
-    <div id="guidePanels"></div>
+    <div class="mobile-section-header" onclick="toggleMobileSection('guide')">
+      <div>
+        <div class="section-label">Your Nosara Resource</div>
+        <h2 class="section-title">The Collective Guide</h2>
+        <p class="section-sub">Everything a foreigner needs to know — buying property, moving to Costa Rica, understanding Guanacaste culture, and making the most of Nosara.</p>
+      </div>
+      <span class="mobile-accordion-chevron" id="guide-secchevron">+</span>
+    </div>
+    <div class="mobile-accordion-body" id="guide-secbody">
+      <div id="guidePanels"></div>
+    </div>
   </div>
 </section>
 
@@ -1683,10 +1728,17 @@ body{top:0!important;position:static!important}
 <section class="impact-section" id="impact">
   <div class="impact-grid">
     <div>
-      <div class="section-label"><span style="color:var(--clay);font-weight:700">Conscience Collective</span></div>
-      <h2 class="section-title" style="font-size:clamp(2.5rem,5vw,3.5rem);color:var(--text-muted)">Travel that gives back</h2>
-      <p style="margin-top:1.25rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">5% of our profits go directly to families in Nosara — not to overhead, not to a middleman. Directly to the people who have built this community into what it is.</p>
-      <p style="margin-top:1rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">When you book with us, you're part of something larger than a vacation. You're part of a movement that believes paradise should lift everyone.</p>
+      <div class="mobile-section-header" onclick="toggleMobileSection('impact')">
+        <div>
+          <div class="section-label"><span style="color:var(--clay);font-weight:700">Conscience Collective</span></div>
+          <h2 class="section-title" style="font-size:clamp(2.5rem,5vw,3.5rem);color:var(--text-muted)">Travel that gives back</h2>
+        </div>
+        <span class="mobile-accordion-chevron" id="impact-secchevron">+</span>
+      </div>
+      <div class="mobile-accordion-body" id="impact-secbody">
+        <p style="margin-top:1.25rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">5% of our profits go directly to families in Nosara — not to overhead, not to a middleman. Directly to the people who have built this community into what it is.</p>
+        <p style="margin-top:1rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">When you book with us, you're part of something larger than a vacation. You're part of a movement that believes paradise should lift everyone.</p>
+      </div>
     </div>
     <div class="impact-stats stagger">
       <div class="impact-stat"><div class="impact-stat-num">5%</div><div class="impact-stat-label">Of Our Profits</div></div>
@@ -1950,10 +2002,10 @@ const SERVICES=[
   {id:'muaythai',icon:'boxing',name:'Muay Thai',desc:'Learn authentic Muay Thai from experienced trainers in a jungle setting.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'muay_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'muay_sessions',label:'Number of Sessions',placeholder:'e.g. 3'},{type:'textarea',id:'muay_notes',label:'Notes / Questions',placeholder:'Experience level, goals, anything you\'d like us to know...'}]},
   {id:'bjj',icon:'martial-arts',name:'Brazilian Jiu Jitsu',desc:'Train BJJ in paradise — private or small group sessions available.',price:90,priceLabel:'$90 per session per person',fields:[{type:'input',inputType:'number',id:'bjj_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'bjj_sessions',label:'Number of Sessions',placeholder:'e.g. 2'},{type:'textarea',id:'bjj_notes',label:'Notes / Questions',placeholder:'Belt level, goals, anything you\'d like us to know...'}]},
   {id:'snorkel',icon:'snorkel',name:'Snorkeling Tour — Pink Sand Island',desc:'A snorkeling tour to The Pink Sand Island, located in front of Playa Rosada, between Playa Guiones and Playa Garza. The little sandy island is a lovely place to have a picnic or collect shells, and in its surroundings you can snorkel coral and rock reefs. The water is crystal clear and it\'s easy to spot all sorts of underwater life.',price:180,priceLabel:'$180 per adult · $120 per child · $400 tour minimum',fields:[{type:'input',inputType:'number',id:'snorkel_adults',label:'Number of Adults',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'snorkel_children',label:'Number of Children',placeholder:'e.g. 0'},{type:'input',inputType:'date',id:'snorkel_date',label:'Preferred Date'},{type:'textarea',id:'snorkel_notes',label:'Comments',placeholder:'Anything else we should know...'}]},
-  {id:'fishing',icon:'fishing',name:'Fishing Trips',desc:'Popular fishing destination in Costa Rica, with the perfect launch to the water and rich fishing grounds. Because of the rich warm waters of Costa Rica\'s Pacific Ocean, the fishing here is pretty incredible year round, and it\'s possible to catch just about anything on any given day. Regardless of whether you\'re an experienced angler or just starting out, you\'re encouraged to hook your own fish!',price:1200,priceLabel:'$1,200 ½ day · $1,850 ¾ day · $2,100 full day (up to 5 people) · +$100/extra person',fields:[{type:'select',id:'fishing_duration',label:'Tour Duration',options:['1/2 Day — 7:30am to 11:00am ($1,200)','3/4 Day — 7:30am to 1:30pm ($1,850)','Full Day ($2,100)']},{type:'input',inputType:'date',id:'fishing_date',label:'Preferred Date'},{type:'input',inputType:'number',id:'fishing_adults',label:'Number of Adults',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'fishing_children',label:'Number of Children',placeholder:'e.g. 0'},{type:'select',id:'fishing_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']},{type:'textarea',id:'fishing_notes',label:'Comments',placeholder:'Anything else we should know...'}]},
+  {id:'fishing',icon:'fishing',name:'Fishing Trips',desc:'Popular fishing destination in Costa Rica, with the perfect launch to the water and rich fishing grounds. Because of the rich warm waters of Costa Rica\'s Pacific Ocean, the fishing here is pretty incredible year round, and it\'s possible to catch just about anything on any given day. Regardless of whether you\'re an experienced angler or just starting out, you\'re encouraged to hook your own fish!',price:1200,priceLabel:'$1,200 ½ day · $1,850 ¾ day · $2,100 full day (up to 5 people) · +$100/extra person',fields:[{type:'select',id:'fishing_duration',label:'Tour Duration',options:['1/2 Day — 7:30am to 11:00am ($1,200, up to 5 people, extra person $100)','3/4 Day — 7:30am to 1:30pm ($1,850, up to 5 people, extra person $100)','Full Day ($2,100, up to 5 people, extra person $100)']},{type:'input',inputType:'date',id:'fishing_date',label:'Preferred Date'},{type:'input',inputType:'number',id:'fishing_adults',label:'Number of Adults',placeholder:'e.g. 3'},{type:'input',inputType:'number',id:'fishing_children',label:'Number of Children',placeholder:'e.g. 0'},{type:'select',id:'fishing_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']},{type:'textarea',id:'fishing_notes',label:'Comments',placeholder:'Anything else we should know...'}]},
   {id:'dolphin',icon:'dolphin',name:'Dolphin Watching',desc:'Magical boat tour searching for dolphins in their natural habitat. Fresh fruits included.',price:180,priceLabel:'$180 per adult · $130 per child · $500 tour minimum',fields:[{type:'input',inputType:'number',id:'dolphin_adults',label:'Number of Adults',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'dolphin_children',label:'Number of Children',placeholder:'e.g. 0'},{type:'input',inputType:'date',id:'dolphin_date',label:'Preferred Date'},{type:'select',id:'dolphin_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']},{type:'textarea',id:'dolphin_notes',label:'Comments',placeholder:'Anything else we should know...'}]},
   {id:'sunset',icon:'sunset',name:'Sunset Trip',desc:'Cruise the Pacific as the sun sets over the Nosara coast.',price:180,priceLabel:'$180 per person',fields:[{type:'input',inputType:'number',id:'sunset_pax',label:'Number of People',placeholder:'e.g. 4'},{type:'input',inputType:'date',id:'sunset_date',label:'Preferred Date'}]},
-  {id:'surftrip',icon:'surf',name:'Surf Trips',desc:'Day trip to some of Nosara\'s best surf breaks — Playa Garza, Playa Ostional, or Playa Camaronal.',price:125,priceLabel:'$125/person Playa Garza · $1,200 ½ day Playa Ostional · $1,300 Playa Camaronal (up to 5 people, +$100/extra person)',fields:[{type:'select',id:'surftrip_dest',label:'Destination',options:['Playa Garza — $125/person','Playa Ostional — $1,200 (up to 5 people)','Playa Camaronal — $1,300 (up to 5 people)']},{type:'input',inputType:'number',id:'surftrip_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'surftrip_date',label:'Preferred Date'},{type:'select',id:'surftrip_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']},{type:'textarea',id:'surftrip_notes',label:'Comments',placeholder:'Anything else we should know...'}]},
+  {id:'surftrip',icon:'surf',name:'Surf Trips',desc:'Whether you are on vacation or live in the Nosara area, grab your best surfboard, lots of energy and come on board of one of our charters for a legendary Surf Trip with us.',price:125,priceLabel:'$125/person Playa Garza · $1,200 ½ day Playa Ostional · $1,300 Playa Camaronal (up to 5 people, +$100/extra person)',fields:[{type:'select',id:'surftrip_dest',label:'Destination',options:['Playa Garza — $125/person','Playa Ostional — $1,200 (up to 5 people, extra person $100)','Playa Camaronal — $1,300 (up to 5 people, extra person $100)']},{type:'input',inputType:'number',id:'surftrip_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'surftrip_date',label:'Preferred Date'},{type:'select',id:'surftrip_drinks',label:'Drinks Preference',options:['Non-Alcoholic','Alcoholic']},{type:'textarea',id:'surftrip_notes',label:'Comments',placeholder:'Anything else we should know...'}]},
   {id:'surfboard',icon:'surf',name:'Surfboard Rental',desc:'Choose your board and hit the waves — transport to beach included.',price:30,priceLabel:'$30 per board/day',fields:[{type:'select',id:'sb_type',label:'Board Type',options:['Longboard','Mid Length','Shortboard']},{type:'input',inputType:'number',id:'sb_qty',label:'Number of Boards',placeholder:'e.g. 2'},{type:'input',inputType:'number',id:'sb_days',label:'Number of Days',placeholder:'e.g. 3'}]},
   {id:'horseback',icon:'horse',name:'Sunset Horseback Riding',desc:'Private sunset ride through Nosara\'s beaches and jungle trails.',price:140,priceLabel:'$140 per person',fields:[{type:'input',inputType:'number',id:'horse_pax',label:'Number of People',placeholder:'e.g. 3'},{type:'input',inputType:'date',id:'horse_date',label:'Preferred Date'}]},
   {id:'massage',icon:'spa',name:'In-House Massage',desc:'Professional massage therapist comes to your home.',price:120,priceLabel:'1 hr $120 · 90 min $180 per person',fields:[{type:'input',inputType:'number',id:'massage_pax',label:'Number of People',placeholder:'e.g. 2'},{type:'input',inputType:'date',id:'massage_date',label:'Preferred Date'},{type:'select',id:'massage_duration',label:'Duration',options:['1 hour — $120/person','90 minutes — $180/person']},{type:'select',id:'massage_type',label:'Massage Type',options:['Swedish / Relaxation','Deep Tissue','Sports','Couples','Surfer Massage']}]},
@@ -2365,6 +2417,34 @@ function toggleGuideCat(i){
     document.getElementById('gc_arrow_'+idx).textContent=willOpen?'−':'+';
   });
 }
+
+// ─── MOBILE ACCORDION (main sections: Stay/Concierge/Retreats/Invest/Guide/Impact) ───
+// Only visually collapses at <=900px (see CSS); harmless no-op on desktop.
+const MOBILE_ACCORDION_SECTIONS=['properties','concierge','retreats','lots','guide','impact'];
+function toggleMobileSection(id){
+  const body=document.getElementById(id+'-secbody');
+  const chev=document.getElementById(id+'-secchevron');
+  if(!body)return;
+  const willOpen=!body.classList.contains('open');
+  body.classList.toggle('open',willOpen);
+  if(chev)chev.textContent=willOpen?'−':'+';
+}
+function expandMobileSection(id){
+  const body=document.getElementById(id+'-secbody');
+  const chev=document.getElementById(id+'-secchevron');
+  if(!body)return;
+  body.classList.add('open');
+  if(chev)chev.textContent='−';
+}
+// Any internal link pointing at one of these sections (nav, footer, hero CTA,
+// sticky mobile CTA, etc.) should reveal that section's content on mobile
+// instead of scrolling to a collapsed, seemingly-empty header.
+document.addEventListener('click',(e)=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(!a)return;
+  const id=a.getAttribute('href').slice(1);
+  if(MOBILE_ACCORDION_SECTIONS.includes(id))expandMobileSection(id);
+});
 
 // ─── RENDER RESTAURANTS ───
 function renderRestaurants(){
