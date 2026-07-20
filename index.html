@@ -1634,9 +1634,15 @@ body{top:0!important;position:static!important}
 <!-- SURF INFO (sin Surfline) -->
 <section id="surf">
   <div class="section-inner">
-    <div class="section-label">Wave Report</div>
-    <h2 class="section-title">Nosara Surf</h2>
-    <p class="section-sub">Playa Guiones — one of the most consistent beach breaks in Central America. Best surf: May–November. Offshore winds: Dec–April.</p>
+    <div class="mobile-section-header" onclick="toggleMobileSection('surf')">
+      <div>
+        <div class="section-label">Wave Report</div>
+        <h2 class="section-title">Nosara Surf</h2>
+        <p class="section-sub">Playa Guiones — one of the most consistent beach breaks in Central America. Best surf: May–November. Offshore winds: Dec–April.</p>
+      </div>
+      <span class="mobile-accordion-chevron" id="surf-secchevron">+</span>
+    </div>
+    <div class="mobile-accordion-body" id="surf-secbody">
     <div class="surf-updated" id="surfUpdated">Updating conditions...</div>
     <div class="surf-cards">
       <div class="surf-card">
@@ -1685,6 +1691,7 @@ body{top:0!important;position:static!important}
         <div class="surf-card-desc">Guiones · Pelada · Ostional · Marbella</div>
       </div>
     </div>
+    </div>
   </div>
 </section>
 
@@ -1728,17 +1735,10 @@ body{top:0!important;position:static!important}
 <section class="impact-section" id="impact">
   <div class="impact-grid">
     <div>
-      <div class="mobile-section-header" onclick="toggleMobileSection('impact')">
-        <div>
-          <div class="section-label"><span style="color:var(--clay);font-weight:700">Conscience Collective</span></div>
-          <h2 class="section-title" style="font-size:clamp(2.5rem,5vw,3.5rem);color:var(--text-muted)">Travel that gives back</h2>
-        </div>
-        <span class="mobile-accordion-chevron" id="impact-secchevron">+</span>
-      </div>
-      <div class="mobile-accordion-body" id="impact-secbody">
-        <p style="margin-top:1.25rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">5% of our profits go directly to families in Nosara — not to overhead, not to a middleman. Directly to the people who have built this community into what it is.</p>
-        <p style="margin-top:1rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">When you book with us, you're part of something larger than a vacation. You're part of a movement that believes paradise should lift everyone.</p>
-      </div>
+      <div class="section-label"><span style="color:var(--clay);font-weight:700">Conscience Collective</span></div>
+      <h2 class="section-title" style="font-size:clamp(2.5rem,5vw,3.5rem);color:var(--text-muted)">Travel that gives back</h2>
+      <p style="margin-top:1.25rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">5% of our profits go directly to families in Nosara — not to overhead, not to a middleman. Directly to the people who have built this community into what it is.</p>
+      <p style="margin-top:1rem;color:var(--text-muted);font-size:0.88rem;line-height:1.85;font-weight:300">When you book with us, you're part of something larger than a vacation. You're part of a movement that believes paradise should lift everyone.</p>
     </div>
     <div class="impact-stats stagger">
       <div class="impact-stat"><div class="impact-stat-num">5%</div><div class="impact-stat-label">Of Our Profits</div></div>
@@ -2420,7 +2420,7 @@ function toggleGuideCat(i){
 
 // ─── MOBILE ACCORDION (main sections: Stay/Concierge/Retreats/Invest/Guide/Impact) ───
 // Only visually collapses at <=900px (see CSS); harmless no-op on desktop.
-const MOBILE_ACCORDION_SECTIONS=['properties','concierge','retreats','lots','guide','impact'];
+const MOBILE_ACCORDION_SECTIONS=['properties','concierge','retreats','surf','lots','guide'];
 function toggleMobileSection(id){
   const body=document.getElementById(id+'-secbody');
   const chev=document.getElementById(id+'-secchevron');
