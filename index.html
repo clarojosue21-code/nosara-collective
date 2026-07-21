@@ -1602,7 +1602,7 @@ body{top:0!important;position:static!important}
     </div>
     <div class="mobile-accordion-body" id="concierge-secbody">
       <div class="builder-grid" id="servicesGrid"></div>
-      <p class="services-tax-note">* Prices shown do not include 13% IVA tax. Taxes are calculated and added at checkout.</p>
+      <p class="services-tax-note">* Prices shown are base rates before 13% IVA tax. The 13% is included in the total the moment you add a service to your cart — nothing more is added at checkout.</p>
     </div>
   </div>
 </section>
@@ -2210,6 +2210,14 @@ function calcServiceCost(id){
   else if(id==='turtles'){cost=0;label+=' — availability to be confirmed';}
   else if(id==='buffet'){const p=parseInt(document.getElementById('buffet_pax')?.value)||1;const d=parseInt(document.getElementById('buffet_days')?.value)||1;cost=40*p*d;label+=` (${p} people × ${d} days)`;}
   else if(id==='custom'){cost=0;label+=' — we\'ll quote this for you';}
+  // Match the property model: the price that reaches the cart/checkout is
+  // always the final, all-inclusive total, and tax is defined as exactly
+  // 13% of that final total (grossed up, not marked up) — so it stays
+  // consistent with how properties compute their tax line at checkout.
+  if(cost>0){
+    cost=Math.round(cost/0.87);
+    label+=' · incl. 13% tax';
+  }
   return{cost,label};
 }
 
@@ -2278,6 +2286,11 @@ function renderRetreats(){
         const c=PROPS.find(p=>p.id===id);
         return sum+(c?.peakPrice||c?.price||0);
       },0);
+      r.ownerPrice=r.composedOf.reduce((sum,id)=>sum+(PROPS.find(p=>p.id===id)?.ownerPrice||0),0);
+      r.peakOwnerPrice=r.composedOf.reduce((sum,id)=>{
+        const c=PROPS.find(p=>p.id===id);
+        return sum+(c?.peakOwnerPrice??c?.ownerPrice??0);
+      },0);
     }
   });
   const cards=RETREATS.map(r=>{
@@ -2318,6 +2331,8 @@ async function openRetreatBooking(name, tag, cover){
     meta: tag,
     price: retreat?.price || 0,
     peakPrice: retreat?.peakPrice || retreat?.price || 0,
+    ownerPrice: retreat?.ownerPrice || 0,
+    peakOwnerPrice: retreat?.peakOwnerPrice ?? retreat?.ownerPrice ?? 0,
     priceLabel: retreat?.price ? '$'+retreat.price+'/night' : 'Contact for pricing',
     desc: retreat?.desc || '',
     features: retreat?.features || [],
@@ -2583,18 +2598,21 @@ function isPeakDate(dateStr){
   return false;
 }
 function calcStayTotal(prop,ci,co,guests){
-  let total=0,nights=0;
+  let total=0,ownerTotal=0,nights=0;
   let cur=new Date(ci+'T00:00:00Z');
   const end=new Date(co+'T00:00:00Z');
   const mult=prop.pricingUnit==='person'?(guests||1):1;
   while(cur<end){
     const dateStr=cur.toISOString().slice(0,10);
-    const rate=isPeakDate(dateStr)?(prop.peakPrice||prop.price):prop.price;
+    const peak=isPeakDate(dateStr);
+    const rate=peak?(prop.peakPrice||prop.price):prop.price;
+    const ownerRate=peak?(prop.peakOwnerPrice??prop.ownerPrice):prop.ownerPrice;
     total+=rate*mult;
+    if(ownerRate!=null)ownerTotal+=ownerRate*mult;
     nights++;
     cur=new Date(cur.getTime()+86400000);
   }
-  return{nights,total};
+  return{nights,total,ownerTotal};
 }
 function updateNightCount(){
   const ci=document.getElementById('checkin').value;
@@ -2751,7 +2769,7 @@ function showBankTransferConfirmation(data){
         <div style="background:#FFF8E8;border:1px solid #E8C860;border-left:4px solid #E8C860;padding:16px;margin-bottom:1.5rem">
           <div style="font-size:0.78rem;color:#8A6A10;line-height:1.9">
             ⏳ <strong>28-Hour Hold Active</strong><br>
-            Your dates at <strong>${data.property_name||''}</strong> are reserved exclusively for you.<br>
+            Your dates${(data.items||[]).filter(i=>i.check_in).length?' at <strong>'+data.items.filter(i=>i.check_in).map(i=>i.name).join(', ')+'</strong>':''} are reserved exclusively for you.<br>
             Reference: <strong>${data.reference}</strong>
           </div>
         </div>
@@ -2773,7 +2791,7 @@ function showBankTransferConfirmation(data){
 function showWiseInstructions(data){
   const ref=data.reference;
   const amount=data.grand_total;
-  const impact=data.community_impact;
+  const impact=data.community_impact_total||0;
   const modal=document.createElement('div');
   modal.id='wiseModal';
   modal.style.cssText='position:fixed;inset:0;background:rgba(20,18,16,0.88);z-index:600;display:flex;align-items:center;justify-content:center;padding:1rem';
@@ -2950,6 +2968,9 @@ async function loadPropsFromSupabase(){
       if(!p)return;
       // Update with Supabase data
       if(row.price_per_night) p.price=row.price_per_night;
+      if(row.peak_price_per_night) p.peakPrice=row.peak_price_per_night;
+      if(row.owner_payout_per_night!=null) p.ownerPrice=row.owner_payout_per_night;
+      if(row.peak_owner_payout_per_night!=null) p.peakOwnerPrice=row.peak_owner_payout_per_night;
       if(row.cover_image) p.cover=row.cover_image;
       if(row.images && row.images.length) p.images=row.images;
       if(row.features && row.features.length) p.features=row.features;
@@ -3118,13 +3139,14 @@ function addPropertyToCart(){
   if(isRangeBlocked(curProp.id,ci,co)){showCalMsg('⚠️ Those dates are not available.','#E07070');return;}
   const numGuestsRaw=document.getElementById('numGuests')?.value||'1';
   const numGuests=parseInt(numGuestsRaw,10)||1;
-  const{nights,total}=calcStayTotal(curProp,ci,co,numGuests);
+  const{nights,total,ownerTotal}=calcStayTotal(curProp,ci,co,numGuests);
   if(curProp.minNights&&nights<curProp.minNights){showCalMsg(`Minimum stay is ${curProp.minNights} nights.`,'#B5553A');return;}
   if(curProp.minGuests&&numGuests<curProp.minGuests){showCalMsg(`Minimum ${curProp.minGuests} guests required.`,'#B5553A');return;}
   addToCart({
     id:'prop_'+curProp.id,
     name:curProp.name,
     price:total,
+    ownerAmount:ownerTotal,
     img:curProp.cover||'',
     meta:`${ci} → ${co} · ${nights} night${nights!==1?'s':''} · ${numGuests} guest${numGuests!==1?'s':''}`,
     icon:'house',
@@ -3164,6 +3186,16 @@ function showCheckoutModal(){
   // payout + tax + NCC margin baked in server-side) — nothing gets added
   // here. This must always match exactly what create-reservation.js charges.
   const base=cart.reduce((s,i)=>s+(i.price||0),0);
+  // Informational only — these are components OF each item's price
+  // (computed the same way create-reservation.js splits it), never added
+  // on top of the total.
+  let taxSum=0,nccSum=0;
+  cart.forEach(item=>{
+    const tax=Math.round((item.price||0)*0.13);
+    const owner=item.ownerAmount||0;
+    taxSum+=tax;
+    nccSum+=Math.max(0,(item.price||0)-tax-owner);
+  });
   const modal=document.createElement('div');
   modal.id='checkoutModal';
   modal.dataset.base=base;
@@ -3188,6 +3220,12 @@ function showCheckoutModal(){
               </div>
               <div style="font-weight:700;color:var(--text)">${item.price>0?'$'+item.price.toLocaleString():'TBD'}</div>
             </div>`).join('')}
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;font-size:0.75rem;color:var(--text-muted)">
+            <span>Includes taxes (13% IVA)</span><span>$${taxSum.toLocaleString()}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;font-size:0.75rem;color:var(--text-muted)">
+            <span>Includes NCC service fee</span><span>$${nccSum.toLocaleString()}</span>
+          </div>
           <div style="display:flex;justify-content:space-between;padding:10px 14px;font-size:1rem;font-weight:700;color:var(--text);border-top:2px solid var(--border)">
             <span>Total</span><span id="co_grand">$${base.toLocaleString()}</span>
           </div>
@@ -3258,24 +3296,32 @@ async function submitCartCheckout(){
   const btn=document.getElementById('co_btn');
   if(btn){btn.textContent='Processing...';btn.disabled=true;}
 
-  // Find property item in cart
-  const propItem=cart.find(i=>i.type==='property');
+  // Every item in the cart — one or more properties, plus any services —
+  // goes into a single order. The backend validates and prices each one
+  // itself; nothing here is trusted for the actual charge.
+  const items=cart.map(item=>item.type==='property'?{
+    type:'property',
+    property_id: item.property_dbId||item.property_id,
+    check_in: item.check_in,
+    check_out: item.check_out,
+    num_guests: item.num_guests||1,
+  }:{
+    type:'service',
+    name: item.name,
+    price: item.price,
+  });
 
   try{
     const res=await fetch('/api/create-reservation',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        property_id: propItem?.property_dbId||propItem?.property_id,
+        items,
         guest_name:name,
         guest_email:email,
         guest_phone:phone||null,
         guest_country:country||null,
-        check_in:propItem?.check_in,
-        check_out:propItem?.check_out,
-        num_guests:propItem?.num_guests||1,
         payment_method:paymentMethod,
-        services:cart.filter(i=>i.type!=='property').map(i=>i.name).join(', ')||null,
       })
     });
     const data=await res.json();

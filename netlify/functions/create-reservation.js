@@ -119,125 +119,189 @@ exports.handler = async (event) => {
   }
 
   const {
-    property_id,
+    items,
     guest_name,
     guest_email,
     guest_phone,
     guest_country,
-    check_in,
-    check_out,
-    num_guests,
     payment_method,
-    services,
     notes,
   } = body;
 
-  if (!property_id || !guest_name || !guest_email || !check_in || !check_out || !num_guests || !payment_method) {
+  if (!Array.isArray(items) || items.length === 0 || !guest_name || !guest_email || !payment_method) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing required fields' }) };
   }
-
-  // Get property first — accept either UUID or slug
-  const isUUID = /^[0-9a-f-]{36}$/.test(property_id);
-  const { data: property, error: propErr } = await supabase
-    .from('properties')
-    .select('id, name, price_per_night, owner_payout_per_night, peak_price_per_night, peak_owner_payout_per_night, pricing_unit, min_guests, min_nights')
-    .eq(isUUID ? 'id' : 'slug', property_id)
-    .single();
-
-  if (propErr || !property) {
-    return { statusCode: 404, body: JSON.stringify({ error: 'Property not found' }) };
+  if (!['paypal', 'wise', 'bank_transfer'].includes(payment_method)) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid payment method' }) };
   }
 
-  const nightsRequested = Math.round((new Date(check_out) - new Date(check_in)) / 86400000);
-  if (property.min_nights && nightsRequested < property.min_nights) {
-    return { statusCode: 400, body: JSON.stringify({ error: `Minimum stay is ${property.min_nights} nights` }) };
-  }
-  if (property.min_guests && num_guests < property.min_guests) {
-    return { statusCode: 400, body: JSON.stringify({ error: `Minimum ${property.min_guests} guests required` }) };
+  const propertyRequests = items.filter((i) => i.type === 'property');
+  const serviceRequests = items.filter((i) => i.type === 'service');
+
+  // ── Validate every property item BEFORE writing anything. If any one of
+  // them is unavailable or invalid, the whole order is rejected — a guest
+  // should never be charged for some of their cart and not the rest.
+  const validatedProperties = [];
+  for (const req of propertyRequests) {
+    if (!req.property_id || !req.check_in || !req.check_out || !req.num_guests) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Missing fields on a property item' }) };
+    }
+    const isUUID = /^[0-9a-f-]{36}$/.test(req.property_id);
+    const { data: property, error: propErr } = await supabase
+      .from('properties')
+      .select('id, name, price_per_night, owner_payout_per_night, peak_price_per_night, peak_owner_payout_per_night, pricing_unit, min_guests, min_nights')
+      .eq(isUUID ? 'id' : 'slug', req.property_id)
+      .single();
+
+    if (propErr || !property) {
+      return { statusCode: 404, body: JSON.stringify({ error: `Property not found: ${req.property_id}` }) };
+    }
+
+    const nightsRequested = Math.round((new Date(req.check_out) - new Date(req.check_in)) / 86400000);
+    if (property.min_nights && nightsRequested < property.min_nights) {
+      return { statusCode: 400, body: JSON.stringify({ error: `${property.name}: minimum stay is ${property.min_nights} nights` }) };
+    }
+    if (property.min_guests && req.num_guests < property.min_guests) {
+      return { statusCode: 400, body: JSON.stringify({ error: `${property.name}: minimum ${property.min_guests} guests required` }) };
+    }
+
+    const { data: blocked } = await supabase
+      .from('blocked_dates')
+      .select('date')
+      .eq('property_id', property.id)
+      .gte('date', req.check_in)
+      .lt('date', req.check_out);
+
+    if (blocked && blocked.length > 0) {
+      return {
+        statusCode: 409,
+        body: JSON.stringify({
+          error: `${property.name} is not available for the selected dates`,
+          property: property.name,
+          blocked_dates: blocked.map((b) => b.date),
+        }),
+      };
+    }
+
+    const { nights, accommodation_total, owner_payout } = calcStayTotals(property, req.check_in, req.check_out, req.num_guests);
+    validatedProperties.push({
+      item_type: 'property',
+      property_id: property.id,
+      name: property.name,
+      check_in: req.check_in,
+      check_out: req.check_out,
+      nights,
+      num_guests: req.num_guests,
+      price: accommodation_total,
+      owner_payout,
+    });
   }
 
-  // Check availability using the real UUID
-  const { data: blocked } = await supabase
-    .from('blocked_dates')
-    .select('date')
-    .eq('property_id', property.id)
-    .gte('date', check_in)
-    .lt('date', check_out);
-
-  if (blocked && blocked.length > 0) {
-    return {
-      statusCode: 409,
-      body: JSON.stringify({ error: 'Selected dates are not available', blocked_dates: blocked.map((b) => b.date) }),
-    };
+  // Guard against the same property being double-booked against itself
+  // within one order (e.g. duplicate cart entry) by checking overlap here too.
+  for (let i = 0; i < validatedProperties.length; i++) {
+    for (let j = i + 1; j < validatedProperties.length; j++) {
+      const a = validatedProperties[i], b = validatedProperties[j];
+      if (a.property_id === b.property_id && a.check_in < b.check_out && b.check_in < a.check_out) {
+        return { statusCode: 409, body: JSON.stringify({ error: `${a.name} appears twice in this order with overlapping dates` }) };
+      }
+    }
   }
 
-  // accommodation_total is already the final, all-inclusive guest-facing price
-  // (season + guest-count aware) — nothing gets added on top at checkout.
-  const { nights, accommodation_total, owner_payout } = calcStayTotals(property, check_in, check_out, num_guests);
-  const grand_total = accommodation_total;
-  const taxes = Math.round(accommodation_total * 0.13);
-  const company_allocation = accommodation_total - owner_payout - taxes;
-  const ncc_fee = company_allocation;
-  const community_impact = Math.round(company_allocation * 0.05);
+  // Services: price is computed client-side by bespoke per-service pricing
+  // logic (duration tiers, per-person minimums, etc.) — we sanity-bound it
+  // rather than re-deriving every formula server-side.
+  const validatedServices = [];
+  for (const req of serviceRequests) {
+    const price = Math.round(Number(req.price) || 0);
+    if (price <= 0 || price > 100000) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Invalid service price' }) };
+    }
+    validatedServices.push({
+      item_type: 'service',
+      property_id: null,
+      name: req.name || 'Concierge Service',
+      check_in: null,
+      check_out: null,
+      nights: null,
+      num_guests: null,
+      price,
+      owner_payout: 0,
+      notes: req.notes || null,
+    });
+  }
+
+  const allItems = [...validatedProperties, ...validatedServices];
+  if (allItems.length === 0) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Order is empty' }) };
+  }
+
+  const grand_total = allItems.reduce((s, i) => s + i.price, 0);
+  const owner_payout_total = allItems.reduce((s, i) => s + i.owner_payout, 0);
+  const taxes_total = allItems.reduce((s, i) => s + Math.round(i.price * 0.13), 0);
+  const ncc_fee_total = grand_total - owner_payout_total - taxes_total;
+  const community_impact_total = Math.round(ncc_fee_total * 0.05);
 
   const reference = generateReference();
 
-  const { data: reservation, error: resErr } = await supabase
-    .from('reservations')
+  const { data: order, error: orderErr } = await supabase
+    .from('orders')
     .insert({
       reference,
-      property_id: property.id,
       guest_name,
       guest_email,
-      guest_phone,
-      guest_country,
-      check_in,
-      check_out,
-      nights,
-      num_guests,
-      accommodation_total,
-      taxes,
-      grand_total,
-      community_impact,
-      owner_payout,
-      company_allocation,
+      guest_phone: guest_phone || null,
+      guest_country: guest_country || null,
       payment_method,
       payment_status: 'pending',
-      services: services || null,
+      grand_total,
+      taxes_total,
+      ncc_fee_total,
+      community_impact_total,
+      owner_payout_total,
       notes: notes || null,
     })
     .select()
     .single();
 
-  if (resErr) {
-    console.error('Reservation insert error:', resErr);
-    return { statusCode: 500, body: JSON.stringify({ error: 'Failed to create reservation' }) };
+  if (orderErr || !order) {
+    console.error('Order insert error:', orderErr);
+    return { statusCode: 500, body: JSON.stringify({ error: 'Failed to create order' }) };
+  }
+
+  const { data: insertedItems, error: itemsErr } = await supabase
+    .from('order_items')
+    .insert(allItems.map((i) => ({ ...i, order_id: order.id })))
+    .select();
+
+  if (itemsErr || !insertedItems) {
+    console.error('Order items insert error:', itemsErr);
+    await supabase.from('orders').delete().eq('id', order.id);
+    return { statusCode: 500, body: JSON.stringify({ error: 'Failed to create order items' }) };
   }
 
   const response = {
-    reservation_id: reservation.id,
+    order_id: order.id,
     reference,
-    property_name: property.name,
-    nights,
-    accommodation_total,
-    ncc_fee,
-    taxes,
     grand_total,
-    community_impact,
+    taxes_total,
+    ncc_fee_total,
+    community_impact_total,
     payment_method,
+    items: insertedItems.map((i) => ({ name: i.name, price: i.price, check_in: i.check_in, check_out: i.check_out, nights: i.nights, num_guests: i.num_guests })),
   };
 
   if (payment_method === 'paypal') {
     try {
       const { orderId, approvalUrl } = await createPayPalOrder(grand_total, reference);
-      await supabase
-        .from('reservations')
-        .update({ paypal_order_id: orderId })
-        .eq('id', reservation.id);
+      await supabase.from('orders').update({ paypal_order_id: orderId }).eq('id', order.id);
       response.paypal_order_id = orderId;
       response.paypal_approval_url = approvalUrl;
     } catch (e) {
       console.error('PayPal order error:', e);
+      // Nothing was charged — remove the order so it doesn't sit as an
+      // orphaned "pending" row with no way to ever be paid.
+      await supabase.from('orders').delete().eq('id', order.id);
       return { statusCode: 500, body: JSON.stringify({ error: 'PayPal order creation failed', detail: e.message }) };
     }
   } else if (payment_method === 'wise') {
@@ -249,32 +313,37 @@ exports.handler = async (event) => {
       reference,
       note: `Please include your booking reference ${reference} in the payment description`,
     };
-    await supabase
-      .from('reservations')
-      .update({ payment_status: 'pending', wise_reference: reference })
-      .eq('id', reservation.id);
+    await supabase.from('orders').update({ wise_reference: reference }).eq('id', order.id);
   } else if (payment_method === 'bank_transfer') {
-    // Block dates temporarily for 28 hours
+    // Hold dates for every property in the order for 28 hours.
     const holdExpiry = new Date(Date.now() + 28 * 60 * 60 * 1000).toISOString();
-    const dates = [];
-    let cur = new Date(check_in);
-    const end = new Date(check_out);
-    while (cur < end) {
-      dates.push({
-        property_id: property.id,
-        date: cur.toISOString().slice(0, 10),
-        source: 'hold',
-        reservation_id: reservation.id,
-      });
-      cur = new Date(cur.getTime() + 86400000);
+    const dateRows = [];
+    for (const item of insertedItems.filter((i) => i.item_type === 'property')) {
+      let cur = new Date(item.check_in);
+      const end = new Date(item.check_out);
+      while (cur < end) {
+        dateRows.push({
+          property_id: item.property_id,
+          date: cur.toISOString().slice(0, 10),
+          source: 'hold',
+          order_item_id: item.id,
+        });
+        cur = new Date(cur.getTime() + 86400000);
+      }
     }
-    await supabase.from('blocked_dates').upsert(dates, { onConflict: 'property_id,date' });
+    if (dateRows.length > 0) {
+      await supabase.from('blocked_dates').upsert(dateRows, { onConflict: 'property_id,date' });
+    }
     await supabase
-      .from('reservations')
+      .from('orders')
       .update({ payment_status: 'pending_bank_transfer', hold_expires_at: holdExpiry })
-      .eq('id', reservation.id);
+      .eq('id', order.id);
 
-    // Notify admin via email
+    const propertyLines = insertedItems
+      .filter((i) => i.item_type === 'property')
+      .map((i) => `<tr><td style="padding:5px 0">${i.name}</td><td style="color:#F0EDE6;text-align:right">${i.check_in} → ${i.check_out}</td></tr>`)
+      .join('');
+
     const adminHtml = `
 <!DOCTYPE html><html><body style="font-family:monospace;background:#1A1916;padding:20px">
 <div style="max-width:600px;margin:0 auto;background:#252520;border:1px solid #3A3830;padding:32px">
@@ -284,10 +353,7 @@ exports.handler = async (event) => {
     <tr><td style="padding:5px 0">Guest</td><td style="color:#F0EDE6;text-align:right">${guest_name}</td></tr>
     <tr><td style="padding:5px 0">Email</td><td style="color:#F0EDE6;text-align:right">${guest_email}</td></tr>
     <tr><td style="padding:5px 0">Phone / WhatsApp</td><td style="color:#F0EDE6;text-align:right">${guest_phone || '—'}</td></tr>
-    <tr><td style="padding:5px 0">Property</td><td style="color:#F0EDE6;text-align:right">${property.name}</td></tr>
-    <tr><td style="padding:5px 0">Check-in</td><td style="color:#F0EDE6;text-align:right">${check_in}</td></tr>
-    <tr><td style="padding:5px 0">Check-out</td><td style="color:#F0EDE6;text-align:right">${check_out}</td></tr>
-    <tr><td style="padding:5px 0">Nights</td><td style="color:#F0EDE6;text-align:right">${nights}</td></tr>
+    ${propertyLines}
     <tr style="border-top:1px solid #3A3830"><td style="padding:8px 0 3px;color:#C4784A">Total to Receive</td><td style="color:#C4784A;text-align:right;font-size:16px">$${grand_total.toLocaleString()}</td></tr>
   </table>
   <div style="margin-top:24px;background:#2A3020;border:1px solid #4A6030;padding:16px;color:#8ABA6A;font-size:13px;line-height:1.8">
@@ -300,19 +366,15 @@ exports.handler = async (event) => {
 
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         from: 'Nosara Collective <bookings@nosaracollectiveconscience.com>',
         to: process.env.ADMIN_EMAIL,
-        subject: `[NCC] ⏳ Bank Transfer Hold ${reference} — ${property.name} — SEND BANK DETAILS NOW`,
+        subject: `[NCC] ⏳ Bank Transfer Hold ${reference} — SEND BANK DETAILS NOW`,
         html: adminHtml,
       }),
     });
 
-    // Send guest confirmation email
     const guestHtml = `
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="font-family:'Helvetica Neue',sans-serif;background:#F2EDE4;margin:0;padding:20px">
@@ -323,7 +385,7 @@ exports.handler = async (event) => {
     </div>
     <div style="padding:40px">
       <p style="color:#5A5548;line-height:1.8;margin-bottom:24px">Dear ${guest_name},<br><br>
-        Your selected dates at <strong style="color:#141210">${property.name}</strong> are now <strong>reserved exclusively for you for the next 28 hours</strong> while we process your bank transfer.
+        Your booking is <strong>reserved exclusively for you for the next 28 hours</strong> while we process your bank transfer.
       </p>
       <div style="background:#FFF8E8;border:1px solid #E8C860;padding:20px;margin-bottom:24px;border-left:4px solid #E8C860">
         <div style="font-size:13px;color:#8A6A10;line-height:1.8">
@@ -335,15 +397,11 @@ exports.handler = async (event) => {
         <div style="font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#C4784A;margin-bottom:16px;font-weight:700">Reservation Summary</div>
         <table style="width:100%;border-collapse:collapse;font-size:14px">
           <tr><td style="padding:6px 0;color:#5A5548">Reference</td><td style="padding:6px 0;font-weight:700;color:#141210;text-align:right">${reference}</td></tr>
-          <tr><td style="padding:6px 0;color:#5A5548">Property</td><td style="padding:6px 0;color:#141210;text-align:right">${property.name}</td></tr>
-          <tr><td style="padding:6px 0;color:#5A5548">Check-in</td><td style="padding:6px 0;color:#141210;text-align:right">${check_in}</td></tr>
-          <tr><td style="padding:6px 0;color:#5A5548">Check-out</td><td style="padding:6px 0;color:#141210;text-align:right">${check_out}</td></tr>
-          <tr><td style="padding:6px 0;color:#5A5548">Nights</td><td style="padding:6px 0;color:#141210;text-align:right">${nights}</td></tr>
           <tr style="border-top:1px solid rgba(20,18,16,0.15)"><td style="padding:10px 0 6px;font-weight:700;color:#141210">Total Amount</td><td style="padding:10px 0 6px;font-weight:700;color:#141210;text-align:right;font-size:18px">$${grand_total.toLocaleString()}</td></tr>
         </table>
       </div>
       <p style="color:#5A5548;font-size:13px;line-height:1.8">
-        Questions? WhatsApp us: <a href="https://wa.me/${(process.env.ADMIN_WHATSAPP||'').replace('+','')}" style="color:#C4784A">${process.env.ADMIN_WHATSAPP}</a>
+        Questions? WhatsApp us: <a href="https://wa.me/${(process.env.ADMIN_WHATSAPP || '').replace('+', '')}" style="color:#C4784A">${process.env.ADMIN_WHATSAPP}</a>
       </p>
       <div style="border-top:1px solid rgba(20,18,16,0.1);padding-top:20px;font-size:11px;color:#8A8278;line-height:1.8">
         Nosara Collective Conscience · Nosara, Guanacaste, Costa Rica<br>
@@ -355,14 +413,11 @@ exports.handler = async (event) => {
 
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         from: 'Nosara Collective <bookings@nosaracollectiveconscience.com>',
         to: guest_email,
-        subject: `Dates Held for You — ${reference} · ${property.name}`,
+        subject: `Dates Held for You — ${reference}`,
         html: guestHtml,
       }),
     });

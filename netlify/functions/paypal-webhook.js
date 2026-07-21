@@ -1,9 +1,4 @@
-const { createClient } = require('@supabase/supabase-js');
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+const { finalizeOrder, supabase } = require('./_shared/finalize-order');
 
 async function verifyPayPalWebhook(event) {
   // PayPal webhook signature verification
@@ -45,22 +40,6 @@ async function verifyPayPalWebhook(event) {
   return result.verification_status === 'SUCCESS';
 }
 
-async function blockDatesForReservation(reservationId, propertyId, checkIn, checkOut) {
-  const dates = [];
-  let cur = new Date(checkIn);
-  const end = new Date(checkOut);
-  while (cur < end) {
-    dates.push({
-      property_id: propertyId,
-      date: cur.toISOString().slice(0, 10),
-      source: 'reservation',
-      reservation_id: reservationId,
-    });
-    cur = new Date(cur.getTime() + 86400000);
-  }
-  await supabase.from('blocked_dates').upsert(dates, { onConflict: 'property_id,date' });
-}
-
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -86,38 +65,20 @@ exports.handler = async (event) => {
       || payload.resource?.id;
     const reference = payload.resource?.purchase_units?.[0]?.reference_id;
 
-    // Find reservation by paypal_order_id or reference
-    const { data: reservation } = await supabase
-      .from('reservations')
+    const { data: order } = await supabase
+      .from('orders')
       .select('*')
       .or(`paypal_order_id.eq.${orderId},reference.eq.${reference}`)
       .single();
 
-    if (!reservation) {
-      console.error('Reservation not found for PayPal order:', orderId);
-      return { statusCode: 404, body: 'Reservation not found' };
+    if (!order) {
+      console.error('Order not found for PayPal order:', orderId);
+      return { statusCode: 404, body: 'Order not found' };
     }
 
-    // Update reservation status
-    await supabase
-      .from('reservations')
-      .update({ payment_status: 'paid', updated_at: new Date().toISOString() })
-      .eq('id', reservation.id);
-
-    // Block dates
-    await blockDatesForReservation(
-      reservation.id,
-      reservation.property_id,
-      reservation.check_in,
-      reservation.check_out
-    );
-
-    // Send confirmation email
-    await fetch(`${process.env.URL}/.netlify/functions/send-confirmation`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reservation_id: reservation.id }),
-    });
+    // finalizeOrder is idempotent — safe even if the guest's browser already
+    // triggered capture-paypal-order.js for the same order.
+    await finalizeOrder(order);
   }
 
   return { statusCode: 200, body: 'OK' };
