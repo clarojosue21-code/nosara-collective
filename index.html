@@ -1582,17 +1582,10 @@ body{top:0!important;position:static!important}
 
 <section id="properties">
   <div class="section-inner">
-    <div class="mobile-section-header" onclick="toggleMobileSection('properties')">
-      <div>
-        <div class="section-label">Where to Stay</div>
-        <h2 class="section-title">Our Properties</h2>
-        <p class="section-sub">From earthen casas to highland retreats — each home carries the soul of Nosara and the warmth of its people.</p>
-      </div>
-      <span class="mobile-accordion-chevron" id="properties-secchevron">+</span>
-    </div>
-    <div class="mobile-accordion-body" id="properties-secbody">
-      <div class="props-grid stagger" id="propsGrid"></div>
-    </div>
+    <div class="section-label">Where to Stay</div>
+    <h2 class="section-title">Our Properties</h2>
+    <p class="section-sub">From earthen casas to highland retreats — each home carries the soul of Nosara and the warmth of its people.</p>
+    <div class="props-grid stagger" id="propsGrid"></div>
   </div>
 </section>
 
@@ -2420,7 +2413,7 @@ function toggleGuideCat(i){
 
 // ─── MOBILE ACCORDION (main sections: Stay/Concierge/Retreats/Invest/Guide/Impact) ───
 // Only visually collapses at <=900px (see CSS); harmless no-op on desktop.
-const MOBILE_ACCORDION_SECTIONS=['properties','concierge','retreats','surf','lots','guide'];
+const MOBILE_ACCORDION_SECTIONS=['concierge','retreats','surf','lots','guide'];
 function toggleMobileSection(id){
   const body=document.getElementById(id+'-secbody');
   const chev=document.getElementById(id+'-secchevron');
