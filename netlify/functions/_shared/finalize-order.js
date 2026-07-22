@@ -1,5 +1,6 @@
 const { createClient } = require('@supabase/supabase-js');
 const { sendOrderConfirmation } = require('./order-email');
+const { BUNDLE_COMPONENTS } = require('./bundles');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -34,17 +35,39 @@ async function finalizeOrder(order) {
     .select('*')
     .eq('order_id', order.id);
 
+  const propertyItems = (items || []).filter((i) => i.item_type === 'property');
+
+  // Resolve each property's slug so bundle bookings also block their
+  // component houses' own calendars (and vice versa is already covered at
+  // create-reservation.js time by rejecting overlapping availability).
+  const propertyIds = [...new Set(propertyItems.map((i) => i.property_id))];
+  const { data: propRows } = propertyIds.length
+    ? await supabase.from('properties').select('id, slug').in('id', propertyIds)
+    : { data: [] };
+  const slugById = {};
+  (propRows || []).forEach((p) => { slugById[p.id] = p.slug; });
+
+  let componentSlugsToIds = {};
+  const allComponentSlugs = [...new Set(
+    propertyItems.flatMap((i) => BUNDLE_COMPONENTS[slugById[i.property_id]] || [])
+  )];
+  if (allComponentSlugs.length) {
+    const { data: componentRows } = await supabase.from('properties').select('id, slug').in('slug', allComponentSlugs);
+    (componentRows || []).forEach((p) => { componentSlugsToIds[p.slug] = p.id; });
+  }
+
   const dateRows = [];
-  for (const item of (items || []).filter((i) => i.item_type === 'property')) {
+  for (const item of propertyItems) {
+    const slug = slugById[item.property_id];
+    const componentIds = (BUNDLE_COMPONENTS[slug] || []).map((s) => componentSlugsToIds[s]).filter(Boolean);
+    const targetIds = [item.property_id, ...componentIds];
     let cur = new Date(item.check_in);
     const end = new Date(item.check_out);
     while (cur < end) {
-      dateRows.push({
-        property_id: item.property_id,
-        date: cur.toISOString().slice(0, 10),
-        source: 'order',
-        order_item_id: item.id,
-      });
+      const dateStr = cur.toISOString().slice(0, 10);
+      for (const pid of targetIds) {
+        dateRows.push({ property_id: pid, date: dateStr, source: 'order', order_item_id: item.id });
+      }
       cur = new Date(cur.getTime() + 86400000);
     }
   }

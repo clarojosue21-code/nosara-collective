@@ -995,6 +995,30 @@ section{padding:5rem 3rem}
   outline:none;transition:border-color 0.15s;width:100%;
 }
 .fg input:focus,.fg select:focus{border-color:var(--clay)}
+.prop-search-bar{
+  display:flex;align-items:flex-end;gap:1rem;flex-wrap:wrap;
+  background:var(--bg2);border:1px solid var(--border-med);
+  padding:1.25rem;margin-bottom:2rem;
+}
+.prop-search-bar .fg{min-width:140px;flex:1}
+.prop-search-btn{white-space:nowrap;padding:11px 22px!important}
+.prop-search-clear{
+  background:none;border:1px solid var(--border-med);color:var(--text-muted);
+  padding:11px 16px;font-size:0.62rem;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;cursor:pointer;font-family:'Archivo',sans-serif;
+  white-space:nowrap;
+}
+.prop-search-clear:hover{border-color:var(--clay);color:var(--clay)}
+.prop-search-msg{
+  font-family:'Archivo',sans-serif;font-size:0.85rem;color:var(--text-mid);
+  margin-bottom:1.5rem;min-height:1.2em;
+}
+.prop-search-msg.warn{color:var(--clay)}
+.prop-card.search-hidden{display:none!important}
+@media(max-width:700px){
+  .prop-search-bar{flex-direction:column;align-items:stretch}
+  .prop-search-bar .fg{min-width:0}
+}
 .book-btn{
   width:100%;background:var(--text);color:var(--bg);
   border:none;padding:14px;font-size:0.65rem;
@@ -1585,6 +1609,14 @@ body{top:0!important;position:static!important}
     <div class="section-label">Where to Stay</div>
     <h2 class="section-title">Our Properties</h2>
     <p class="section-sub">From earthen casas to highland retreats — each home carries the soul of Nosara and the warmth of its people.</p>
+    <div class="prop-search-bar">
+      <div class="fg"><label>Check-in</label><input type="date" id="searchCheckin" onchange="clearSearchMsg()"></div>
+      <div class="fg"><label>Check-out</label><input type="date" id="searchCheckout" onchange="clearSearchMsg()"></div>
+      <div class="fg"><label>Guests</label><input type="number" id="searchGuests" min="1" value="2" onchange="clearSearchMsg()"></div>
+      <button class="btn-primary prop-search-btn" onclick="searchAvailability()">Check Availability →</button>
+      <button class="prop-search-clear" id="propSearchClear" onclick="clearAvailabilitySearch()" style="display:none">Clear search ✕</button>
+    </div>
+    <div id="propSearchMsg" class="prop-search-msg"></div>
     <div class="props-grid stagger" id="propsGrid"></div>
   </div>
 </section>
@@ -2076,7 +2108,7 @@ const GRID_FILLER_PHOTOS=[
 
 function renderProps(){
   const cards=PROPS.map(p=>`
-    <div class="prop-card" onclick="openModal('${p.id}')">
+    <div class="prop-card" data-prop-id="${p.id}" onclick="openModal('${p.id}')">
       <div class="prop-img-wrap">
         <img src="${p.cover}" alt="${p.name}" onerror="this.style.display='none'" loading="lazy">
         <div class="prop-overlay">
@@ -2122,6 +2154,77 @@ function renderProps(){
     }
   }
   document.getElementById('propsGrid').innerHTML=cards.join('');
+}
+
+// ─── AVAILABILITY SEARCH — dates + guests, across every property at once ───
+function clearSearchMsg(){
+  const el=document.getElementById('propSearchMsg');
+  if(el){el.textContent='';el.className='prop-search-msg';}
+}
+// A property is unavailable if it's blocked directly, OR (for a bundle) any
+// of its component houses is blocked, OR (for a component house) any bundle
+// that contains it is blocked — reusing the same composedOf relationships
+// already used to keep bundle prices in sync.
+function isPropAvailableGivenBlocked(prop,blockedIds){
+  if(blockedIds.has(prop.dbId))return false;
+  if(prop.composedOf){
+    for(const compId of prop.composedOf){
+      const comp=PROPS.find(p=>p.id===compId);
+      if(comp&&blockedIds.has(comp.dbId))return false;
+    }
+  }else{
+    const containingBundles=PROPS.filter(p=>p.composedOf&&p.composedOf.includes(prop.id));
+    for(const b of containingBundles){
+      if(blockedIds.has(b.dbId))return false;
+    }
+  }
+  return true;
+}
+async function searchAvailability(){
+  const ci=document.getElementById('searchCheckin').value;
+  const co=document.getElementById('searchCheckout').value;
+  const guests=parseInt(document.getElementById('searchGuests').value,10)||1;
+  const msg=document.getElementById('propSearchMsg');
+  if(!ci||!co){msg.textContent='Please select check-in and check-out dates.';msg.className='prop-search-msg warn';return;}
+  if(new Date(co)<=new Date(ci)){msg.textContent='Check-out must be after check-in.';msg.className='prop-search-msg warn';return;}
+  msg.textContent='Checking availability…';msg.className='prop-search-msg';
+  try{
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/blocked_dates?select=property_id&date=gte.${ci}&date=lt.${co}`,{
+      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+    });
+    const rows=res.ok?await res.json():[];
+    const blockedIds=new Set(rows.map(r=>r.property_id));
+    let shown=0;
+    document.querySelectorAll('.prop-card[data-prop-id]').forEach(card=>{
+      const id=card.dataset.propId;
+      const prop=PROPS.find(p=>p.id===id);
+      if(!prop){card.classList.add('search-hidden');return;}
+      const capacityOk=!prop.maxGuests||guests<=prop.maxGuests;
+      const minGuestsOk=!prop.minGuests||guests>=prop.minGuests;
+      const available=isPropAvailableGivenBlocked(prop,blockedIds)&&capacityOk&&minGuestsOk;
+      card.classList.toggle('search-hidden',!available);
+      if(available)shown++;
+    });
+    document.getElementById('propSearchClear').style.display='inline-block';
+    const nights=Math.round((new Date(co)-new Date(ci))/86400000);
+    if(shown===0){
+      msg.textContent=`No properties available for ${guests} guest${guests!==1?'s':''}, ${nights} night${nights!==1?'s':''} — try different dates or fewer guests.`;
+      msg.className='prop-search-msg warn';
+    }else{
+      msg.textContent=`${shown} propert${shown!==1?'ies':'y'} available for ${guests} guest${guests!==1?'s':''}, ${nights} night${nights!==1?'s':''}.`;
+      msg.className='prop-search-msg';
+    }
+  }catch(e){
+    msg.textContent='Could not check availability right now — please try again.';
+    msg.className='prop-search-msg warn';
+  }
+}
+function clearAvailabilitySearch(){
+  document.querySelectorAll('.prop-card.search-hidden').forEach(c=>c.classList.remove('search-hidden'));
+  document.getElementById('propSearchClear').style.display='none';
+  document.getElementById('propSearchMsg').textContent='';
+  document.getElementById('searchCheckin').value='';
+  document.getElementById('searchCheckout').value='';
 }
 
 // ─── RENDER SERVICES ───

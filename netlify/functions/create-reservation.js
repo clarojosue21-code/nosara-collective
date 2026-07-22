@@ -1,9 +1,19 @@
 const { createClient } = require('@supabase/supabase-js');
+const { BUNDLE_COMPONENTS, CONTAINING_BUNDLES } = require('./_shared/bundles');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
+
+// All slugs whose calendars must be checked/blocked together with `slug` —
+// its bundle components (if it is a bundle) and any bundle that contains it
+// (if it is a component) — so booking one can never leave the other
+// showing incorrectly available.
+function relatedSlugs(slug) {
+  const set = new Set([slug, ...(BUNDLE_COMPONENTS[slug] || []), ...(CONTAINING_BUNDLES[slug] || [])]);
+  return [...set];
+}
 
 function generateReference() {
   const now = new Date();
@@ -149,7 +159,7 @@ exports.handler = async (event) => {
     const isUUID = /^[0-9a-f-]{36}$/.test(req.property_id);
     const { data: property, error: propErr } = await supabase
       .from('properties')
-      .select('id, name, price_per_night, owner_payout_per_night, peak_price_per_night, peak_owner_payout_per_night, pricing_unit, min_guests, min_nights')
+      .select('id, slug, name, price_per_night, owner_payout_per_night, peak_price_per_night, peak_owner_payout_per_night, pricing_unit, min_guests, min_nights')
       .eq(isUUID ? 'id' : 'slug', req.property_id)
       .single();
 
@@ -165,10 +175,21 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: JSON.stringify({ error: `${property.name}: minimum ${property.min_guests} guests required` }) };
     }
 
+    // Check availability across this property AND anything it's linked to —
+    // its own components (if it's a bundle) or any bundle that contains it
+    // (if it's a component) — so a bundle booking and an individual booking
+    // of the same physical house can never both go through.
+    const relSlugs = relatedSlugs(property.slug);
+    const { data: relatedProps } = await supabase.from('properties').select('id, slug').in('slug', relSlugs);
+    const componentIds = (relatedProps || [])
+      .filter((p) => (BUNDLE_COMPONENTS[property.slug] || []).includes(p.slug))
+      .map((p) => p.id);
+    const relatedIds = (relatedProps || []).map((p) => p.id);
+
     const { data: blocked } = await supabase
       .from('blocked_dates')
       .select('date')
-      .eq('property_id', property.id)
+      .in('property_id', relatedIds)
       .gte('date', req.check_in)
       .lt('date', req.check_out);
 
@@ -178,7 +199,7 @@ exports.handler = async (event) => {
         body: JSON.stringify({
           error: `${property.name} is not available for the selected dates`,
           property: property.name,
-          blocked_dates: blocked.map((b) => b.date),
+          blocked_dates: [...new Set(blocked.map((b) => b.date))],
         }),
       };
     }
@@ -187,6 +208,7 @@ exports.handler = async (event) => {
     validatedProperties.push({
       item_type: 'property',
       property_id: property.id,
+      component_ids: componentIds,
       name: property.name,
       check_in: req.check_in,
       check_out: req.check_out,
@@ -271,7 +293,7 @@ exports.handler = async (event) => {
 
   const { data: insertedItems, error: itemsErr } = await supabase
     .from('order_items')
-    .insert(allItems.map((i) => ({ ...i, order_id: order.id })))
+    .insert(allItems.map(({ component_ids, ...i }) => ({ ...i, order_id: order.id })))
     .select();
 
   if (itemsErr || !insertedItems) {
@@ -315,19 +337,23 @@ exports.handler = async (event) => {
     };
     await supabase.from('orders').update({ wise_reference: reference }).eq('id', order.id);
   } else if (payment_method === 'bank_transfer') {
-    // Hold dates for every property in the order for 28 hours.
+    // Hold dates for every property in the order for 28 hours — and for any
+    // bundle component too, so a bundle hold can't be silently bypassed by
+    // booking one of its houses individually during the same window.
+    const componentIdsByPropertyId = {};
+    validatedProperties.forEach((p) => { componentIdsByPropertyId[p.property_id] = p.component_ids || []; });
+
     const holdExpiry = new Date(Date.now() + 28 * 60 * 60 * 1000).toISOString();
     const dateRows = [];
     for (const item of insertedItems.filter((i) => i.item_type === 'property')) {
+      const targetIds = [item.property_id, ...(componentIdsByPropertyId[item.property_id] || [])];
       let cur = new Date(item.check_in);
       const end = new Date(item.check_out);
       while (cur < end) {
-        dateRows.push({
-          property_id: item.property_id,
-          date: cur.toISOString().slice(0, 10),
-          source: 'hold',
-          order_item_id: item.id,
-        });
+        const dateStr = cur.toISOString().slice(0, 10);
+        for (const pid of targetIds) {
+          dateRows.push({ property_id: pid, date: dateStr, source: 'hold', order_item_id: item.id });
+        }
         cur = new Date(cur.getTime() + 86400000);
       }
     }
