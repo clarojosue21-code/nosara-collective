@@ -97,7 +97,7 @@ async function createPayPalOrder(amount, reference) {
         },
       ],
       application_context: {
-        return_url: `${siteUrl}/?payment=success&ref=${reference}`,
+        return_url: `${siteUrl}/?payment=success&ref=${reference}&amt=${amount.toFixed(2)}`,
         cancel_url: `${siteUrl}/?payment=cancelled`,
         brand_name: 'Nosara Collective Conscience',
         user_action: 'PAY_NOW',

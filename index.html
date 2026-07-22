@@ -18,6 +18,14 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-RQR5J3K470');
+
+  // Fires for every wa.me link on the site (floating button, checkout
+  // confirmations, footer, etc.) without needing an onclick on each one —
+  // this is the main "contact us" conversion signal for Google Ads.
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href*="wa.me/"]');
+    if(a) gtag('event', 'contact_whatsapp', {link_url: a.href});
+  });
 </script>
 
 <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
@@ -3555,6 +3563,12 @@ async function submitCartCheckout(){
     const data=await res.json();
     if(!res.ok){alert('Error: '+(data.detail||data.error));if(btn){btn.textContent='Complete Order →';btn.disabled=false;}return;}
 
+    // A validated, priced order now exists server-side regardless of payment
+    // method — this is the core "someone wants to book" signal for Google Ads.
+    // The PayPal path additionally fires a stronger `purchase` event once the
+    // payment actually clears (see the ?payment=success handler below).
+    gtag('event','generate_lead',{lead_type:'booking_request',transaction_id:data.reference,value:data.grand_total,currency:'USD',payment_method:paymentMethod});
+
     if(paymentMethod==='paypal'&&data.paypal_approval_url){
       window.location.href=data.paypal_approval_url;
     } else if(paymentMethod==='wise'){
@@ -3619,6 +3633,50 @@ function injectMarquee(){
   if(hero) hero.insertAdjacentHTML('afterend', html);
 }
 injectMarquee();
+
+// ─── PAYPAL RETURN HANDLER ───
+// PayPal redirects the guest back to `/?payment=success&ref=...&amt=...`
+// after a real payment is captured — this is the strongest conversion
+// signal on the site (actual money received), so it gets its own `purchase`
+// event distinct from the `generate_lead` fired when the order was first
+// created. The query string is stripped immediately so a page refresh or
+// back-navigation can never re-fire it.
+(function(){
+  const params=new URLSearchParams(location.search);
+  const status=params.get('payment');
+  if(status!=='success'&&status!=='cancelled')return;
+  const ref=params.get('ref');
+  const amt=parseFloat(params.get('amt'));
+  history.replaceState({},'',location.pathname);
+  if(status==='success'&&ref){
+    gtag('event','purchase',{transaction_id:ref,value:isNaN(amt)?undefined:amt,currency:'USD'});
+    showPaymentSuccessConfirmation(ref,amt);
+  }
+})();
+
+function showPaymentSuccessConfirmation(ref,amt){
+  const modal=document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;background:rgba(20,18,16,0.88);z-index:700;display:flex;align-items:center;justify-content:center;padding:1rem';
+  modal.innerHTML=`
+    <div style="background:var(--white);max-width:480px;width:100%;border:2px solid var(--border)">
+      <div style="background:var(--text);padding:1.5rem 2rem">
+        <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--clay)">NOSARA COLLECTIVE CONSCIENCE</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:1.8rem;font-weight:300;color:var(--bg);margin-top:4px">Payment Successful ✓</div>
+      </div>
+      <div style="padding:2rem">
+        <div style="font-size:0.82rem;color:var(--text-mid);line-height:1.9;margin-bottom:1.5rem">
+          Your booking is confirmed. A confirmation email is on its way — reach out any time on WhatsApp if you have questions.
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);padding:14px;margin-bottom:1.5rem;font-size:0.75rem;color:var(--text-muted);line-height:1.8;font-family:'Archivo',monospace">
+          Reference: <strong style="color:var(--text)">${ref}</strong>${amt&&!isNaN(amt)?`<br>Amount paid: <strong style="color:var(--text)">$${amt.toLocaleString()} USD</strong>`:''}
+        </div>
+        <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;background:var(--text);color:var(--bg);border:none;padding:14px;font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Archivo',sans-serif">
+          Done →
+        </button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
 
 // ─── HERO SLIDESHOW ───
 (function(){
@@ -4110,6 +4168,7 @@ async function submitLead(){
       body:JSON.stringify({email,phone,type:_leadType,source:_leadSource})
     });
   }catch(e){}
+  gtag('event','generate_lead',{lead_type:_leadType,source:_leadSource});
   document.getElementById('leadModalForm').style.display='none';
   document.getElementById('leadModalThanks').style.display='block';
   btn.textContent='Send my info →';
