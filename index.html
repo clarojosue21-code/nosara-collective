@@ -1014,7 +1014,7 @@ section{padding:5rem 3rem}
   margin-bottom:1.5rem;min-height:1.2em;
 }
 .prop-search-msg.warn{color:var(--clay)}
-.prop-card.search-hidden{display:none!important}
+.prop-card.search-hidden,.retreat-card.search-hidden{display:none!important}
 @media(max-width:700px){
   .prop-search-bar{flex-direction:column;align-items:stretch}
   .prop-search-bar .fg{min-width:0}
@@ -1651,6 +1651,14 @@ body{top:0!important;position:static!important}
       <span class="mobile-accordion-chevron" id="retreats-secchevron">+</span>
     </div>
     <div class="mobile-accordion-body" id="retreats-secbody">
+      <div class="prop-search-bar">
+        <div class="fg"><label>Check-in</label><input type="date" id="retreatSearchCheckin" onchange="onRetreatSearchCheckinChange()"></div>
+        <div class="fg"><label>Check-out</label><input type="date" id="retreatSearchCheckout" onchange="clearRetreatSearchMsg()"></div>
+        <div class="fg"><label>Guests</label><input type="number" id="retreatSearchGuests" min="1" value="10" onchange="clearRetreatSearchMsg()"></div>
+        <button class="btn-primary prop-search-btn" onclick="searchRetreatAvailability()">Check Availability →</button>
+        <button class="prop-search-clear" id="retreatSearchClear" onclick="clearRetreatAvailabilitySearch()" style="display:none">Clear search ✕</button>
+      </div>
+      <div id="retreatSearchMsg" class="prop-search-msg"></div>
       <div class="retreats-grid stagger" id="retreatsGrid"></div>
     </div>
   </div>
@@ -2040,11 +2048,11 @@ const SERVICES=[
 ];
 
 const RETREATS=[
-  {name:'Arcilla Compound',slug:'arcilla-bundle',composedOf:['arcilla1','arcilla2'],tag:'Full Compound · Up to 18 Guests',desc:'Both Arcilla villas together — 7 bedrooms sleeping up to 18 guests. Two private pools, two full kitchens, deep jungle seclusion. The ultimate setting for yoga, wellness, leadership, or creative retreats.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 18 guests','7 bedrooms','Two private pools','Two full kitchens','Buffet catering available','Full concierge','Jungle immersion']},
-  {name:'Casa Ojos Azules',slug:'ojosazules',composedOf:['ojosazules'],tag:'Intimate Retreat · Up to 10 Guests',desc:'A luminous 4-bedroom villa sleeping up to 10 guests. Open spaces, natural light, tropical gardens and a private pool. Ideal for yoga, healing, wellness, or creative retreats.',cover:CDN+'v1781050965/Small5_qfmiv4.jpg',features:['Up to 10 guests','4 bedrooms','Private pool','Epic sunset view','Garden spaces','Buffet catering available','Natural light']},
-  {name:'Arcilla + Ojos Azules',slug:'arcilla-ojos-bundle',composedOf:['arcilla1','arcilla2','ojosazules'],tag:'Triple Villa · Up to 28 Guests',desc:'The full Arcilla Compound plus Casa Ojos Azules — three villas, three pools, sleeping up to 28 guests. The most exclusive multi-space retreat experience in Nosara. Perfect for large groups who want total seclusion and a complete resort feel.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 28 guests','11 bedrooms','Three private pools','Three full kitchens','Buffet catering available','Full concierge','Maximum privacy']},
-  {name:'Castillo Colonial',slug:'castillo',tag:'Crown Jewel · Up to 34 Guests',priceLabel:'$125/person/night · min. 5 guests, 2 nights',desc:'The most prestigious retreat venue in Nosara — 15 bedrooms, two private pools, sunset viewpoint, tennis court, and fitness center. The perfect stage for large wellness retreats, corporate events, destination weddings, and elite multi-group experiences. Nothing in Nosara compares.',cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',features:['Up to 34 guests','15 bedrooms','2 private pools','Sunset view point','Tennis court','Fitness center','Full kitchen','Pet friendly']},
-  {name:'Sol + Mar Bundle',slug:'sol-mar-bundle',composedOf:['sol','mar'],tag:'Twin Villa Retreat · Up to 16 Guests',desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms, 2 queen beds per room, one shared central pool. Perfect for retreats up to 16 guests.',cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',features:['Up to 16 guests','4 bedrooms','2 queen beds per room','One shared pool','Two kitchens','Buffet catering available']}
+  {name:'Arcilla Compound',slug:'arcilla-bundle',composedOf:['arcilla1','arcilla2'],maxGuests:18,tag:'Full Compound · Up to 18 Guests',desc:'Both Arcilla villas together — 7 bedrooms sleeping up to 18 guests. Two private pools, two full kitchens, deep jungle seclusion. The ultimate setting for yoga, wellness, leadership, or creative retreats.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 18 guests','7 bedrooms','Two private pools','Two full kitchens','Buffet catering available','Full concierge','Jungle immersion']},
+  {name:'Casa Ojos Azules',slug:'ojosazules',composedOf:['ojosazules'],maxGuests:10,tag:'Intimate Retreat · Up to 10 Guests',desc:'A luminous 4-bedroom villa sleeping up to 10 guests. Open spaces, natural light, tropical gardens and a private pool. Ideal for yoga, healing, wellness, or creative retreats.',cover:CDN+'v1781050965/Small5_qfmiv4.jpg',features:['Up to 10 guests','4 bedrooms','Private pool','Epic sunset view','Garden spaces','Buffet catering available','Natural light']},
+  {name:'Arcilla + Ojos Azules',slug:'arcilla-ojos-bundle',composedOf:['arcilla1','arcilla2','ojosazules'],maxGuests:28,tag:'Triple Villa · Up to 28 Guests',desc:'The full Arcilla Compound plus Casa Ojos Azules — three villas, three pools, sleeping up to 28 guests. The most exclusive multi-space retreat experience in Nosara. Perfect for large groups who want total seclusion and a complete resort feel.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 28 guests','11 bedrooms','Three private pools','Three full kitchens','Buffet catering available','Full concierge','Maximum privacy']},
+  {name:'Castillo Colonial',slug:'castillo',maxGuests:34,minGuests:5,tag:'Crown Jewel · Up to 34 Guests',priceLabel:'$125/person/night · min. 5 guests, 2 nights',desc:'The most prestigious retreat venue in Nosara — 15 bedrooms, two private pools, sunset viewpoint, tennis court, and fitness center. The perfect stage for large wellness retreats, corporate events, destination weddings, and elite multi-group experiences. Nothing in Nosara compares.',cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',features:['Up to 34 guests','15 bedrooms','2 private pools','Sunset view point','Tennis court','Fitness center','Full kitchen','Pet friendly']},
+  {name:'Sol + Mar Bundle',slug:'sol-mar-bundle',composedOf:['sol','mar'],maxGuests:16,tag:'Twin Villa Retreat · Up to 16 Guests',desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms, 2 queen beds per room, one shared central pool. Perfect for retreats up to 16 guests.',cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',features:['Up to 16 guests','4 bedrooms','2 queen beds per room','One shared pool','Two kitchens','Buffet catering available']}
 ];
 
 const LOTS=[
@@ -2243,6 +2251,107 @@ function clearAvailabilitySearch(){
   document.getElementById('searchCheckout').value='';
 }
 
+// ─── RETREATS AVAILABILITY SEARCH — same idea, applied to the Retreats grid ───
+let _retreatDbIdsCache=null;
+async function getRetreatDbIds(){
+  if(_retreatDbIdsCache)return _retreatDbIdsCache;
+  const map={};
+  const missing=[];
+  RETREATS.forEach(r=>{
+    const fromProps=PROPS.find(p=>p.id===r.slug)?.dbId;
+    if(fromProps)map[r.slug]=fromProps;else missing.push(r.slug);
+  });
+  if(missing.length){
+    try{
+      const res=await fetch(`${SUPABASE_URL}/rest/v1/properties?slug=in.(${missing.join(',')})&select=slug,id`,{
+        headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+      });
+      if(res.ok){(await res.json()).forEach(row=>{map[row.slug]=row.id;});}
+    }catch(e){}
+  }
+  _retreatDbIdsCache=map;
+  return map;
+}
+function isRetreatAvailable(r,dbIdMap,blockedIds){
+  const dbId=dbIdMap[r.slug];
+  if(dbId&&blockedIds.has(dbId))return false;
+  if(r.composedOf){
+    for(const compSlug of r.composedOf){
+      const compDbId=PROPS.find(p=>p.id===compSlug)?.dbId;
+      if(compDbId&&blockedIds.has(compDbId))return false;
+    }
+  }
+  for(const other of RETREATS){
+    if(other.composedOf&&other.composedOf.includes(r.slug)){
+      const otherDbId=dbIdMap[other.slug];
+      if(otherDbId&&blockedIds.has(otherDbId))return false;
+    }
+  }
+  return true;
+}
+function clearRetreatSearchMsg(){
+  const el=document.getElementById('retreatSearchMsg');
+  if(el){el.textContent='';el.className='prop-search-msg';}
+}
+function onRetreatSearchCheckinChange(){
+  clearRetreatSearchMsg();
+  const ciEl=document.getElementById('retreatSearchCheckin');
+  const coEl=document.getElementById('retreatSearchCheckout');
+  if(!ciEl.value)return;
+  if(!coEl.value||coEl.value<=ciEl.value){
+    const d=new Date(ciEl.value+'T00:00:00');
+    d.setDate(d.getDate()+2);
+    coEl.value=d.toISOString().slice(0,10);
+  }
+}
+async function searchRetreatAvailability(){
+  const ci=document.getElementById('retreatSearchCheckin').value;
+  const co=document.getElementById('retreatSearchCheckout').value;
+  const guests=parseInt(document.getElementById('retreatSearchGuests').value,10)||1;
+  const msg=document.getElementById('retreatSearchMsg');
+  if(!ci||!co){msg.textContent='Please select check-in and check-out dates.';msg.className='prop-search-msg warn';return;}
+  if(new Date(co)<=new Date(ci)){msg.textContent='Check-out must be after check-in.';msg.className='prop-search-msg warn';return;}
+  msg.textContent='Checking availability…';msg.className='prop-search-msg';
+  try{
+    const dbIdMap=await getRetreatDbIds();
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/blocked_dates?select=property_id&date=gte.${ci}&date=lt.${co}`,{
+      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+    });
+    const rows=res.ok?await res.json():[];
+    const blockedIds=new Set(rows.map(r=>r.property_id));
+    let shown=0;
+    document.querySelectorAll('.retreat-card[data-retreat-slug]').forEach(card=>{
+      const slug=card.dataset.retreatSlug;
+      const r=RETREATS.find(x=>x.slug===slug);
+      if(!r){card.classList.add('search-hidden');return;}
+      const capacityOk=!r.maxGuests||guests<=r.maxGuests;
+      const minGuestsOk=!r.minGuests||guests>=r.minGuests;
+      const available=isRetreatAvailable(r,dbIdMap,blockedIds)&&capacityOk&&minGuestsOk;
+      card.classList.toggle('search-hidden',!available);
+      if(available)shown++;
+    });
+    document.getElementById('retreatSearchClear').style.display='inline-block';
+    const nights=Math.round((new Date(co)-new Date(ci))/86400000);
+    if(shown===0){
+      msg.textContent=`No spaces available for ${guests} guest${guests!==1?'s':''}, ${nights} night${nights!==1?'s':''} — try different dates or a smaller group.`;
+      msg.className='prop-search-msg warn';
+    }else{
+      msg.textContent=`${shown} option${shown!==1?'s':''} available for ${guests} guest${guests!==1?'s':''}, ${nights} night${nights!==1?'s':''}.`;
+      msg.className='prop-search-msg';
+    }
+  }catch(e){
+    msg.textContent='Could not check availability right now — please try again.';
+    msg.className='prop-search-msg warn';
+  }
+}
+function clearRetreatAvailabilitySearch(){
+  document.querySelectorAll('.retreat-card.search-hidden').forEach(c=>c.classList.remove('search-hidden'));
+  document.getElementById('retreatSearchClear').style.display='none';
+  document.getElementById('retreatSearchMsg').textContent='';
+  document.getElementById('retreatSearchCheckin').value='';
+  document.getElementById('retreatSearchCheckout').value='';
+}
+
 // ─── RENDER SERVICES ───
 function toggleServiceCard(id){
   const card=document.getElementById('sc_'+id);
@@ -2423,7 +2532,7 @@ function renderRetreats(){
     const bookable=PROPS.some(p=>p.id===r.slug);
     const onclick=bookable?`openModal('${r.slug}')`:`openRetreatBooking('${r.name.replace(/'/g,"\\'")}','${r.tag.replace(/'/g,"\\'")}','${r.cover}')`;
     return `
-    <div class="retreat-card">
+    <div class="retreat-card" data-retreat-slug="${r.slug}">
       <div class="retreat-img-wrap">
         <img src="${r.cover}" alt="${r.name}" onerror="this.style.display='none'" loading="lazy">
       </div>
