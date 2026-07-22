@@ -1610,7 +1610,7 @@ body{top:0!important;position:static!important}
     <h2 class="section-title">Our Properties</h2>
     <p class="section-sub">From earthen casas to highland retreats — each home carries the soul of Nosara and the warmth of its people.</p>
     <div class="prop-search-bar">
-      <div class="fg"><label>Check-in</label><input type="date" id="searchCheckin" onchange="clearSearchMsg()"></div>
+      <div class="fg"><label>Check-in</label><input type="date" id="searchCheckin" onchange="onSearchCheckinChange()"></div>
       <div class="fg"><label>Check-out</label><input type="date" id="searchCheckout" onchange="clearSearchMsg()"></div>
       <div class="fg"><label>Guests</label><input type="number" id="searchGuests" min="1" value="2" onchange="clearSearchMsg()"></div>
       <button class="btn-primary prop-search-btn" onclick="searchAvailability()">Check Availability →</button>
@@ -2160,6 +2160,22 @@ function renderProps(){
 function clearSearchMsg(){
   const el=document.getElementById('propSearchMsg');
   if(el){el.textContent='';el.className='prop-search-msg';}
+}
+// When the guest picks a check-in date, pre-fill check-out with a sensible
+// default (a 2-night stay) if it's empty or now before check-in. Native
+// date pickers open showing whatever month the field's current value is
+// in, so this means clicking into "Check-out" right after picking
+// check-in opens on that same month instead of jumping back to today.
+function onSearchCheckinChange(){
+  clearSearchMsg();
+  const ciEl=document.getElementById('searchCheckin');
+  const coEl=document.getElementById('searchCheckout');
+  if(!ciEl.value)return;
+  if(!coEl.value||coEl.value<=ciEl.value){
+    const d=new Date(ciEl.value+'T00:00:00');
+    d.setDate(d.getDate()+2);
+    coEl.value=d.toISOString().slice(0,10);
+  }
 }
 // A property is unavailable if it's blocked directly, OR (for a bundle) any
 // of its component houses is blocked, OR (for a component house) any bundle
