@@ -205,6 +205,10 @@ exports.handler = async (event) => {
     }
 
     const { nights, accommodation_total, owner_payout } = calcStayTotals(property, req.check_in, req.check_out, req.num_guests);
+    // Displayed nightly rates are base prices — tax and the NCC service fee
+    // are calculated on top of them and added at checkout, not baked in.
+    const tax = Math.round(accommodation_total * 0.13);
+    const ncc_fee = Math.round(accommodation_total * 0.10);
     validatedProperties.push({
       item_type: 'property',
       property_id: property.id,
@@ -214,8 +218,10 @@ exports.handler = async (event) => {
       check_out: req.check_out,
       nights,
       num_guests: req.num_guests,
-      price: accommodation_total,
+      price: accommodation_total + tax + ncc_fee,
       owner_payout,
+      tax,
+      ncc_fee,
     });
   }
 
@@ -235,10 +241,12 @@ exports.handler = async (event) => {
   // rather than re-deriving every formula server-side.
   const validatedServices = [];
   for (const req of serviceRequests) {
-    const price = Math.round(Number(req.price) || 0);
-    if (price <= 0 || price > 100000) {
+    const base = Math.round(Number(req.price) || 0);
+    if (base <= 0 || base > 100000) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Invalid service price' }) };
     }
+    const tax = Math.round(base * 0.13);
+    const ncc_fee = Math.round(base * 0.10);
     validatedServices.push({
       item_type: 'service',
       property_id: null,
@@ -247,8 +255,10 @@ exports.handler = async (event) => {
       check_out: null,
       nights: null,
       num_guests: null,
-      price,
+      price: base + tax + ncc_fee,
       owner_payout: 0,
+      tax,
+      ncc_fee,
       notes: req.notes || null,
     });
   }
@@ -260,8 +270,8 @@ exports.handler = async (event) => {
 
   const grand_total = allItems.reduce((s, i) => s + i.price, 0);
   const owner_payout_total = allItems.reduce((s, i) => s + i.owner_payout, 0);
-  const taxes_total = allItems.reduce((s, i) => s + Math.round(i.price * 0.13), 0);
-  const ncc_fee_total = grand_total - owner_payout_total - taxes_total;
+  const taxes_total = allItems.reduce((s, i) => s + i.tax, 0);
+  const ncc_fee_total = allItems.reduce((s, i) => s + i.ncc_fee, 0);
   const community_impact_total = Math.round(ncc_fee_total * 0.05);
 
   const reference = generateReference();
@@ -293,7 +303,7 @@ exports.handler = async (event) => {
 
   const { data: insertedItems, error: itemsErr } = await supabase
     .from('order_items')
-    .insert(allItems.map(({ component_ids, ...i }) => ({ ...i, order_id: order.id })))
+    .insert(allItems.map(({ component_ids, tax, ncc_fee, ...i }) => ({ ...i, order_id: order.id })))
     .select();
 
   if (itemsErr || !insertedItems) {

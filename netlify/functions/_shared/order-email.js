@@ -82,9 +82,10 @@ function adminEmailHtml(order, items) {
       ${itemRowsPlain(items)}
       <tr style="border-top:1px solid #3A3830"><td style="padding:8px 0 3px;color:#C4784A">Grand Total</td><td style="color:#C4784A;text-align:right;font-size:16px">$${order.grand_total.toLocaleString()}</td></tr>
       <tr><td style="padding:3px 0;color:#6A9E6A">Owner Payout</td><td style="color:#6A9E6A;text-align:right">$${order.owner_payout_total.toLocaleString()}</td></tr>
-      <tr><td style="padding:3px 0;color:#D4906A">NCC Margin</td><td style="color:#D4906A;text-align:right">$${order.ncc_fee_total.toLocaleString()}</td></tr>
-      <tr><td style="padding:3px 0;color:#7AAAC0">— Community Impact (5% of margin)</td><td style="color:#7AAAC0;text-align:right">$${order.community_impact_total.toLocaleString()}</td></tr>
-      <tr><td style="padding:3px 0;color:#A0988E">Taxes (13% IVA)</td><td style="color:#A0988E;text-align:right">$${order.taxes_total.toLocaleString()}</td></tr>
+      <tr><td style="padding:3px 0;color:#A0988E">Taxes (13% IVA, added at checkout)</td><td style="color:#A0988E;text-align:right">$${order.taxes_total.toLocaleString()}</td></tr>
+      <tr><td style="padding:3px 0;color:#D4906A">NCC Added Fee (10%, added at checkout)</td><td style="color:#D4906A;text-align:right">$${order.ncc_fee_total.toLocaleString()}</td></tr>
+      <tr><td style="padding:3px 0;color:#D4906A">NCC Base Margin (already in base rate)</td><td style="color:#D4906A;text-align:right">$${(order.grand_total - order.taxes_total - order.ncc_fee_total - order.owner_payout_total).toLocaleString()}</td></tr>
+      <tr><td style="padding:3px 0;color:#7AAAC0">— Community Impact (5% of added fee)</td><td style="color:#7AAAC0;text-align:right">$${order.community_impact_total.toLocaleString()}</td></tr>
     </table>
   </div>
 </body>
