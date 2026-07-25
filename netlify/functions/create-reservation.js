@@ -22,8 +22,22 @@ function generateReference() {
   return `NCC-${date}-${rand}`;
 }
 
+// Casa Sol, Casa Mar, and their bundle follow a one-time scheduled rate
+// increase from the owner (not the recurring Christmas/Holy Week pattern
+// every other property uses) — their channel-manager rate steps up on
+// 2026-12-21 for about a year. Revisit this cutoff once a new schedule is
+// set closer to 2027-12-15.
+const CUSTOM_RATE_CUTOFFS = {
+  sol: '2026-12-21',
+  mar: '2026-12-21',
+  'sol-mar-bundle': '2026-12-21',
+};
+
 // Peak season: Christmas/New Year (Dec 21 - Jan 6) and Holy Week (Mar 21-28) — same window every year
-function isPeakDate(dateStr) {
+function isPeakDate(dateStr, slug) {
+  if (CUSTOM_RATE_CUTOFFS[slug]) {
+    return dateStr >= CUSTOM_RATE_CUTOFFS[slug];
+  }
   const d = new Date(dateStr + 'T00:00:00Z');
   const month = d.getUTCMonth() + 1;
   const day = d.getUTCDate();
@@ -45,7 +59,7 @@ function calcStayTotals(property, check_in, check_out, numGuests) {
   const end = new Date(check_out + 'T00:00:00Z');
   while (cur < end) {
     const dateStr = cur.toISOString().slice(0, 10);
-    const peak = isPeakDate(dateStr);
+    const peak = isPeakDate(dateStr, property.slug);
     const rate = peak && property.peak_price_per_night != null ? property.peak_price_per_night : property.price_per_night;
     const ownerRate = peak && property.peak_owner_payout_per_night != null ? property.peak_owner_payout_per_night : property.owner_payout_per_night;
     accommodation_total += rate * mult;
