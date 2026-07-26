@@ -932,6 +932,18 @@ section{padding:5rem 3rem}
   color:var(--text);transition:background 0.15s;
 }
 .modal-close:hover{background:var(--clay);color:var(--white)}
+.modal-share{
+  position:absolute;top:0;left:0;
+  background:var(--bg);border:none;
+  border-right:2px solid var(--border);
+  border-bottom:2px solid var(--border);
+  min-width:44px;height:44px;cursor:pointer;
+  font-size:0.68rem;font-family:'Archivo',sans-serif;font-weight:600;
+  letter-spacing:0.04em;z-index:10;padding:0 14px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  color:var(--text);transition:background 0.15s;white-space:nowrap;
+}
+.modal-share:hover{background:var(--clay);color:var(--white)}
 .modal-arrow{
   position:absolute;top:50%;transform:translateY(-50%);
   background:rgba(20,18,16,0.55);
@@ -1897,6 +1909,7 @@ function showPolicy(key){
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modal">
     <div class="modal-gal">
+      <button class="modal-share" id="modalShareBtn" onclick="shareCurrentProperty()" aria-label="Copy link to this property">🔗 Copy Link</button>
       <button class="modal-close" onclick="closeModalDirect()" aria-label="Close">✕</button>
       <button class="modal-arrow prev" onclick="galPrev(event)">‹</button>
       <button class="modal-arrow next" onclick="galNext(event)">›</button>
@@ -2913,9 +2926,29 @@ async function openModal(id){
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
   startAutoSlide();
+  // Updates the address bar so the founder can copy a direct link to this
+  // property straight from the URL bar (or the Copy Link button) and send
+  // it via WhatsApp — the client's browser then opens straight to it.
+  history.replaceState({},'','?casa='+id);
   if(ICAL_FEEDS[curProp.id]){await fetchBlockedDates(curProp.id);}
   else{blockedDates[curProp.id]=new Set();}
   renderCalendar(curProp.id);
+}
+function shareCurrentProperty(){
+  if(!curProp)return;
+  const url=location.origin+location.pathname+'?casa='+curProp.id;
+  const btn=document.getElementById('modalShareBtn');
+  const done=()=>{
+    if(!btn)return;
+    const original=btn.innerHTML;
+    btn.innerHTML='✓ Copied!';
+    setTimeout(()=>{btn.innerHTML=original;},2000);
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done).catch(()=>prompt('Copy this link:',url));
+  }else{
+    prompt('Copy this link:',url);
+  }
 }
 let galTimer=null;
 function updateGal(){
@@ -2938,7 +2971,14 @@ function galPrev(e){e.stopPropagation();galIdx=(galIdx-1+curProp.images.length)%
 function galNext(e){e.stopPropagation();galIdx=(galIdx+1)%curProp.images.length;updateGal();startAutoSlide();}
 function goGal(i){galIdx=i;updateGal();startAutoSlide();}
 function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect()}
-function closeModalDirect(){stopAutoSlide();document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''}
+function closeModalDirect(){
+  stopAutoSlide();
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+  if(new URLSearchParams(location.search).has('casa')){
+    history.replaceState({},'',location.pathname);
+  }
+}
 async function submitBooking(){
   const ci=document.getElementById('checkin').value;
   const co=document.getElementById('checkout').value;
@@ -3255,6 +3295,12 @@ const propsReady=loadPropsFromSupabase().then(()=>{
   syncBundlePrices();
   try{renderProps();}catch(e){console.warn('renderProps',e);}
   try{renderRetreats();}catch(e){console.warn('renderRetreats',e);}
+  // Direct property links (?casa=slug) — shared via WhatsApp, etc. — open
+  // straight to that property's modal instead of just landing on the homepage.
+  const casaSlug=new URLSearchParams(location.search).get('casa');
+  if(casaSlug&&PROPS.some(p=>p.id===casaSlug)){
+    try{openModal(casaSlug);}catch(e){console.warn('openModal from ?casa=',e);}
+  }
 });
 try{renderServices();}catch(e){console.warn('renderServices',e);}
 try{renderLots();}catch(e){console.warn('renderLots',e);}
