@@ -2822,7 +2822,7 @@ function selectDate(dateStr){
 // Casa Sol, Casa Mar, and their bundle follow a one-time scheduled rate
 // increase from the owner (not the recurring Christmas/Holy Week pattern
 // every other property uses) — mirrors the same cutoff in create-reservation.js.
-const CUSTOM_RATE_CUTOFFS={sol:'2026-12-21',mar:'2026-12-21','sol-mar-bundle':'2026-12-21'};
+const CUSTOM_RATE_CUTOFFS={sol:'2026-12-21',mar:'2026-12-21','sol-mar-bundle':'2026-12-21',arcilla1:'2026-12-21',arcilla2:'2026-12-21','arcilla-bundle':'2026-12-21',monkey:'2026-12-21',h7:'2026-12-21',ojosazules:'2026-12-21','arcilla-ojos-bundle':'2026-12-21'};
 function isPeakDate(dateStr,slug){
   if(CUSTOM_RATE_CUTOFFS[slug])return dateStr>=CUSTOM_RATE_CUTOFFS[slug];
   const d=new Date(dateStr+'T00:00:00Z');

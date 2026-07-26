@@ -31,6 +31,13 @@ const CUSTOM_RATE_CUTOFFS = {
   sol: '2026-12-21',
   mar: '2026-12-21',
   'sol-mar-bundle': '2026-12-21',
+  arcilla1: '2026-12-21',
+  arcilla2: '2026-12-21',
+  'arcilla-bundle': '2026-12-21',
+  monkey: '2026-12-21',
+  h7: '2026-12-21',
+  ojosazules: '2026-12-21',
+  'arcilla-ojos-bundle': '2026-12-21',
 };
 
 // Peak season: Christmas/New Year (Dec 21 - Jan 6) and Holy Week (Mar 21-28) — same window every year
