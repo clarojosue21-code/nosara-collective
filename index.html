@@ -1936,8 +1936,18 @@ function showPolicy(key){
         <div class="form-row">
           <div class="fg" id="guestFieldWrap"><label>Guests</label><select id="numGuests"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8+</option></select></div>
         </div>
-        <button class="book-btn" onclick="addPropertyToCart()">🛒 Add to Cart</button>
-        <p class="book-note">🔒 Secure checkout · 5% of our profits supports Nosara families · Dates sync with Airbnb</p>
+        <div id="requestOnlyFields" style="display:none">
+          <div class="form-row">
+            <div class="fg"><label>Full Name *</label><input type="text" id="reqName" placeholder="Your full name"></div>
+            <div class="fg"><label>Email *</label><input type="email" id="reqEmail" placeholder="your@email.com"></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Phone / WhatsApp</label><input type="tel" id="reqPhone" placeholder="+1 555 000 0000"></div>
+          </div>
+          <div class="fg"><label>Tell us about your event</label><textarea id="reqMessage" rows="3" placeholder="Event type, group size, anything else we should know..." style="width:100%;font-family:'Archivo',sans-serif;font-size:0.82rem;padding:10px;border:1px solid var(--border-med);box-sizing:border-box;resize:vertical"></textarea></div>
+        </div>
+        <button class="book-btn" id="bookBtn" onclick="addPropertyToCart()">🛒 Add to Cart</button>
+        <p class="book-note" id="bookNote">🔒 Secure checkout · 5% of our profits supports Nosara families · Dates sync with Airbnb</p>
       </div>
     </div>
   </div>
@@ -1985,7 +1995,7 @@ const PROPS=[
   images:[CDN+'v1781055843/WhatsApp_Image_2025-01-23_at_10.32.14_AM_b992us.jpg',CDN+'v1781055820/sala_2_tdh0ml.jpg',CDN+'v1781055823/sala_3_lm5mgf.jpg',CDN+'v1781055839/sala_rawjtl.jpg',CDN+'v1781055836/main_room_z24xhi.jpg',CDN+'v1781055813/main_bath_a4mgw5.jpg',CDN+'v1781055806/cocina_m0306m.jpg',CDN+'v1781055815/room_1_hudowr.jpg'],
   features:['Mountain views','4 bedrooms','Master bedroom with ocean view','Panoramic windows','Double garage','Modern design'],retreat:false}
 ,
-  {id:'castillo',name:'Castillo Colonial',badge:'Premium',badgeClass:'retreat',price:125,peakPrice:200,pricingUnit:'person',minGuests:5,minNights:2,meta:'15 bed · 15 bath · 2 private pools · Sunset view · Tennis · Up to 34 guests',desc:'The crown jewel of Nosara — a magnificent 15-bedroom colonial estate with two private pools, sunset viewpoint, tennis court, and fitness center. The ultimate venue for large groups, elite retreats, and unforgettable events.',
+  {id:'castillo',name:'Castillo Colonial',badge:'Premium',badgeClass:'retreat',price:125,peakPrice:200,pricingUnit:'person',minGuests:5,minNights:2,requestOnly:true,meta:'15 bed · 15 bath · 2 private pools · Sunset view · Tennis · Up to 34 guests',desc:'The crown jewel of Nosara — a magnificent 15-bedroom colonial estate with two private pools, sunset viewpoint, tennis court, and fitness center. The ultimate venue for large groups, elite retreats, and unforgettable events.',
   cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',
   images:['https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg','https://imgservice.surfbreakrentals.com/500x325/castillo-colonial-nosara-b-cr-nosara-bc-14420491-1.jpg','https://imgservice.surfbreakrentals.com/500x325/castillo-colonial-nosara-b-cr-nosara-bc-14420491-2.jpg','https://imgservice.surfbreakrentals.com/500x325/castillo-colonial-nosara-b-cr-nosara-bc-14420491-3.jpg','https://imgservice.surfbreakrentals.com/500x325/castillo-colonial-nosara-b-cr-nosara-bc-14420491-4.jpg'],
   features:['15 bedrooms','2 private pools','Sunset view point','Tennis court','Fitness center','Pet friendly','Free WiFi','BBQ & Terrace'],
@@ -2918,6 +2928,23 @@ async function openModal(id){
   document.getElementById('checkin').value='';
   document.getElementById('checkout').value='';
   document.getElementById('nightCount').textContent='';
+  // Castillo Colonial (and any future venue marked requestOnly) skips instant
+  // checkout entirely — guests submit their event details as an inquiry and
+  // the team follows up directly, rather than paying online right away.
+  const reqFields=document.getElementById('requestOnlyFields');
+  const bookBtn=document.getElementById('bookBtn');
+  const bookNote=document.getElementById('bookNote');
+  if(curProp.requestOnly){
+    reqFields.style.display='block';
+    bookBtn.textContent='📩 Request to Book';
+    bookBtn.onclick=submitCastilloRequest;
+    bookNote.textContent="We'll follow up personally to confirm availability and details — usually within a few hours.";
+  }else{
+    reqFields.style.display='none';
+    bookBtn.textContent='🛒 Add to Cart';
+    bookBtn.onclick=addPropertyToCart;
+    bookNote.textContent='🔒 Secure checkout · 5% of our profits supports Nosara families · Dates sync with Airbnb';
+  }
   const cal=document.getElementById('calendarWidget');
   const today=new Date();
   cal.dataset.year=today.getFullYear();
@@ -3448,6 +3475,38 @@ function addPropertyToCart(){
   });
   closeModalDirect();
   setTimeout(()=>toggleCart(),300);
+}
+
+async function submitCastilloRequest(){
+  const name=document.getElementById('reqName')?.value?.trim();
+  const email=document.getElementById('reqEmail')?.value?.trim();
+  const phone=document.getElementById('reqPhone')?.value?.trim();
+  const message=document.getElementById('reqMessage')?.value?.trim();
+  const ci=document.getElementById('checkin')?.value;
+  const co=document.getElementById('checkout')?.value;
+  const guests=document.getElementById('numGuests')?.value;
+  if(!name||!email){showCalMsg('Please enter your name and email.');return;}
+
+  const btn=document.getElementById('bookBtn');
+  btn.textContent='Sending...';btn.disabled=true;
+  try{
+    await fetch('/.netlify/functions/send-lead',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        name,email,phone,
+        type:'booking',
+        source:'castillo-colonial',
+        property_interest:curProp.name,
+        travel_dates:(ci&&co)?`${ci} → ${co}`:null,
+        num_guests:guests?parseInt(guests,10)||null:null,
+        message:message||null,
+      })
+    });
+  }catch(e){}
+  btn.textContent='✓ Request Sent — We\'ll Be In Touch';
+  gtag('event','generate_lead',{lead_type:'castillo_request',source:'castillo-colonial'});
+  setTimeout(()=>{closeModalDirect();btn.textContent='📩 Request to Book';btn.disabled=false;},2500);
 }
 
 function proceedToCheckout(){

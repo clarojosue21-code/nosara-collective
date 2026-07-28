@@ -13,7 +13,7 @@ exports.handler = async (event) => {
   let body;
   try { body = JSON.parse(event.body); } catch { return { statusCode: 400, body: 'Bad Request' }; }
 
-  const { email, phone, type, source } = body;
+  const { name, email, phone, type, source, property_interest, travel_dates, num_guests, message } = body;
   if (!email && !phone) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Email or phone required' }) };
   }
@@ -24,10 +24,15 @@ exports.handler = async (event) => {
 
   // Save to Supabase leads table
   const { error: dbError } = await supabase.from('leads').insert([{
+    name: name || null,
     email: email || null,
     phone: phone || null,
     type: dbType,
     source: source || 'guide-cta',
+    property_interest: property_interest || null,
+    travel_dates: travel_dates || null,
+    num_guests: num_guests || null,
+    message: message || null,
     created_at: new Date().toISOString(),
   }]);
 
@@ -39,7 +44,8 @@ exports.handler = async (event) => {
   // Send email notification via Resend (free tier — 3,000 emails/month)
   // Requires RESEND_API_KEY env var in Netlify dashboard
   if (process.env.RESEND_API_KEY) {
-    const typeLabel = type === 'property' ? 'Buying Property' : type === 'relocation' ? 'Moving to CR' : 'General';
+    const typeLabel = source === 'castillo-colonial' ? 'Castillo Colonial Booking Request'
+      : type === 'property' ? 'Buying Property' : type === 'relocation' ? 'Moving to CR' : 'General';
     try {
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -56,13 +62,22 @@ exports.handler = async (event) => {
               <h2 style="color:#C4784A;margin-bottom:4px">New Lead — ${typeLabel}</h2>
               <p style="color:#888;font-size:12px;margin-top:0">Via The Collective Guide</p>
               <table style="border-collapse:collapse;width:100%;margin-top:16px">
+                ${name ? `<tr><td style="padding:8px 0;border-bottom:1px solid #eee;color:#888;font-size:13px;width:90px">Name</td>
+                    <td style="padding:8px 0;border-bottom:1px solid #eee;font-size:13px">${name}</td></tr>` : ''}
                 <tr><td style="padding:8px 0;border-bottom:1px solid #eee;color:#888;font-size:13px;width:90px">Email</td>
                     <td style="padding:8px 0;border-bottom:1px solid #eee;font-size:13px">${email || '—'}</td></tr>
                 <tr><td style="padding:8px 0;border-bottom:1px solid #eee;color:#888;font-size:13px">Phone</td>
                     <td style="padding:8px 0;border-bottom:1px solid #eee;font-size:13px">${phone || '—'}</td></tr>
+                ${property_interest ? `<tr><td style="padding:8px 0;border-bottom:1px solid #eee;color:#888;font-size:13px">Property</td>
+                    <td style="padding:8px 0;border-bottom:1px solid #eee;font-size:13px">${property_interest}</td></tr>` : ''}
+                ${travel_dates ? `<tr><td style="padding:8px 0;border-bottom:1px solid #eee;color:#888;font-size:13px">Dates</td>
+                    <td style="padding:8px 0;border-bottom:1px solid #eee;font-size:13px">${travel_dates}</td></tr>` : ''}
+                ${num_guests ? `<tr><td style="padding:8px 0;border-bottom:1px solid #eee;color:#888;font-size:13px">Guests</td>
+                    <td style="padding:8px 0;border-bottom:1px solid #eee;font-size:13px">${num_guests}</td></tr>` : ''}
                 <tr><td style="padding:8px 0;color:#888;font-size:13px">Interest</td>
                     <td style="padding:8px 0;font-size:13px">${typeLabel}</td></tr>
               </table>
+              ${message ? `<p style="margin-top:16px;font-size:13px;color:#333;background:#f7f7f7;padding:12px;border-radius:4px">${message}</p>` : ''}
               <p style="margin-top:24px;font-size:12px;color:#aaa">Nosara Collective Conscience · nosaracollectiveconscience.com</p>
             </div>
           `,
