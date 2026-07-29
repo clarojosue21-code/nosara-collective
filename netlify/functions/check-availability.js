@@ -102,7 +102,21 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'property_id or slug required' }) };
   }
 
-  const requestedSlug = slug || property_id;
+  const isUUIDParam = property_id && /^[0-9a-f-]{36}$/.test(property_id);
+
+  // The frontend calendar widget calls this with property_id=<uuid> for every
+  // property, bundles included — resolve the real slug first so the bundle
+  // check below (keyed by slug) actually fires instead of silently treating
+  // a bundle like any other single property.
+  let requestedSlug = slug;
+  if (!requestedSlug) {
+    if (isUUIDParam) {
+      const { data: propRow } = await supabase.from('properties').select('slug').eq('id', property_id).single();
+      requestedSlug = propRow?.slug || property_id;
+    } else {
+      requestedSlug = property_id;
+    }
+  }
 
   // ── BUNDLE HANDLING ──────────────────────────────────────────────────────────
   // For bundles (e.g. arcilla-bundle), sync and query each component property,
@@ -153,11 +167,10 @@ exports.handler = async (event) => {
   // ────────────────────────────────────────────────────────────────────────────
 
   // Get property by UUID or slug
-  const isUUID = property_id && /^[0-9a-f-]{36}$/.test(property_id);
   const { data: property } = await supabase
     .from('properties')
     .select('id, slug')
-    .eq(isUUID ? 'id' : 'slug', isUUID ? property_id : requestedSlug)
+    .eq(isUUIDParam ? 'id' : 'slug', isUUIDParam ? property_id : requestedSlug)
     .single();
 
   if (property) {

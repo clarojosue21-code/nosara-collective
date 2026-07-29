@@ -2957,8 +2957,12 @@ async function openModal(id){
   // property straight from the URL bar (or the Copy Link button) and send
   // it via WhatsApp — the client's browser then opens straight to it.
   history.replaceState({},'','?casa='+id);
-  if(ICAL_FEEDS[curProp.id]){await fetchBlockedDates(curProp.id);}
-  else{blockedDates[curProp.id]=new Set();}
+  // Always ask the backend, regardless of whether this property has a direct
+  // iCal feed of its own — /api/check-availability already unions bundle
+  // component calendars (e.g. arcilla-bundle = arcilla1 + arcilla2) and
+  // returns any DB-stored blocks (holds, manual reservations) even for
+  // properties with no external calendar to sync.
+  await fetchBlockedDates(curProp.id);
   renderCalendar(curProp.id);
 }
 function shareCurrentProperty(){
