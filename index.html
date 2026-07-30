@@ -1661,7 +1661,7 @@ body{top:0!important;position:static!important}
     </div>
     <div class="mobile-accordion-body" id="concierge-secbody">
       <div class="builder-grid" id="servicesGrid"></div>
-      <p class="services-tax-note">* Prices shown are base rates. 13% IVA tax and our service fee are added at checkout.</p>
+      <p class="services-tax-note">* Prices shown already include our service fee. 13% IVA tax is added at checkout.</p>
     </div>
   </div>
 </section>
@@ -2904,7 +2904,7 @@ function updateNightCount(){
       msg.textContent=`Minimum ${curProp.minGuests} guests required.`;msg.style.color='#B5553A';return;
     }
     msg.style.color='';
-    msg.textContent=`${nights} night${nights!==1?'s':''}${curProp.pricingUnit==='person'?` · ${guests} guests`:''} · Subtotal $${total.toLocaleString()} (+ taxes & fees at checkout)`;
+    msg.textContent=`${nights} night${nights!==1?'s':''}${curProp.pricingUnit==='person'?` · ${guests} guests`:''} · Subtotal $${total.toLocaleString()} (+ 13% tax at checkout)`;
   }
   else{msg.textContent='';}
 }
@@ -3542,17 +3542,16 @@ function updateCheckoutTotal(){
 function showCheckoutModal(){
   const existing=document.getElementById('checkoutModal');
   if(existing)existing.remove();
-  // Cart item prices are base rates — 13% tax and the 10% NCC service fee
-  // are calculated on top of them here, exactly as create-reservation.js
-  // calculates them server-side, so the displayed total always matches
-  // what actually gets charged.
+  // Cart item prices already include NCC's margin (the spread between the
+  // base rate and what the property owner is paid) — only the 13% IVA tax
+  // is calculated on top here, exactly as create-reservation.js calculates
+  // it server-side, so the displayed total always matches what's charged.
   const base=cart.reduce((s,i)=>s+(i.price||0),0);
-  let taxSum=0,nccSum=0;
+  let taxSum=0;
   cart.forEach(item=>{
     taxSum+=Math.round((item.price||0)*0.13);
-    nccSum+=Math.round((item.price||0)*0.10);
   });
-  const grandTotal=base+taxSum+nccSum;
+  const grandTotal=base+taxSum;
   const modal=document.createElement('div');
   modal.id='checkoutModal';
   modal.dataset.base=base;
@@ -3577,14 +3576,12 @@ function showCheckoutModal(){
               </div>
               <div style="font-weight:700;color:var(--text)">${item.price>0?'$'+item.price.toLocaleString():'TBD'}</div>
             </div>`).join('')}
-          <div style="display:flex;justify-content:space-between;padding:8px 14px;font-size:0.75rem;color:var(--text-muted)">
+          <div style="display:flex;justify-content:space-between;padding:8px 14px 2px;font-size:0.75rem;color:var(--text-muted)">
             <span>Subtotal</span><span>$${base.toLocaleString()}</span>
           </div>
+          <div style="padding:0 14px 8px;font-size:0.65rem;color:var(--text-muted);opacity:0.75">5% of NCC's profits support the local community</div>
           <div style="display:flex;justify-content:space-between;padding:8px 14px;font-size:0.75rem;color:var(--text-muted)">
             <span>Taxes (13% IVA)</span><span>+$${taxSum.toLocaleString()}</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:8px 14px;font-size:0.75rem;color:var(--text-muted)">
-            <span>NCC service fee (10%)</span><span>+$${nccSum.toLocaleString()}</span>
           </div>
           <div style="display:flex;justify-content:space-between;padding:10px 14px;font-size:1rem;font-weight:700;color:var(--text);border-top:2px solid var(--border)">
             <span>Total</span><span id="co_grand">$${grandTotal.toLocaleString()}</span>

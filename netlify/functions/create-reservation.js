@@ -254,10 +254,11 @@ exports.handler = async (event) => {
     }
 
     const { nights, accommodation_total, owner_payout } = calcStayTotals(property, req.check_in, req.check_out, req.num_guests);
-    // Displayed nightly rates are base prices — tax and the NCC service fee
-    // are calculated on top of them and added at checkout, not baked in.
+    // Displayed nightly rates already include NCC's margin (the spread
+    // between the base rate and the owner payout) — only the 13% IVA tax
+    // gets added on top at checkout.
     const tax = Math.round(accommodation_total * 0.13);
-    const ncc_fee = Math.round(accommodation_total * 0.10);
+    const ncc_fee = accommodation_total - owner_payout;
     validatedProperties.push({
       item_type: 'property',
       property_id: property.id,
@@ -267,7 +268,7 @@ exports.handler = async (event) => {
       check_out: req.check_out,
       nights,
       num_guests: req.num_guests,
-      price: accommodation_total + tax + ncc_fee,
+      price: accommodation_total + tax,
       owner_payout,
       tax,
       ncc_fee,
@@ -295,7 +296,9 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: JSON.stringify({ error: 'Invalid service price' }) };
     }
     const tax = Math.round(base * 0.13);
-    const ncc_fee = Math.round(base * 0.10);
+    // No property owner to pay out on a concierge service — the whole base
+    // rate is NCC's margin already, same as it's always been.
+    const ncc_fee = base;
     validatedServices.push({
       item_type: 'service',
       property_id: null,
@@ -304,7 +307,7 @@ exports.handler = async (event) => {
       check_out: null,
       nights: null,
       num_guests: null,
-      price: base + tax + ncc_fee,
+      price: base + tax,
       owner_payout: 0,
       tax,
       ncc_fee,
