@@ -2853,8 +2853,7 @@ function selectDate(dateStr){
 // increase from the owner (not the recurring Christmas/Holy Week pattern
 // every other property uses) — mirrors the same cutoff in create-reservation.js.
 const CUSTOM_RATE_CUTOFFS={sol:'2026-12-21',mar:'2026-12-21','sol-mar-bundle':'2026-12-21',arcilla1:'2026-12-21',arcilla2:'2026-12-21','arcilla-bundle':'2026-12-21',monkey:'2026-12-21',h7:'2026-12-21',ojosazules:'2026-12-21','arcilla-ojos-bundle':'2026-12-21'};
-function isPeakDate(dateStr,slug){
-  if(CUSTOM_RATE_CUTOFFS[slug])return dateStr>=CUSTOM_RATE_CUTOFFS[slug];
+function isHolidayWindow(dateStr){
   const d=new Date(dateStr+'T00:00:00Z');
   const month=d.getUTCMonth()+1,day=d.getUTCDate();
   if(month===12&&day>=21)return true;
@@ -2862,6 +2861,13 @@ function isPeakDate(dateStr,slug){
   if(month===3&&day>=21&&day<=28)return true;
   return false;
 }
+function isPeakDate(dateStr,slug){
+  if(CUSTOM_RATE_CUTOFFS[slug])return dateStr>=CUSTOM_RATE_CUTOFFS[slug];
+  return isHolidayWindow(dateStr);
+}
+// Flat per-night surcharge during Christmas/New Year + Holy Week, every
+// year — mirrors create-reservation.js exactly. Owner payout is untouched.
+const HOLIDAY_SURCHARGE={sol:100,mar:100,monkey:100,'sol-mar-bundle':200,arcilla1:250,arcilla2:250,ojosazules:250,'arcilla-bundle':500,'arcilla-ojos-bundle':750,h7:150};
 function calcStayTotal(prop,ci,co,guests){
   let total=0,ownerTotal=0,nights=0;
   let cur=new Date(ci+'T00:00:00Z');
@@ -2870,8 +2876,11 @@ function calcStayTotal(prop,ci,co,guests){
   while(cur<end){
     const dateStr=cur.toISOString().slice(0,10);
     const peak=isPeakDate(dateStr,prop.id);
-    const rate=peak?(prop.peakPrice||prop.price):prop.price;
+    let rate=peak?(prop.peakPrice||prop.price):prop.price;
     const ownerRate=peak?(prop.peakOwnerPrice??prop.ownerPrice):prop.ownerPrice;
+    if(isHolidayWindow(dateStr)&&HOLIDAY_SURCHARGE[prop.id]){
+      rate+=HOLIDAY_SURCHARGE[prop.id];
+    }
     total+=rate*mult;
     if(ownerRate!=null)ownerTotal+=ownerRate*mult;
     nights++;

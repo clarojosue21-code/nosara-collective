@@ -45,6 +45,14 @@ function isPeakDate(dateStr, slug) {
   if (CUSTOM_RATE_CUTOFFS[slug]) {
     return dateStr >= CUSTOM_RATE_CUTOFFS[slug];
   }
+  return isHolidayWindow(dateStr);
+}
+
+// Same recurring Christmas/New Year + Holy Week window as above, but exposed
+// standalone — properties on CUSTOM_RATE_CUTOFFS still get a holiday
+// surcharge on top of whichever base rate is currently active, even though
+// that window no longer decides their regular/peak split.
+function isHolidayWindow(dateStr) {
   const d = new Date(dateStr + 'T00:00:00Z');
   const month = d.getUTCMonth() + 1;
   const day = d.getUTCDate();
@@ -53,6 +61,23 @@ function isPeakDate(dateStr, slug) {
   if (month === 3 && day >= 21 && day <= 28) return true;
   return false;
 }
+
+// Flat per-night surcharge added on top of whatever rate is otherwise active
+// during Christmas/New Year and Holy Week, every year — owner payout is
+// unaffected, so this is pure additional NCC margin. Bundle amounts are the
+// sum of their components, matching how every other bundle price is derived.
+const HOLIDAY_SURCHARGE = {
+  sol: 100,
+  mar: 100,
+  monkey: 100,
+  'sol-mar-bundle': 200,
+  arcilla1: 250,
+  arcilla2: 250,
+  ojosazules: 250,
+  'arcilla-bundle': 500,
+  'arcilla-ojos-bundle': 750,
+  h7: 150,
+};
 
 // Sums nightly guest-facing price and owner payout across a stay, night by night,
 // applying the peak-season rate where applicable. For per-person properties
@@ -67,8 +92,11 @@ function calcStayTotals(property, check_in, check_out, numGuests) {
   while (cur < end) {
     const dateStr = cur.toISOString().slice(0, 10);
     const peak = isPeakDate(dateStr, property.slug);
-    const rate = peak && property.peak_price_per_night != null ? property.peak_price_per_night : property.price_per_night;
+    let rate = peak && property.peak_price_per_night != null ? property.peak_price_per_night : property.price_per_night;
     const ownerRate = peak && property.peak_owner_payout_per_night != null ? property.peak_owner_payout_per_night : property.owner_payout_per_night;
+    if (isHolidayWindow(dateStr) && HOLIDAY_SURCHARGE[property.slug]) {
+      rate += HOLIDAY_SURCHARGE[property.slug];
+    }
     accommodation_total += rate * mult;
     owner_payout += (ownerRate != null ? ownerRate : rate) * mult;
     nights++;
