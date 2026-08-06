@@ -798,6 +798,23 @@ section{padding:5rem 3rem}
 }
 .lot-map{width:100%;height:160px;margin-bottom:1.1rem;border:1px solid var(--border-light);overflow:hidden}
 .lot-map iframe{width:100%;height:100%;border:0;display:block;filter:grayscale(40%) contrast(1.05)}
+.lot-photo-cover{width:100%;height:160px;margin-bottom:1.1rem;border:1px solid var(--border-light);overflow:hidden;position:relative;cursor:pointer}
+.lot-photo-cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s ease}
+.lot-photo-cover:hover img{transform:scale(1.06)}
+.lot-photo-badge{position:absolute;bottom:8px;right:8px;background:rgba(20,18,16,0.72);color:#F7F5F2;font-family:'Archivo',monospace;font-size:0.58rem;letter-spacing:0.08em;padding:4px 9px;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+/* ─── LOT PHOTO MODAL ─── */
+.lot-modal-overlay{position:fixed;inset:0;background:rgba(20,18,16,0.9);z-index:800;display:none;align-items:center;justify-content:center;padding:1rem}
+.lot-modal-overlay.open{display:flex}
+.lot-modal{background:var(--white);max-width:640px;width:100%;max-height:92vh;overflow-y:auto;border:2px solid var(--border)}
+.lot-modal-gal{position:relative;height:340px;background:#141210;overflow:hidden}
+.lot-modal-gal img{width:100%;height:100%;object-fit:cover}
+.lot-modal-body{padding:2rem}
+.lot-modal-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem;flex-wrap:wrap;gap:1rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border-light)}
+.lot-modal-title{font-family:'Archivo',sans-serif;font-size:1.15rem;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.04em}
+.lot-modal-size{font-family:'Archivo',monospace;font-size:0.65rem;color:var(--clay);margin-top:6px;letter-spacing:0.06em}
+.lot-modal-price{font-family:'Instrument Serif',serif;font-size:2rem;font-weight:300;color:var(--text);text-align:right}
+.lot-modal-map{width:100%;height:200px;margin:1.25rem 0;border:1px solid var(--border-light);overflow:hidden}
+.lot-modal-map iframe{width:100%;height:100%;border:0;display:block;filter:grayscale(40%) contrast(1.05)}
 .lot-price{font-family:'Instrument Serif',serif;font-size:1.1rem;font-weight:300;color:var(--text-muted);margin-bottom:0.9rem}
 .lot-actions{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .lot-map-link{font-family:'Archivo',monospace;font-size:0.6rem;letter-spacing:0.06em;color:var(--clay);text-decoration:none;text-transform:uppercase}
@@ -1953,8 +1970,35 @@ function showPolicy(key){
   </div>
 </div>
 
+<!-- LOT PHOTO MODAL -->
+<div class="lot-modal-overlay" id="lotModalOverlay" onclick="if(event.target===this)closeLotModal()">
+  <div class="lot-modal">
+    <div class="lot-modal-gal">
+      <button class="modal-close" onclick="closeLotModal()" aria-label="Close">✕</button>
+      <button class="modal-arrow prev" onclick="lotGalNav(-1)">‹</button>
+      <button class="modal-arrow next" onclick="lotGalNav(1)">›</button>
+      <img id="lotModalImg" src="" alt="">
+      <div class="gal-dots" id="lotGalDots"></div>
+    </div>
+    <div class="lot-modal-body">
+      <div class="lot-modal-hdr">
+        <div><div class="lot-modal-title" id="lotModalTitle"></div><div class="lot-modal-size" id="lotModalSize"></div></div>
+        <div class="lot-modal-price" id="lotModalPrice"></div>
+      </div>
+      <div class="lot-modal-map" id="lotModalMap"></div>
+      <div class="lot-actions">
+        <a class="lot-map-link" id="lotModalMapLink" href="#" target="_blank" rel="noopener">View on Google Maps →</a>
+        <button class="lot-btn" id="lotModalRequestBtn">Request Info</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const CDN='https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/';
+// New Cloudinary account (idqhktsn) — being migrated to property by property
+// as the founder re-uploads photos; CDN above stays until every property is moved.
+const CDN2='https://res.cloudinary.com/idqhktsn/image/upload/f_auto,q_auto/';
 
 // ─── DATA (same as original) ───
 const PROPS=[
@@ -1971,28 +2015,28 @@ const PROPS=[
   images:[CDN+'v1780975416/20_-_grounds_hgojyr.jpg',CDN+'v1780975905/14_-_master_5_fz39fi.jpg'],
   features:['Two private pools','7 bedrooms','Two kitchens','Shared garden','Sleeps up to 18','Best value'],retreat:true},
   {id:'ojosazules',name:'Casa Ojos Azules',badge:'Signature',price:625,peakPrice:1050,meta:'4 bed · 4.5 bath · Private pool · Ocean view',desc:'Named for the electric blue eyes of the surrounding butterflies — a luminous, open-plan home with gorgeous tropical gardens and a pool that floats in the canopy.',
-  cover:CDN+'v1781050965/Small5_qfmiv4.jpg',
-  images:[CDN+'v1781050965/Small5_qfmiv4.jpg',CDN+'v1781051116/Small1_kyeuul.jpg',CDN+'v1781051114/Small2_z7gahl.jpg',CDN+'v1781051119/Small3_vkxkcf.jpg',CDN+'v1781051122/Small4_bckcyk.jpg',CDN+'v1781050967/Small6_xqpl0f.jpg',CDN+'v1781050983/Small7_qppaxb.jpg',CDN+'v1781050973/Small9_crahh9.jpg',CDN+'v1781050997/Small10_c3akud.jpg'],
+  cover:CDN2+'v1785897478/Small7_qt7umv.jpg',
+  images:[CDN2+'v1785897478/Small7_qt7umv.jpg',CDN2+'v1785897477/Small4_ph6vsi.jpg',CDN2+'v1785897476/Small5_lg7lmm.jpg',CDN2+'v1785897474/Small6_lbj2eh.jpg',CDN2+'v1785897473/Small3_ks8ubv.jpg',CDN2+'v1785897471/Small2_wgm5xp.jpg',CDN2+'v1785897468/Small12_ru9idm.jpg',CDN2+'v1785897466/Small10_ftoqhr.jpg',CDN2+'v1785897465/Small13_mnzmur.jpg',CDN2+'v1785897463/Small16_y4offd.jpg',CDN2+'v1785897462/Small11_drpbr4.jpg',CDN2+'v1785897461/Small31_fkoazi.jpg',CDN2+'v1785897459/Small33_juy5dx.jpg',CDN2+'v1785897457/Small18_q44cyf.jpg',CDN2+'v1785897456/Small32_focakd.jpg',CDN2+'v1785897454/Small9_rm7vax.jpg',CDN2+'v1785897453/Small24_hly8yb.jpg',CDN2+'v1785897451/Small29_ztipw6.jpg',CDN2+'v1785897450/Small8_njolzt.jpg',CDN2+'v1785897449/Small19_btlayk.jpg',CDN2+'v1785897448/Small15_q5cawq.jpg',CDN2+'v1785897447/Small35_dio1fy.jpg',CDN2+'v1785897443/Small27_toqp69.jpg',CDN2+'v1785897440/Small23_fmcdlk.jpg',CDN2+'v1785897442/Small22_ccunfg.jpg',CDN2+'v1785897437/Small17_ktozu7.jpg',CDN2+'v1785897438/Small26_e0n1sx.jpg',CDN2+'v1785897433/Small14_e6dbpx.jpg',CDN2+'v1785897436/Small25_buv6mg.jpg'],
   features:['Private pool','4 bedrooms','A/C & private bath in each room','Open living','Tropical garden','Free parking'],retreat:true},
   {id:'sol',name:'Casa Sol',badge:'Nature',badgeClass:'eco',price:250,peakPrice:560,meta:'2 bed · 2 bath · Shared pool · Tennis courts',desc:'Warm and radiant like the Guanacaste sun — opens to lush gardens and a shared central pool. Wood details, organic textures, coastal light.',
-  cover:CDN+'v1781041056/Casa_Sol_y_Mar_039_ps2rfd.jpg',
-  images:[CDN+'v1781041056/Casa_Sol_y_Mar_039_ps2rfd.jpg',CDN+'v1781041060/Casa_Sol_y_Mar_040_cfcnvn.jpg',CDN+'v1781041063/Casa_Sol_y_Mar_041_yp3nwl.jpg',CDN+'v1781041048/Casa_Sol_y_Mar_033_ygkfum.jpg',CDN+'v1781041045/Casa_Sol_y_Mar_034_iys1qp.jpg',CDN+'v1781041054/Casa_Sol_y_Mar_036_rwcv2m.jpg',CDN+'v1781041015/Casa_Sol_y_Mar_016_sm0tei.jpg',CDN+'v1781041019/Casa_Sol_y_Mar_020_avb1nv.jpg',CDN+'v1781040984/Casa_Sol_y_Mar_001_c1p9lo.jpg',CDN+'v1781040984/Casa_Sol_y_Mar_002_rwlwup.jpg'],
+  cover:CDN2+'v1785898680/Casa_Sol_y_Mar_042_hafmka.jpg',
+  images:[CDN2+'v1785898680/Casa_Sol_y_Mar_042_hafmka.jpg',CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.27_PM_ccvhug.jpg',CDN2+'v1785898702/Casa_Sol_y_Mar_036_xjphf8.jpg',CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.25_PM_rw8ipm.jpg',CDN2+'v1785896616/Casa_Sol_y_Mar_017_llx5hy.jpg',CDN2+'v1785896862/WhatsApp_Image_2024-08-28_at_4.25.21_PM_etc3sf.jpg',CDN2+'v1785896616/Casa_Sol_y_Mar_021_aygzfw.jpg',CDN2+'v1785896861/WhatsApp_Image_2024-08-28_at_4.25.20_PM_rdpfyz.jpg',CDN2+'v1785896613/Casa_Sol_y_Mar_020_c5fdzy.jpg',CDN2+'v1785896861/WhatsApp_Image_2024-08-28_at_4.25.22_PM_l7korf.jpg',CDN2+'v1785896610/Casa_Sol_y_Mar_007_wa5mgf.jpg',CDN2+'v1785896860/WhatsApp_Image_2024-08-28_at_4.25.19_PM_r6sssd.jpg',CDN2+'v1785896612/Casa_Sol_y_Mar_014_hmgj1d.jpg',CDN2+'v1785896859/WhatsApp_Image_2024-08-28_at_4.25.17_PM_g16vrl.jpg',CDN2+'v1785896607/Casa_Sol_y_Mar_003_raa1ud.jpg',CDN2+'v1785896858/WhatsApp_Image_2024-08-28_at_4.25.17_PM_2_zlrnll.jpg',CDN2+'v1785896858/WhatsApp_Image_2024-08-28_at_4.25.17_PM_1_n9hfgs.jpg'],
   features:['Shared pool','2 bedrooms','2 beds per room','Wood details','Open group terrace','Full kitchen'],retreat:false},
   {id:'mar',name:'Casa Mar',badge:'Nature',badgeClass:'eco',price:250,peakPrice:560,meta:'2 bed · 2 bath · Shared pool · Tennis courts',desc:'Ocean-inspired twin to Casa Sol — aqua tones, fish-print linens, and a serene atmosphere that puts you right in the coastal mood.',
-  cover:CDN+'v1781041035/Casa_Sol_y_Mar_025_gr1v2w.jpg',
-  images:[CDN+'v1781041035/Casa_Sol_y_Mar_025_gr1v2w.jpg',CDN+'v1781041036/Casa_Sol_y_Mar_027_ubstlr.jpg',CDN+'v1781041039/Casa_Sol_y_Mar_028_r8ya28.jpg',CDN+'v1781041041/Casa_Sol_y_Mar_029_v404gh.jpg',CDN+'v1781041042/Casa_Sol_y_Mar_030_u0144h.jpg',CDN+'v1781041026/Casa_Sol_y_Mar_023_mb4pkw.jpg'],
+  cover:CDN2+'v1785898702/Casa_Sol_y_Mar_036_xjphf8.jpg',
+  images:[CDN2+'v1785898702/Casa_Sol_y_Mar_036_xjphf8.jpg',CDN2+'v1785896858/WhatsApp_Image_2024-08-28_at_4.25.17_PM_1_n9hfgs.jpg',CDN2+'v1785896858/WhatsApp_Image_2024-08-28_at_4.25.17_PM_2_zlrnll.jpg',CDN2+'v1785896607/Casa_Sol_y_Mar_003_raa1ud.jpg',CDN2+'v1785896859/WhatsApp_Image_2024-08-28_at_4.25.17_PM_g16vrl.jpg',CDN2+'v1785896612/Casa_Sol_y_Mar_014_hmgj1d.jpg',CDN2+'v1785896860/WhatsApp_Image_2024-08-28_at_4.25.19_PM_r6sssd.jpg',CDN2+'v1785896610/Casa_Sol_y_Mar_007_wa5mgf.jpg',CDN2+'v1785896861/WhatsApp_Image_2024-08-28_at_4.25.22_PM_l7korf.jpg',CDN2+'v1785896613/Casa_Sol_y_Mar_020_c5fdzy.jpg',CDN2+'v1785896861/WhatsApp_Image_2024-08-28_at_4.25.20_PM_rdpfyz.jpg',CDN2+'v1785896616/Casa_Sol_y_Mar_021_aygzfw.jpg',CDN2+'v1785896862/WhatsApp_Image_2024-08-28_at_4.25.21_PM_etc3sf.jpg',CDN2+'v1785896616/Casa_Sol_y_Mar_017_llx5hy.jpg',CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.25_PM_rw8ipm.jpg',CDN2+'v1785898680/Casa_Sol_y_Mar_042_hafmka.jpg',CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.27_PM_ccvhug.jpg'],
   features:['Shared pool','2 bedrooms','2 beds per room','Ocean-themed','Open group terrace','Full kitchen'],retreat:false},
   {id:'sol-mar-bundle',name:'Bundle: Sol + Mar',badge:'Bundle',badgeClass:'bundle',price:470,composedOf:['sol','mar'],meta:'4 bed · 4 bath · Shared pool · Tennis courts',desc:'Take over both Sol and Mar — 4 bedrooms, one shared central pool, 2 queen beds per room. Perfect for two families or group retreats up to 16 guests.',
-  cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',
-  images:[CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',CDN+'v1781041056/Casa_Sol_y_Mar_039_ps2rfd.jpg',CDN+'v1781041035/Casa_Sol_y_Mar_025_gr1v2w.jpg',CDN+'v1781041063/Casa_Sol_y_Mar_041_yp3nwl.jpg'],
+  cover:CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.27_PM_ccvhug.jpg',
+  images:[CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.27_PM_ccvhug.jpg',CDN2+'v1785898680/Casa_Sol_y_Mar_042_hafmka.jpg',CDN2+'v1785898702/Casa_Sol_y_Mar_036_xjphf8.jpg',CDN2+'v1785896616/Casa_Sol_y_Mar_017_llx5hy.jpg',CDN2+'v1785896610/Casa_Sol_y_Mar_007_wa5mgf.jpg'],
   features:['One shared central pool','4 bedrooms','2 queen beds per room','Two kitchens','Sleeps up to 16','Best value'],retreat:true},
   {id:'monkey',name:'Casa Monkey',badge:'Nature',badgeClass:'eco',price:235,peakPrice:495,meta:'2 bed · 2 bath · Salt pool · Hidden Palms',desc:'Tucked inside Hidden Palms — a charming casita surrounded by tropical trees, howler monkeys, and a stunning saltwater community pool.',
-  cover:CDN+'v1781055993/piscina_casa_monkey_hidden_palms_xd5azv.png',
-  images:[CDN+'v1781055993/piscina_casa_monkey_hidden_palms_xd5azv.png',CDN+'v1781055612/foto_1_a24qfa.png',CDN+'v1781055613/foto_2_tjkpn1.png',CDN+'v1781055616/foto_3_u3ukit.png',CDN+'v1781055620/foto_4_snhoyo.png',CDN+'v1781055622/foto_5_vwmrzp.png'],
+  cover:CDN2+'v1785897369/piscina_sal_wjg5yf.jpg',
+  images:[CDN2+'v1785897369/piscina_sal_wjg5yf.jpg',CDN2+'v1785897358/foto_1_vkxkxv.png',CDN2+'v1785897352/foto_2_oses8y.png',CDN2+'v1785897355/foto_3_vhathz.png',CDN2+'v1785897354/foto_4_lf4hk4.png',CDN2+'v1785897356/foto_5_ibhckw.png',CDN2+'v1785897357/foto_6_r1gqnd.png',CDN2+'v1785897353/foto_7_bxvgwc.png',CDN2+'v1785897351/foto_8_evyr7l.png',CDN2+'v1785897351/foto_9_b2ibqo.png'],
   features:['Shared saltwater pool','2 bedrooms','Surrounded by nature','Quiet & peaceful zone','Full kitchen','Gated community'],retreat:false},
   {id:'h7',name:'H7 Highlands',badge:'',price:300,peakPrice:625,meta:'4 bed · 4 bath · Mountain views · Modern',desc:'Striking electric-blue modernist villa on the Nosara highlands — floor-to-ceiling windows with jungle-to-ocean panoramas, double-sink master bath, master bedroom with ocean view and living room.',
-  cover:CDN+'v1781055843/WhatsApp_Image_2025-01-23_at_10.32.14_AM_b992us.jpg',
-  images:[CDN+'v1781055843/WhatsApp_Image_2025-01-23_at_10.32.14_AM_b992us.jpg',CDN+'v1781055820/sala_2_tdh0ml.jpg',CDN+'v1781055823/sala_3_lm5mgf.jpg',CDN+'v1781055839/sala_rawjtl.jpg',CDN+'v1781055836/main_room_z24xhi.jpg',CDN+'v1781055813/main_bath_a4mgw5.jpg',CDN+'v1781055806/cocina_m0306m.jpg',CDN+'v1781055815/room_1_hudowr.jpg'],
+  cover:CDN2+'v1785897572/WhatsApp_Image_2025-01-23_at_10.32.14_AM_fxu0ue.jpg',
+  images:[CDN2+'v1785897572/WhatsApp_Image_2025-01-23_at_10.32.14_AM_fxu0ue.jpg',CDN2+'v1785897586/sala_urdiew.jpg',CDN2+'v1785897584/sala_2_lptkni.jpg',CDN2+'v1785897580/sala_3_k5jppy.jpg',CDN2+'v1785897569/Sala_segundo_piso_oaizi2.avif',CDN2+'v1785897582/main_room_yyskt5.jpg',CDN2+'v1785897579/main_bath_nixa1d.jpg',CDN2+'v1785897583/bano_2_tjkzd9.jpg',CDN2+'v1785897575/bano_cai2mo.jpg',CDN2+'v1785897573/bano_3_n4hb3b.jpg',CDN2+'v1785897577/cocina_e1sise.jpg',CDN2+'v1785897571/room_1_m5yefs.jpg',CDN2+'v1785897576/cuarto_4_xt4mee.jpg'],
   features:['Mountain views','4 bedrooms','Master bedroom with ocean view','Panoramic windows','Double garage','Modern design'],retreat:false}
 ,
   {id:'castillo',name:'Castillo Colonial',badge:'Premium',badgeClass:'retreat',price:125,peakPrice:200,pricingUnit:'person',minGuests:5,minNights:2,requestOnly:true,meta:'15 bed · 15 bath · 2 private pools · Sunset view · Tennis · Up to 34 guests',desc:'The crown jewel of Nosara — a magnificent 15-bedroom colonial estate with two private pools, sunset viewpoint, tennis court, and fitness center. The ultimate venue for large groups, elite retreats, and unforgettable events.',
@@ -2090,18 +2134,22 @@ const RETREATS=[
   {name:'Casa Ojos Azules',slug:'ojosazules',composedOf:['ojosazules'],maxGuests:10,tag:'Intimate Retreat · Up to 10 Guests',desc:'A luminous 4-bedroom villa sleeping up to 10 guests. Open spaces, natural light, tropical gardens and a private pool. Ideal for yoga, healing, wellness, or creative retreats.',cover:CDN+'v1781050965/Small5_qfmiv4.jpg',features:['Up to 10 guests','4 bedrooms','Private pool','Epic sunset view','Garden spaces','Buffet catering available','Natural light']},
   {name:'Arcilla + Ojos Azules',slug:'arcilla-ojos-bundle',composedOf:['arcilla1','arcilla2','ojosazules'],maxGuests:28,tag:'Triple Villa · Up to 28 Guests',desc:'The full Arcilla Compound plus Casa Ojos Azules — three villas, three pools, sleeping up to 28 guests. The most exclusive multi-space retreat experience in Nosara. Perfect for large groups who want total seclusion and a complete resort feel.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 28 guests','11 bedrooms','Three private pools','Three full kitchens','Buffet catering available','Full concierge','Maximum privacy']},
   {name:'Castillo Colonial',slug:'castillo',maxGuests:34,minGuests:5,tag:'Crown Jewel · Up to 34 Guests',priceLabel:'$125/person/night · min. 5 guests, 2 nights',desc:'The most prestigious retreat venue in Nosara — 15 bedrooms, two private pools, sunset viewpoint, tennis court, and fitness center. The perfect stage for large wellness retreats, corporate events, destination weddings, and elite multi-group experiences. Nothing in Nosara compares.',cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',features:['Up to 34 guests','15 bedrooms','2 private pools','Sunset view point','Tennis court','Fitness center','Full kitchen','Pet friendly']},
-  {name:'Sol + Mar Bundle',slug:'sol-mar-bundle',composedOf:['sol','mar'],maxGuests:16,tag:'Twin Villa Retreat · Up to 16 Guests',desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms, 2 queen beds per room, one shared central pool. Perfect for retreats up to 16 guests.',cover:CDN+'v1781041065/Casa_Sol_y_Mar_042_ortywj.jpg',features:['Up to 16 guests','4 bedrooms','2 queen beds per room','One shared pool','Two kitchens','Buffet catering available']}
+  {name:'Sol + Mar Bundle',slug:'sol-mar-bundle',composedOf:['sol','mar'],maxGuests:16,tag:'Twin Villa Retreat · Up to 16 Guests',desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms, 2 queen beds per room, one shared central pool. Perfect for retreats up to 16 guests.',cover:CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.27_PM_ccvhug.jpg',features:['Up to 16 guests','4 bedrooms','2 queen beds per room','One shared pool','Two kitchens','Buffet catering available']}
 ];
 
 const LOTS=[
   {icon:'pin',name:'Lote #2 — 9 Degrees North',size:'441.38 m²',price:'$155,000',lat:9.949771,lng:-85.666682,mapLink:'https://maps.app.goo.gl/spygWjdFd2gbf2ad6'},
-  {icon:'pin',name:'Lot 3',size:'351.80 m²',price:'$275,000',lat:9.939446,lng:-85.652717,mapLink:'https://maps.app.goo.gl/C1BpEYjE97cgHA3Q9'},
-  {icon:'pin',name:'Lot 9',size:'1,905.00 m²',price:'$450,000',lat:9.939446,lng:-85.652717,mapLink:'https://maps.app.goo.gl/C1BpEYjE97cgHA3Q9'},
+  {icon:'pin',name:'Lot 3',size:'351.80 m²',price:'$275,000',lat:9.939446,lng:-85.652717,mapLink:'https://maps.app.goo.gl/C1BpEYjE97cgHA3Q9',
+    images:[CDN2+'v1785988687/DSC_1450_udh6az.jpg',CDN2+'v1785988686/DSC_1442_dwowkn.jpg',CDN2+'v1785988686/DSC_1454_fkwbxi.jpg',CDN2+'v1785988685/DSC_1459_vrazyk.jpg']},
+  {icon:'pin',name:'Lot 9',size:'1,905.00 m²',price:'$450,000',lat:9.939446,lng:-85.652717,mapLink:'https://maps.app.goo.gl/C1BpEYjE97cgHA3Q9',
+    images:[CDN2+'v1785988611/DSC_1426_yajsrt.jpg',CDN2+'v1785988611/DSC_1440_ulrf1b.jpg',CDN2+'v1785988609/DSC_1432_amhg0k.jpg']},
   {icon:'pin',name:'Lot C1',size:'532.03 m²',price:'$72,000',lat:9.945109,lng:-85.642530,mapLink:'https://maps.app.goo.gl/mtb2wyss8vxCNeEv6'},
   {icon:'pin',name:'Lot C2',size:'704.04 m²',price:'$128,000',lat:9.945109,lng:-85.642530,mapLink:'https://maps.app.goo.gl/mtb2wyss8vxCNeEv6'},
   {icon:'pin',name:'Lot B2',size:'534.98 m²',price:'$65,000',lat:9.945448,lng:-85.642666,mapLink:'https://maps.app.goo.gl/Zoc329Tj6ZuSDrUK8'},
-  {icon:'pin',name:'H7 — 4 Bed · 3 Bath · Ocean View',size:'1,208.48 m²',price:'$1,250,000',lat:9.9424099,lng:-85.6432034,mapLink:'https://maps.app.goo.gl/EmAYQR1j3yQRiqQN9'},
-  {icon:'pin',name:'H24 — Home Site',size:'1,113.49 m²',price:'$350,000',lat:9.943647,lng:-85.644830,mapLink:'https://maps.app.goo.gl/nHQkmAnCb5BhnADNA'}
+  {icon:'pin',name:'H7 — 4 Bed · 3 Bath · Ocean View',size:'1,208.48 m²',price:'$1,250,000',lat:9.9424099,lng:-85.6432034,mapLink:'https://maps.app.goo.gl/EmAYQR1j3yQRiqQN9',
+    images:[CDN2+'v1785989039/main_room_lbijl5.jpg',CDN2+'v1785989031/sala_v0beod.jpg',CDN2+'v1785989028/sala_2_a34vre.jpg',CDN2+'v1785989029/sala_3_txzbp3.jpg',CDN2+'v1785989029/Sala_segundo_piso_o6cqvo.avif',CDN2+'v1785989036/cocina_vrowl0.jpg',CDN2+'v1785989038/main_bath_xzvm7j.jpg',CDN2+'v1785989035/bano_vnzbtj.jpg',CDN2+'v1785989033/bano_2_gy2g3h.jpg',CDN2+'v1785989034/bano_3_kbbjil.jpg',CDN2+'v1785989027/room_1_sv5mnm.jpg',CDN2+'v1785989037/cuarto_4_kxlhoj.jpg',CDN2+'v1785989032/WhatsApp_Image_2025-01-23_at_10.32.14_AM_1_sidmpm.jpg']},
+  {icon:'pin',name:'H24 — Home Site',size:'1,113.49 m²',price:'$350,000',lat:9.943647,lng:-85.644830,mapLink:'https://maps.app.goo.gl/nHQkmAnCb5BhnADNA',
+    images:[CDN2+'v1785988855/DSC_1486_ghtw8m.jpg',CDN2+'v1785988856/DSC_1490_fuf51h.jpg',CDN2+'v1785988857/DSC_1466_lh0pkd.jpg',CDN2+'v1785988857/DSC_1480_dhoqvn.jpg',CDN2+'v1785988856/DSC_1474_lsmww7.jpg',CDN2+'v1785988851/DSC_1470_hakogy.jpg']}
 ];
 
 const GUIDE=[
@@ -2399,18 +2447,19 @@ function toggleServiceCard(id){
 }
 
 const SERVICE_PHOTOS = {
-  atv:              'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783215692/ATV_FINAL_roefnd.jpg',
+  atv:              CDN2+'v1785898982/ATV_rent_n0h6gi.jpg',
   golf:             'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783216390/golf_car_4_ha6iwu.jpg',
-  chef:             'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/403832778_732909078873438_4264179694023831035_n_bvx95m.jpg',
-  airport_arrival:  'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783210418/TRANSFERS_VAN_vgu2rl.jpg',
-  airport_departure:'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783210418/TRANSFERS_VAN_vgu2rl.jpg',
+  chef:             CDN2+'v1785898968/private_chef_ealgxz.jpg',
+  airport_arrival:  CDN2+'v1785898980/Airport_Shuttle_xplv0q.jpg',
+  airport_departure:CDN2+'v1785898980/Airport_Shuttle_xplv0q.jpg',
   yoga:             'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/pexels-thirdman-6957891_rjobdi.jpg',
   bjj:              'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/breath_bjj_4_hvxjwv.jpg',
-  fishing:          'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206787/tour_pesca_hrppko.jpg',
+  fishing:          CDN2+'v1785898975/tour_pesca_tuy7tq.jpg',
   sunset:           'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783217664/7_faeijr.jpg',
-  horseback:        'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/14_errrjd.jpg',
-  turtles:          'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783206786/8d_avu1lh.jpg',
-  tennis:           'https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1783207612/WhatsApp_Image_2024-02-22_at_10.27.33_AM_bgoaqj.jpg',
+  horseback:        CDN2+'v1785898971/Sunset_Trip_have51.jpg',
+  turtles:          CDN2+'v1785898977/turtles_arribada_kgv16e.jpg',
+  tennis:           CDN2+'v1785898973/Tennis_Lessons_qlwdxi.jpg',
+  skate:            CDN2+'v1785898969/SKATE_Lessons_d7cb8c.jpg',
 };
 
 function renderServices(){
@@ -2625,14 +2674,19 @@ async function openRetreatBooking(name, tag, cover){
 }
 
 // ─── RENDER LOTS ───
+function lotOsmSrc(l){
+  const d=0.0035;
+  const bbox=`${l.lng-d},${l.lat-d},${l.lng+d},${l.lat+d}`;
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${l.lat},${l.lng}`;
+}
 function renderLots(){
-  const cards=LOTS.map(l=>{
-    const d=0.0035;
-    const bbox=`${l.lng-d},${l.lat-d},${l.lng+d},${l.lat+d}`;
-    const osmSrc=`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${l.lat},${l.lng}`;
+  const cards=LOTS.map((l,i)=>{
+    const visual=(l.images&&l.images.length)
+      ?`<div class="lot-photo-cover" onclick="openLotModal(${i})"><img src="${l.images[0]}" alt="${l.name}" loading="lazy"><div class="lot-photo-badge">🖼 ${l.images.length} photo${l.images.length!==1?'s':''}</div></div>`
+      :`<div class="lot-map"><iframe src="${lotOsmSrc(l)}" loading="lazy"></iframe></div>`;
     return `
     <div class="lot-card">
-      <div class="lot-map"><iframe src="${osmSrc}" loading="lazy"></iframe></div>
+      ${visual}
       <div class="lot-icon">${iconSvg(l.icon)}</div>
       <div class="lot-name">${l.name}</div>
       <div class="lot-size">${l.size}</div>
@@ -2645,6 +2699,35 @@ function renderLots(){
   });
   cards.push(ncFillerCard('lot-card',300,'Have a property or lot<br>to list? Contact us.','property','lots-list-with-us','https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1782172166/9_h82qdn.jpg'));
   document.getElementById('lotsGrid').innerHTML=cards.join('');
+}
+
+// ─── LOT PHOTO MODAL ───
+let curLot=null,lotGalIdx=0;
+function openLotModal(index){
+  curLot=LOTS[index];
+  if(!curLot||!curLot.images||!curLot.images.length)return;
+  lotGalIdx=0;
+  document.getElementById('lotModalTitle').textContent=curLot.name;
+  document.getElementById('lotModalSize').textContent=curLot.size;
+  document.getElementById('lotModalPrice').textContent=curLot.price;
+  document.getElementById('lotModalMap').innerHTML=`<iframe src="${lotOsmSrc(curLot)}" loading="lazy"></iframe>`;
+  document.getElementById('lotModalMapLink').href=curLot.mapLink;
+  document.getElementById('lotGalDots').innerHTML=curLot.images.map((_,i)=>`<button class="gal-dot${i===0?' active':''}" onclick="lotGoGal(${i})"></button>`).join('');
+  const reqBtn=document.getElementById('lotModalRequestBtn');
+  reqBtn.onclick=()=>{closeLotModal();openLeadModal('property','lots-'+curLot.name.replace(/[^a-zA-Z0-9]+/g,'-'));};
+  updateLotGal();
+  document.getElementById('lotModalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function updateLotGal(){
+  document.getElementById('lotModalImg').src=curLot.images[lotGalIdx];
+  document.querySelectorAll('#lotGalDots .gal-dot').forEach((d,i)=>d.classList.toggle('active',i===lotGalIdx));
+}
+function lotGoGal(i){lotGalIdx=i;updateLotGal();}
+function lotGalNav(dir){lotGalIdx=(lotGalIdx+dir+curLot.images.length)%curLot.images.length;updateLotGal();}
+function closeLotModal(){
+  document.getElementById('lotModalOverlay').classList.remove('open');
+  document.body.style.overflow='';
 }
 
 // ─── RENDER GUIDE ───
@@ -3329,6 +3412,14 @@ function syncBundlePrices(){
       const c=PROPS.find(x=>x.id===id);
       return sum+(c?.peakPrice||c?.price||0);
     },0);
+    // Bundle photo galleries are just each component's own photos combined —
+    // never curated by hand, so a bundle can never show stale/outdated
+    // photos after an individual house's gallery gets updated.
+    const combinedImages=p.composedOf.flatMap(id=>PROPS.find(x=>x.id===id)?.images||[]);
+    if(combinedImages.length){
+      p.images=combinedImages;
+      p.cover=combinedImages[0];
+    }
   });
 }
 const propsReady=loadPropsFromSupabase().then(()=>{
