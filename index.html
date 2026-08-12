@@ -5,11 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Primary SEO -->
-<title>Nosara Collective Conscience · Luxury Vacation Rentals in Nosara, Costa Rica</title>
-<meta name="description" content="Luxury vacation rentals in Nosara, Costa Rica. Private villas with pools, concierge services, surf lessons and more. 5% of our profits support the local community. Book direct — no hidden fees.">
-<meta name="keywords" content="Nosara vacation rentals, Nosara Costa Rica villas, luxury rentals Nosara, Playa Guiones rentals, Nosara surf house, Costa Rica beach house rental, Nosara Airbnb alternative">
+<title>Luxury Villas in Nosara, Costa Rica | Nosara Collective</title>
+<meta name="description" content="Book direct in Nosara, Costa Rica — private villas with pools, concierge service, and surf access. 5% of profits support local families. No hidden fees.">
+<meta name="keywords" content="Nosara vacation rentals, Nosara Costa Rica villas, luxury rentals Nosara, Playa Guiones rentals, Nosara surf house, Costa Rica beach house rental, Nosara Airbnb alternative, Nosara retreat venue, Nosara real estate">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#F7F5F2">
 <link rel="canonical" href="https://nosaracollectiveconscience.com/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 60'%3E%3Crect width='140' height='60' rx='14' fill='%23F7F5F2'/%3E%3Cpath d='M14,42 Q45,16 80,36 T126,16' fill='none' stroke='%232E2C2A' stroke-width='7'/%3E%3Cpath d='M14,52 Q45,30 80,48 T126,30' fill='none' stroke='%23B5553A' stroke-width='7'/%3E%3C/svg%3E">
 
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-RQR5J3K470"></script>
@@ -66,10 +68,25 @@
     "latitude": "9.976",
     "longitude": "-85.653"
   },
-  "image": "https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1780975891/1_-_grounds5_qacxew.jpg",
+  "areaServed": {
+    "@type": "Place",
+    "name": "Nosara, Guanacaste, Costa Rica"
+  },
+  "image": [
+    "https://res.cloudinary.com/dzqgajn3l/image/upload/f_auto,q_auto/v1780975891/1_-_grounds5_qacxew.jpg",
+    "https://res.cloudinary.com/idqhktsn/image/upload/f_auto,q_auto/v1785898680/Casa_Sol_y_Mar_042_hafmka.jpg",
+    "https://res.cloudinary.com/idqhktsn/image/upload/f_auto,q_auto/v1785897478/Small7_qt7umv.jpg"
+  ],
   "priceRange": "$$$",
   "currenciesAccepted": "USD",
-  "paymentAccepted": "PayPal, Bank Transfer",
+  "paymentAccepted": "PayPal, Wise, Bank Transfer",
+  "amenityFeature": [
+    {"@type": "LocationFeatureSpecification", "name": "Private Pool"},
+    {"@type": "LocationFeatureSpecification", "name": "Full Concierge Service"},
+    {"@type": "LocationFeatureSpecification", "name": "Surf Access"},
+    {"@type": "LocationFeatureSpecification", "name": "Free Parking"},
+    {"@type": "LocationFeatureSpecification", "name": "Full Kitchen"}
+  ],
   "sameAs": [
     "https://www.instagram.com/nosaracollectiveconscience"
   ]
@@ -2720,7 +2737,9 @@ function openLotModal(index){
   document.body.style.overflow='hidden';
 }
 function updateLotGal(){
-  document.getElementById('lotModalImg').src=curLot.images[lotGalIdx];
+  const img=document.getElementById('lotModalImg');
+  img.src=curLot.images[lotGalIdx];
+  img.alt=`${curLot.name} — photo ${lotGalIdx+1} of ${curLot.images.length}`;
   document.querySelectorAll('#lotGalDots .gal-dot').forEach((d,i)=>d.classList.toggle('active',i===lotGalIdx));
 }
 function lotGoGal(i){lotGalIdx=i;updateLotGal();}
@@ -3004,6 +3023,7 @@ let curProp=null,galIdx=0;
 async function openModal(id){
   curProp=PROPS.find(p=>p.id===id);galIdx=0;
   document.getElementById('modalImg').src=curProp.images[0];
+  document.getElementById('modalImg').alt=`${curProp.name} — photo 1 of ${curProp.images.length}`;
   document.getElementById('modalTitle').textContent=curProp.name;
   document.getElementById('modalMeta').textContent=curProp.meta;
   document.getElementById('modalPrice').textContent='$'+curProp.price;
@@ -3080,6 +3100,7 @@ function updateGal(){
   img.style.transform='scale(1.03)';
   setTimeout(()=>{
     img.src=curProp.images[galIdx];
+    img.alt=`${curProp.name} — photo ${galIdx+1} of ${curProp.images.length}`;
     img.style.opacity='1';
     img.style.transform='scale(1)';
   },500);
