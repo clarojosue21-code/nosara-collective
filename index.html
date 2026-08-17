@@ -837,6 +837,12 @@ section{padding:5rem 3rem}
 .lot-modal{background:var(--white);max-width:640px;width:100%;max-height:92vh;overflow-y:auto;border:2px solid var(--border)}
 .lot-modal-gal{position:relative;height:340px;background:#141210;overflow:hidden}
 .lot-modal-gal img{width:100%;height:100%;object-fit:cover}
+.lot-modal-gal.no-photo{height:90px}
+.lot-modal-no-photo{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Archivo',monospace;font-size:0.62rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:rgba(247,245,242,0.5);
+}
 .lot-modal-body{padding:2rem}
 .lot-modal-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem;flex-wrap:wrap;gap:1rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border-light)}
 .lot-modal-title{font-family:'Archivo',sans-serif;font-size:1.15rem;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.04em}
@@ -2002,12 +2008,14 @@ function showPolicy(key){
 <!-- LOT PHOTO MODAL -->
 <div class="lot-modal-overlay" id="lotModalOverlay" onclick="if(event.target===this)closeLotModal()">
   <div class="lot-modal">
-    <div class="lot-modal-gal">
+    <div class="lot-modal-gal" id="lotModalGal">
+      <button class="modal-share" id="lotModalShareBtn" onclick="shareCurrentLot()" aria-label="Copy link to this lot">🔗 Copy Link</button>
       <button class="modal-close" onclick="closeLotModal()" aria-label="Close">✕</button>
-      <button class="modal-arrow prev" onclick="lotGalNav(-1)">‹</button>
-      <button class="modal-arrow next" onclick="lotGalNav(1)">›</button>
+      <button class="modal-arrow prev" id="lotGalPrevBtn" onclick="lotGalNav(-1)">‹</button>
+      <button class="modal-arrow next" id="lotGalNextBtn" onclick="lotGalNav(1)">›</button>
       <img id="lotModalImg" src="" alt="">
       <div class="gal-dots" id="lotGalDots"></div>
+      <div class="lot-modal-no-photo" id="lotModalNoPhoto" style="display:none">Photos coming soon</div>
     </div>
     <div class="lot-modal-body">
       <div class="lot-modal-hdr">
@@ -2059,7 +2067,7 @@ const PROPS=[
   cover:CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.27_PM_ccvhug.jpg',
   images:[CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.27_PM_ccvhug.jpg',CDN2+'v1785898680/Casa_Sol_y_Mar_042_hafmka.jpg',CDN2+'v1785898702/Casa_Sol_y_Mar_036_xjphf8.jpg',CDN2+'v1785896616/Casa_Sol_y_Mar_017_llx5hy.jpg',CDN2+'v1785896610/Casa_Sol_y_Mar_007_wa5mgf.jpg'],
   features:['One shared central pool','4 bedrooms','2 queen beds per room','Two kitchens','Sleeps up to 16','Best value'],retreat:true},
-  {id:'monkey',name:'Casa Monkey',badge:'Nature',badgeClass:'eco',price:235,peakPrice:495,wasPrice:250,meta:'2 bed · 2 bath · Salt pool · Hidden Palms',desc:'Tucked inside Hidden Palms — a charming casita surrounded by tropical trees, howler monkeys, and a stunning saltwater community pool.',
+  {id:'monkey',name:'Casa Monkey',badge:'Nature',badgeClass:'eco',price:176,peakPrice:280,wasPrice:250,meta:'2 bed · 2 bath · Salt pool · Hidden Palms',desc:'Tucked inside Hidden Palms — a charming casita surrounded by tropical trees, howler monkeys, and a stunning saltwater community pool.',
   cover:CDN2+'v1785897369/piscina_sal_wjg5yf.jpg',
   images:[CDN2+'v1785897369/piscina_sal_wjg5yf.jpg',CDN2+'v1785897358/foto_1_vkxkxv.png',CDN2+'v1785897352/foto_2_oses8y.png',CDN2+'v1785897355/foto_3_vhathz.png',CDN2+'v1785897354/foto_4_lf4hk4.png',CDN2+'v1785897356/foto_5_ibhckw.png',CDN2+'v1785897357/foto_6_r1gqnd.png',CDN2+'v1785897353/foto_7_bxvgwc.png',CDN2+'v1785897351/foto_8_evyr7l.png',CDN2+'v1785897351/foto_9_b2ibqo.png'],
   features:['Shared saltwater pool','2 bedrooms','Surrounded by nature','Quiet & peaceful zone','Full kitchen','Gated community'],retreat:false},
@@ -2704,6 +2712,9 @@ async function openRetreatBooking(name, tag, cover){
 }
 
 // ─── RENDER LOTS ───
+// Stable, human-readable identifier derived from the lot's name — used for
+// shareable ?lote= links since LOTS entries have no dedicated id field.
+function lotSlug(l){return l.name.replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'').toLowerCase();}
 function lotOsmSrc(l){
   const d=0.0035;
   const bbox=`${l.lng-d},${l.lat-d},${l.lng+d},${l.lat+d}`;
@@ -2713,7 +2724,7 @@ function renderLots(){
   const cards=LOTS.map((l,i)=>{
     const visual=(l.images&&l.images.length)
       ?`<div class="lot-photo-cover" onclick="openLotModal(${i})"><img src="${l.images[0]}" alt="${l.name}" loading="lazy"><div class="lot-photo-badge">🖼 ${l.images.length} photo${l.images.length!==1?'s':''}</div></div>`
-      :`<div class="lot-map"><iframe src="${lotOsmSrc(l)}" loading="lazy"></iframe></div>`;
+      :`<div class="lot-map" onclick="openLotModal(${i})" style="cursor:pointer"><iframe src="${lotOsmSrc(l)}" loading="lazy" style="pointer-events:none"></iframe></div>`;
     return `
     <div class="lot-card">
       ${visual}
@@ -2723,7 +2734,7 @@ function renderLots(){
       <div class="lot-price">${l.price}</div>
       <div class="lot-actions">
         <a class="lot-map-link" href="${l.mapLink}" target="_blank" rel="noopener">View on Google Maps →</a>
-        <button class="lot-btn" onclick="openLeadModal('property','lots-${l.name.replace(/[^a-zA-Z0-9]+/g,'-')}')">Request Info</button>
+        <button class="lot-btn" onclick="openLeadModal('property','lots-${lotSlug(l)}')">Request Info</button>
       </div>
     </div>`;
   });
@@ -2735,19 +2746,50 @@ function renderLots(){
 let curLot=null,lotGalIdx=0;
 function openLotModal(index){
   curLot=LOTS[index];
-  if(!curLot||!curLot.images||!curLot.images.length)return;
+  if(!curLot)return;
   lotGalIdx=0;
   document.getElementById('lotModalTitle').textContent=curLot.name;
   document.getElementById('lotModalSize').textContent=curLot.size;
   document.getElementById('lotModalPrice').textContent=curLot.price;
   document.getElementById('lotModalMap').innerHTML=`<iframe src="${lotOsmSrc(curLot)}" loading="lazy"></iframe>`;
   document.getElementById('lotModalMapLink').href=curLot.mapLink;
-  document.getElementById('lotGalDots').innerHTML=curLot.images.map((_,i)=>`<button class="gal-dot${i===0?' active':''}" onclick="lotGoGal(${i})"></button>`).join('');
+  // Lots without photos yet still get a full modal + shareable link — just
+  // without a gallery, so nothing here is ever gated behind having photos.
+  const hasPhotos=curLot.images&&curLot.images.length>0;
+  const gal=document.getElementById('lotModalGal');
+  gal.classList.toggle('no-photo',!hasPhotos);
+  document.getElementById('lotModalImg').style.display=hasPhotos?'':'none';
+  document.getElementById('lotGalDots').style.display=hasPhotos?'':'none';
+  document.getElementById('lotGalPrevBtn').style.display=hasPhotos?'':'none';
+  document.getElementById('lotGalNextBtn').style.display=hasPhotos?'':'none';
+  document.getElementById('lotModalNoPhoto').style.display=hasPhotos?'none':'flex';
+  if(hasPhotos){
+    document.getElementById('lotGalDots').innerHTML=curLot.images.map((_,i)=>`<button class="gal-dot${i===0?' active':''}" onclick="lotGoGal(${i})"></button>`).join('');
+    updateLotGal();
+  }
   const reqBtn=document.getElementById('lotModalRequestBtn');
-  reqBtn.onclick=()=>{closeLotModal();openLeadModal('property','lots-'+curLot.name.replace(/[^a-zA-Z0-9]+/g,'-'));};
-  updateLotGal();
+  reqBtn.onclick=()=>{closeLotModal();openLeadModal('property','lots-'+lotSlug(curLot));};
   document.getElementById('lotModalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+  // Direct, shareable link to this specific lot — same pattern as ?casa= for
+  // rental properties, so it can be copied and posted on Facebook, etc.
+  history.replaceState({},'','?lote='+lotSlug(curLot));
+}
+function shareCurrentLot(){
+  if(!curLot)return;
+  const url=location.origin+location.pathname+'?lote='+lotSlug(curLot);
+  const btn=document.getElementById('lotModalShareBtn');
+  const done=()=>{
+    if(!btn)return;
+    const original=btn.innerHTML;
+    btn.innerHTML='✓ Copied!';
+    setTimeout(()=>{btn.innerHTML=original;},2000);
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done).catch(()=>prompt('Copy this link:',url));
+  }else{
+    prompt('Copy this link:',url);
+  }
 }
 function updateLotGal(){
   const img=document.getElementById('lotModalImg');
@@ -2756,10 +2798,16 @@ function updateLotGal(){
   document.querySelectorAll('#lotGalDots .gal-dot').forEach((d,i)=>d.classList.toggle('active',i===lotGalIdx));
 }
 function lotGoGal(i){lotGalIdx=i;updateLotGal();}
-function lotGalNav(dir){lotGalIdx=(lotGalIdx+dir+curLot.images.length)%curLot.images.length;updateLotGal();}
+function lotGalNav(dir){
+  if(!curLot||!curLot.images||!curLot.images.length)return;
+  lotGalIdx=(lotGalIdx+dir+curLot.images.length)%curLot.images.length;updateLotGal();
+}
 function closeLotModal(){
   document.getElementById('lotModalOverlay').classList.remove('open');
   document.body.style.overflow='';
+  if(new URLSearchParams(location.search).has('lote')){
+    history.replaceState({},'',location.pathname);
+  }
 }
 
 // ─── RENDER GUIDE ───
@@ -3474,6 +3522,15 @@ const propsReady=loadPropsFromSupabase().then(()=>{
 });
 try{renderServices();}catch(e){console.warn('renderServices',e);}
 try{renderLots();}catch(e){console.warn('renderLots',e);}
+// Direct lot links (?lote=slug) — shared on Facebook, etc. — open straight
+// to that lot's photo gallery instead of just landing on the homepage.
+{
+  const loteSlug=new URLSearchParams(location.search).get('lote');
+  if(loteSlug){
+    const loteIndex=LOTS.findIndex(l=>lotSlug(l)===loteSlug);
+    if(loteIndex>=0){try{openLotModal(loteIndex);}catch(e){console.warn('openLotModal from ?lote=',e);}}
+  }
+}
 try{renderGuide();}catch(e){console.warn('renderGuide',e);}
 if(document.getElementById('restaurantsGrid')){try{renderRestaurants();}catch(e){console.warn('renderRestaurants',e);}}
 if(document.getElementById('waveToday')){try{loadSurfConditions();}catch(e){console.warn('loadSurf',e);}}
