@@ -44,16 +44,29 @@ async function syncProperty(propertyId, slug) {
   if (!urls?.length) return { slug, skipped: true };
 
   const allDates = [];
+  let anySuccess = false;
   for (const url of urls) {
     try {
       const res = await fetch(url, {
         headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CalendarSync/1.0)', Accept: 'text/calendar' },
       });
       if (!res.ok) { console.warn(`iCal fetch failed: ${slug} ${res.status}`); continue; }
-      allDates.push(...parseIcal(await res.text(), propertyId));
+      const text = await res.text();
+      if (!text.includes('BEGIN:VCALENDAR')) { console.warn(`iCal invalid response for ${slug}`); continue; }
+      allDates.push(...parseIcal(text, propertyId));
+      anySuccess = true;
     } catch (e) {
       console.error(`iCal error: ${slug}`, e.message);
     }
+  }
+
+  // If every feed failed (Airbnb down, rate-limited, etc.), leave the
+  // existing blocked dates alone — wiping them here would make the
+  // property look fully available until the next successful run, which is
+  // exactly the double-booking risk this sync exists to prevent.
+  if (!anySuccess) {
+    console.warn(`No successful iCal fetches for ${slug} — keeping existing blocked dates`);
+    return { slug, skipped: true, reason: 'all feeds failed' };
   }
 
   const seen = new Set();
