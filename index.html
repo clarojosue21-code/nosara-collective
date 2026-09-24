@@ -2023,6 +2023,8 @@ function showPolicy(key){
         <div class="lot-modal-price" id="lotModalPrice"></div>
       </div>
       <div class="lot-modal-map" id="lotModalMap"></div>
+      <p class="modal-desc" id="lotModalDesc" style="display:none"></p>
+      <div class="modal-feats" id="lotModalFeats"></div>
       <div class="lot-actions">
         <a class="lot-map-link" id="lotModalMapLink" href="#" target="_blank" rel="noopener">View on Google Maps →</a>
         <button class="lot-btn" id="lotModalRequestBtn">Request Info</button>
@@ -2186,7 +2188,12 @@ const LOTS=[
   {icon:'pin',name:'H7 — 4 Bed · 3 Bath · Ocean View',size:'1,208.48 m²',price:'$1,250,000',lat:9.9424099,lng:-85.6432034,mapLink:'https://maps.app.goo.gl/EmAYQR1j3yQRiqQN9',
     images:[CDN2+'v1785989039/main_room_lbijl5.jpg',CDN2+'v1785989031/sala_v0beod.jpg',CDN2+'v1785989028/sala_2_a34vre.jpg',CDN2+'v1785989029/sala_3_txzbp3.jpg',CDN2+'v1785989029/Sala_segundo_piso_o6cqvo.avif',CDN2+'v1785989036/cocina_vrowl0.jpg',CDN2+'v1785989038/main_bath_xzvm7j.jpg',CDN2+'v1785989035/bano_vnzbtj.jpg',CDN2+'v1785989033/bano_2_gy2g3h.jpg',CDN2+'v1785989034/bano_3_kbbjil.jpg',CDN2+'v1785989027/room_1_sv5mnm.jpg',CDN2+'v1785989037/cuarto_4_kxlhoj.jpg',CDN2+'v1785989032/WhatsApp_Image_2025-01-23_at_10.32.14_AM_1_sidmpm.jpg']},
   {icon:'pin',name:'H24 — Home Site',size:'1,113.49 m²',price:'$350,000',lat:9.943647,lng:-85.644830,mapLink:'https://maps.app.goo.gl/nHQkmAnCb5BhnADNA',
-    images:[CDN2+'v1785988855/DSC_1486_ghtw8m.jpg',CDN2+'v1785988856/DSC_1490_fuf51h.jpg',CDN2+'v1785988857/DSC_1466_lh0pkd.jpg',CDN2+'v1785988857/DSC_1480_dhoqvn.jpg',CDN2+'v1785988856/DSC_1474_lsmww7.jpg',CDN2+'v1785988851/DSC_1470_hakogy.jpg']}
+    images:[CDN2+'v1785988855/DSC_1486_ghtw8m.jpg',CDN2+'v1785988856/DSC_1490_fuf51h.jpg',CDN2+'v1785988857/DSC_1466_lh0pkd.jpg',CDN2+'v1785988857/DSC_1480_dhoqvn.jpg',CDN2+'v1785988856/DSC_1474_lsmww7.jpg',CDN2+'v1785988851/DSC_1470_hakogy.jpg']},
+  {icon:'pin',name:'Barrigona Tropical Estate',size:'~5,000 m²',price:'$495,000',lat:9.8930625,lng:-85.5821875,
+    mapLink:'https://www.google.com/maps/place/Earth+Temple+-+Playa+Barrigona/@9.8930625,-85.5821875,17z',
+    desc:'Set on approximately 5,000 m² of tropical land, the property includes three independent living units: two private casitas, and a rancho with an additional apartment — plus an outdoor living/rancho area for gathering and entertaining.',
+    features:['🏡 Two private casitas','🌴 Rancho with an additional apartment','🍹 Outdoor living / rancho area','🍳 Outdoor kitchens','❄️ Air conditioning','🚿 Hot water','⚡ Water & electricity connected','🌿 Tropical & fruit trees','🏡 Plenty of space and privacy'],
+    images:['images/lots/barrigona-tropical-estate-1.jpg',CDN2+'v1790263153/WhatsApp_Image_2025-04-09_at_6.45.49_PM_3_hlszoz.jpg',CDN2+'v1790263171/WhatsApp_Image_2025-04-09_at_6.45.21_PM_vfp8wg.jpg',CDN2+'v1790263192/WhatsApp_Image_2025-04-09_at_6.45.19_PM_2_oxhxqp.jpg',CDN2+'v1790263201/WhatsApp_Image_2025-04-09_at_6.45.47_PM_vntdum.jpg']}
 ];
 
 const GUIDE=[
@@ -2732,6 +2739,7 @@ function renderLots(){
       <div class="lot-name">${l.name}</div>
       <div class="lot-size">${l.size}</div>
       <div class="lot-price">${l.price}</div>
+      ${l.desc?`<p class="modal-desc" style="margin-bottom:0.9rem">${l.desc}</p>`:''}
       <div class="lot-actions">
         <a class="lot-map-link" href="${l.mapLink}" target="_blank" rel="noopener">View on Google Maps →</a>
         <button class="lot-btn" onclick="openLeadModal('property','lots-${lotSlug(l)}')">Request Info</button>
@@ -2753,6 +2761,10 @@ function openLotModal(index){
   document.getElementById('lotModalPrice').textContent=curLot.price;
   document.getElementById('lotModalMap').innerHTML=`<iframe src="${lotOsmSrc(curLot)}" loading="lazy"></iframe>`;
   document.getElementById('lotModalMapLink').href=curLot.mapLink;
+  const descEl=document.getElementById('lotModalDesc');
+  descEl.textContent=curLot.desc||'';
+  descEl.style.display=curLot.desc?'':'none';
+  document.getElementById('lotModalFeats').innerHTML=(curLot.features||[]).map(f=>`<div class="modal-feat">${f}</div>`).join('');
   // Lots without photos yet still get a full modal + shareable link — just
   // without a gallery, so nothing here is ever gated behind having photos.
   const hasPhotos=curLot.images&&curLot.images.length>0;
