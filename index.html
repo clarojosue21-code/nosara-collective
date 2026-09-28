@@ -2053,7 +2053,7 @@ const PROPS=[
   cover:CDN+'v1780975416/20_-_grounds_hgojyr.jpg',
   images:[CDN+'v1780975416/20_-_grounds_hgojyr.jpg',CDN+'v1780975905/14_-_master_5_fz39fi.jpg'],
   features:['Two private pools','7 bedrooms','Two kitchens','Shared garden','Sleeps up to 18','Best value'],retreat:true},
-  {id:'ojosazules',name:'Casa Ojos Azules',badge:'Signature',price:625,peakPrice:1050,meta:'4 bed · 4.5 bath · Private pool · Ocean view',desc:'Named for the electric blue eyes of the surrounding butterflies — a luminous, open-plan home with gorgeous tropical gardens and a pool that floats in the canopy.',
+  {id:'ojosazules',name:'Casa Ojos Azules',badge:'Signature',price:625,peakPrice:1050,requestOnly:true,meta:'4 bed · 4.5 bath · Private pool · Ocean view',desc:'Named for the electric blue eyes of the surrounding butterflies — a luminous, open-plan home with gorgeous tropical gardens and a pool that floats in the canopy.',
   cover:CDN2+'v1785897478/Small7_qt7umv.jpg',
   images:[CDN2+'v1785897478/Small7_qt7umv.jpg',CDN2+'v1785897477/Small4_ph6vsi.jpg',CDN2+'v1785897476/Small5_lg7lmm.jpg',CDN2+'v1785897474/Small6_lbj2eh.jpg',CDN2+'v1785897473/Small3_ks8ubv.jpg',CDN2+'v1785897471/Small2_wgm5xp.jpg',CDN2+'v1785897468/Small12_ru9idm.jpg',CDN2+'v1785897466/Small10_ftoqhr.jpg',CDN2+'v1785897465/Small13_mnzmur.jpg',CDN2+'v1785897463/Small16_y4offd.jpg',CDN2+'v1785897462/Small11_drpbr4.jpg',CDN2+'v1785897461/Small31_fkoazi.jpg',CDN2+'v1785897459/Small33_juy5dx.jpg',CDN2+'v1785897457/Small18_q44cyf.jpg',CDN2+'v1785897456/Small32_focakd.jpg',CDN2+'v1785897454/Small9_rm7vax.jpg',CDN2+'v1785897453/Small24_hly8yb.jpg',CDN2+'v1785897451/Small29_ztipw6.jpg',CDN2+'v1785897450/Small8_njolzt.jpg',CDN2+'v1785897449/Small19_btlayk.jpg',CDN2+'v1785897448/Small15_q5cawq.jpg',CDN2+'v1785897447/Small35_dio1fy.jpg',CDN2+'v1785897443/Small27_toqp69.jpg',CDN2+'v1785897440/Small23_fmcdlk.jpg',CDN2+'v1785897442/Small22_ccunfg.jpg',CDN2+'v1785897437/Small17_ktozu7.jpg',CDN2+'v1785897438/Small26_e0n1sx.jpg',CDN2+'v1785897433/Small14_e6dbpx.jpg',CDN2+'v1785897436/Small25_buv6mg.jpg'],
   features:['Private pool','4 bedrooms','A/C & private bath in each room','Open living','Tropical garden','Free parking'],retreat:true},
@@ -2171,7 +2171,6 @@ const SERVICES=[
 const RETREATS=[
   {name:'Arcilla Compound',slug:'arcilla-bundle',composedOf:['arcilla1','arcilla2'],maxGuests:18,tag:'Full Compound · Up to 18 Guests',desc:'Both Arcilla villas together — 7 bedrooms sleeping up to 18 guests. Two private pools, two full kitchens, deep jungle seclusion. The ultimate setting for yoga, wellness, leadership, or creative retreats.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 18 guests','7 bedrooms','Two private pools','Two full kitchens','Buffet catering available','Full concierge','Jungle immersion']},
   {name:'Casa Ojos Azules',slug:'ojosazules',composedOf:['ojosazules'],maxGuests:10,tag:'Intimate Retreat · Up to 10 Guests',desc:'A luminous 4-bedroom villa sleeping up to 10 guests. Open spaces, natural light, tropical gardens and a private pool. Ideal for yoga, healing, wellness, or creative retreats.',cover:CDN+'v1781050965/Small5_qfmiv4.jpg',features:['Up to 10 guests','4 bedrooms','Private pool','Epic sunset view','Garden spaces','Buffet catering available','Natural light']},
-  {name:'Arcilla + Ojos Azules',slug:'arcilla-ojos-bundle',composedOf:['arcilla1','arcilla2','ojosazules'],maxGuests:28,tag:'Triple Villa · Up to 28 Guests',desc:'The full Arcilla Compound plus Casa Ojos Azules — three villas, three pools, sleeping up to 28 guests. The most exclusive multi-space retreat experience in Nosara. Perfect for large groups who want total seclusion and a complete resort feel.',cover:CDN+'v1780975891/1_-_grounds5_qacxew.jpg',features:['Up to 28 guests','11 bedrooms','Three private pools','Three full kitchens','Buffet catering available','Full concierge','Maximum privacy']},
   {name:'Castillo Colonial',slug:'castillo',maxGuests:34,minGuests:5,tag:'Crown Jewel · Up to 34 Guests',priceLabel:'$125/person/night · min. 5 guests, 2 nights',desc:'The most prestigious retreat venue in Nosara — 15 bedrooms, two private pools, sunset viewpoint, tennis court, and fitness center. The perfect stage for large wellness retreats, corporate events, destination weddings, and elite multi-group experiences. Nothing in Nosara compares.',cover:'https://imgservice.surfbreakrentals.com/680x408/castillo-colonial-nosara-b-cr-nosara-bc-14420491-0.jpg',features:['Up to 34 guests','15 bedrooms','2 private pools','Sunset view point','Tennis court','Fitness center','Full kitchen','Pet friendly']},
   {name:'Sol + Mar Bundle',slug:'sol-mar-bundle',composedOf:['sol','mar'],maxGuests:16,tag:'Twin Villa Retreat · Up to 16 Guests',desc:'Two beautifully designed villas sharing lush grounds — 4 bedrooms, 2 queen beds per room, one shared central pool. Perfect for retreats up to 16 guests.',cover:CDN2+'v1785896863/WhatsApp_Image_2024-08-28_at_4.25.27_PM_ccvhug.jpg',features:['Up to 16 guests','4 bedrooms','2 queen beds per room','One shared pool','Two kitchens','Buffet catering available']}
 ];
@@ -3689,7 +3688,7 @@ async function submitCastilloRequest(){
       body:JSON.stringify({
         name,email,phone,
         type:'booking',
-        source:'castillo-colonial',
+        source:curProp.id,
         property_interest:curProp.name,
         travel_dates:(ci&&co)?`${ci} → ${co}`:null,
         num_guests:guests?parseInt(guests,10)||null:null,
@@ -3698,7 +3697,7 @@ async function submitCastilloRequest(){
     });
   }catch(e){}
   btn.textContent='✓ Request Sent — We\'ll Be In Touch';
-  gtag('event','generate_lead',{lead_type:'castillo_request',source:'castillo-colonial'});
+  gtag('event','generate_lead',{lead_type:'request_only_booking',source:curProp.id});
   setTimeout(()=>{closeModalDirect();btn.textContent='📩 Request to Book';btn.disabled=false;},2500);
 }
 
